@@ -120,7 +120,7 @@ $data = <<<EOT
 }
 EOT;
 
-	echo "TOY DATA IS BEING USED\n";
+	# echo "TOY DATA IS BEING USED\n";
 
 	$movies = array();
 	$dat = json_decode($data, true);
@@ -136,9 +136,9 @@ EOT;
 		}
 		array_push($movies, $mov);
 	}
+	# print_r(getMovies());
+
 	return $movies;
 }
-
-print_r(getMovies());
 
 ?>
