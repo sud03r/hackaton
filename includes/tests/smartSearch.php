@@ -34,4 +34,7 @@ printMovieList("moviesRatedHigher:Imdb", $filtered);
 $filtered = SmartSearch::moviesRatedHigher($movieList, "netflix", "6.79");
 printMovieList("moviesRatedHigher:netflix", $filtered);
 
+//$filtered = SmartSearch::moviesShorterThan($movieList, "120");
+//printMovieList("moviesRatedHigher:netflix", $filtered);
+
 ?>
