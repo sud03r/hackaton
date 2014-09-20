@@ -75,10 +75,19 @@ class SmartSearch {
 		return $filteredMovies;
 	}
 
+	public static $scoreDatabase = array(
+		"imdb" => "imdb",
+		"netflix" => "netflix",
+		"rotten tomato audience" => "audience_score",
+		"rotten tomato critics" => "critics_score",
+		);
+
+	# 'where' is one of "imdb", "netflix", "rotten tomato audience", "rotten tomato critics",
+	# case insensitive
 	public static function moviesRatedHigher($movieList, $where, $rValue) {
 		$filteredMovies = array();
 		foreach ($movieList as $movie) {
-			if ($movie->rating["$where"] > $rValue)
+			if ($movie->rating[ SmartSearch::$scoreDatabase[ strtolower("$where")] ] >= $rValue)
 				array_push($filteredMovies, $movie);
 		}
 		return $filteredMovies;

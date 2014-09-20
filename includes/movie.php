@@ -8,6 +8,8 @@ class Movie {
 		$this->rating['netflix'] = $rNetfLix;
 		$this->netflixId = $netflixId;
 		$this->year = $year;
+
+		$this->otherTitles = array();
 	}  
 
 	# From the key-value pairs, populate the unfilled fields.
@@ -29,11 +31,19 @@ class Movie {
 		$this->mType = $imdbData['Type'];
 	}
 
-	# Populate the rotten tomatoes
-	public function populateFromRottenTomatoes($criticRating, $viewerRating) {
-		$this->rating['rotTomCritic'] = $criticRating;
-		$this->rating['rotTomViewers'] = $viewerRating;
+	# Populate the rotten tomatoes ratings -- just get it as in json, ie
+	# { "critics_rating": "Certified Fresh",
+	#  "critics_score": 97,
+	#  "audience_rating": "Upright",
+	#  "audience_score": 88 }
+	public function populateFromRottenTomatoes($ratings) {
+		array_push($this->rating, $ratings);
 	}
 
+	# If there is another movie with a similar title we'll keep track of that here
+	# Pass in an associative array with "Name"->rotten_tomato_id
+	public function addSimilarTitles($movies) {
+		array_push($this->otherTitles, movies);
+	}
 }
 ?>

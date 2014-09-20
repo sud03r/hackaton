@@ -31,7 +31,11 @@ $filtered = SmartSearch::filterByGenreAdv($movieList, "Romance", "NOT", "Comedy"
 printMovieList("filterByGenreAdv", $filtered);
 $filtered = SmartSearch::moviesRatedHigher($movieList, "imdb", "6.79");
 printMovieList("moviesRatedHigher:Imdb", $filtered);
-$filtered = SmartSearch::moviesRatedHigher($movieList, "netflix", "6.79");
-printMovieList("moviesRatedHigher:netflix", $filtered);
 
+$ratingTests = array("netflix" => 6.79, "imdb" => 5.6,
+	"Rotten Tomato Audience" => 74, "Rotten Tomato critics" => 69);
+foreach ($ratingTests as $where => $val) {
+	$filtered = SmartSearch::moviesRatedHigher($movieList, $where, $val);
+	printMovieList("moviesRatedHigher:" . $where, $filtered);
+}
 ?>

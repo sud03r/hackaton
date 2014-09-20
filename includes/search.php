@@ -53,14 +53,25 @@ function basicSearch($searchString) {
 	}
 
 	// At this point we have a list of all movies with partial info.
-	// Fill the rest of the data in from imdb.
-	
+	// - much of our information we get from imdb
+	// also some from rotten tomatoes
 	foreach ($movies as $movie) {
 		$imdbData = getImdbData($movie);
 		if (!is_null($imdbData)) {
 //			echo "reading from imdb for " . $movie->mName . "\n";
 			$movie->populateFromIMDB($imdbData);
 		}
+		/* UNDER DEV -------------------------------------------
+		$rottenData = getRottenData($movie);
+		if (!is_null($rottenData)) {
+			// this data might have a number of movies..
+			$similarTitles = array(); // this will keep track of similar titles
+			$ourMovie = selectOurMovieFromRotten($rottenData, $movie, $similarTitles);
+			// now we add the info from rottenTomatoes to the selected movie
+			$movie.populateFromRottenTomatoes($ourMovie->["ratings"])
+			$movie.addSimilarTitles($similarTitles);
+		}
+		*/
 	}
 
 	return $movies;
