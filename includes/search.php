@@ -57,9 +57,8 @@ function basicSearch($searchString) {
 	
 	foreach ($movies as $movie) {
 		$imdbData = getImdbData($movie);
-		var_dump($imdbData);
 		if (!is_null($imdbData)) {
-			echo "reading from imdb for " . $movie->mName . "\n";
+//			echo "reading from imdb for " . $movie->mName . "\n";
 			$movie->populateFromIMDB($imdbData);
 		}
 	}
@@ -85,17 +84,17 @@ If we are not successful, null is returned.
 */
 function getImdbData($movie) {
 	$urlBase = "http://www.omdbapi.com/?t=" . $movie->mName;
-	echo "trying=" . $urlBase . "&y=" . $movie->year . "\n";
+//	echo "trying=" . $urlBase . "&y=" . $movie->year . "\n";
 	$imdbjson = Utils::getWebData($urlBase . "&y=" . $movie->year);
-	var_dump($imdbjson);
+//	var_dump($imdbjson);
 	if ($imdbjson !== false) {
 		$mdata = json_decode($imdbjson, true);
-		if ($mdata['Response']) {
+		if ($mdata['Response'] === "True") {
 			return $mdata;
 		} else {
 			// we could not find a matching movie...
 			// so relax the year constraint
-			echo "..trying=" . $urlBase . "\n";
+//			echo "..trying=" . $urlBase . "\n";
 			$imdbjson = @Utils::getWebData($urlBase);
 			if ($imdbjson !== false) {
 				$mdata = json_decode($imdbjson, true);
