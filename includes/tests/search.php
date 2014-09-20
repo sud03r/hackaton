@@ -27,6 +27,7 @@ assert($moviesConj[0]->mName === "The Boondocks");
 
 echo "-- Next we check the addition info from imdb ------------------------------------\n";
 echo "[1]\n";
+var_dump($moviesTitan);
 assert($moviesTitan[0]->plot === "After his hometown is destroyed, young Eren Jaegar vows to cleanse the earth of the giant humanoid Titans that have brought humanity to the brink of extinction.");
 
 echo "[2]\n";

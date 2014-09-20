@@ -35,7 +35,6 @@ function basicSearch($searchString) {
 
 	if ($contents === false) {
 		// the query failed, return an empty list
-		// TODO is this the best way to handle this?
 		return array();
 	}
 
@@ -55,13 +54,13 @@ function basicSearch($searchString) {
 	// Fill the rest of the data in from imdb.
 	
 	foreach ($movies as $movie) {
-		$url = "http://www.omdbapi.com/?t=" . urlencode($movie->mName) . "&y=" . $movie->getYear();
-		$imdbjson = @file_get_contents($url);
-		if ($imdbjson !== false) {
-			$movie->populateFromIMDB($imdbjson);
+		$imdbData = getImdbData($movie);
+		var_dump($imdbData);
+		if (!is_null($imdbData)) {
+			echo "reading from imdb for " . $movie->mName . "\n";
+			$movie->populateFromIMDB($imdbData);
 		}
 	}
-
 
 	return $movies;
 }
@@ -78,9 +77,34 @@ function getMovieFromNetflixData($movieData) {
 	return new Movie($movieData->show_title, $movieData->rating, $movieData->show_id, $movieData->release_year);
 }
 
+/* Tries to get the data from imdb for the specified Movie object.
 
-
-
+If we are not successful, null is returned.
+*/
+function getImdbData($movie) {
+	$urlBase = "http://www.omdbapi.com/?t=" . $movie->mName;
+	echo "trying=" . $urlBase . "&y=" . $movie->year . "\n";
+	$imdbjson = file_get_contents($urlBase . "&y=" . $movie->year);
+	var_dump($imdbjson);
+	if ($imdbjson !== false) {
+		$mdata = json_decode($imdbjson, true);
+		if ($mdata['Response']) {
+			return $mdata;
+		} else {
+			// we could not find a matching movie...
+			// so relax the year constraint
+			echo "..trying=" . $urlBase . "\n";
+			$imdbjson = @file_get_contents($urlBase);
+			if ($imdbjson !== false) {
+				$mdata = json_decode($imdbjson, true);
+				if ($mdata['Response']) {
+					return $mdata;
+				}
+			}
+		}
+	}
+	return null; // at this point we failed
+}
 
 ?>
 
