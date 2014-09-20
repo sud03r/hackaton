@@ -2,7 +2,7 @@
 /*
 	This file contains search functions. 
 */
-require_once(__DIR__ . "/Movie.php");
+require_once(__DIR__ . "/movie.php");
 
 /* Perform a basic search, return an array of matching Movies.
 
@@ -26,10 +26,18 @@ function basicSearch($searchString) {
 	// TODO this is not secure... check this for better options:
 	// http://www.bin-co.com/php/scripts/load/
 	$url = "http://netflixroulette.net/api/api.php?" . $searchString;
-	$contents = file_get_contents($url);
+	$contents = @file_get_contents($url);
+
+	if ($contents === false) {
+		# the query failed, return an empty list
+		// TODO is this the best way to handle this?
+		return array();
+	}
+
 	# now we extract the name, netflix rating and id, date
 	$moviesData = json_decode($contents);
-	$movies = array();
+	$movies = array(); // the list of movies we populate
+
 	if (is_array($moviesData)) {
 		foreach ($moviesData as $movie) {
 //			var_dump($movie);

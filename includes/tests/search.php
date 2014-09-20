@@ -5,8 +5,7 @@
 require_once(__DIR__ . "/../search.php");
 echo "Some basic query tests --------------------------------------\n";
 
-
-assert("false");
+// assert("false");
 
 echo "\n[one result] ";
 $moviesTitan = basicSearch("title=Attack%20on%20titan");
@@ -19,11 +18,13 @@ assert(count($moviesTarantino) === 6);
 
 echo "\n[query with no results] ";
 $moviesBad = basicSearch("title=asdfjifis");
-// TODO add assertion
+assert(count($moviesBad) === 0);
 
 echo "\n[conjuction query] ";
 $moviesConj = basicSearch("title=The%20Boondocks&year=2005");
 assert($moviesConj[0]->mName === "The Boondocks");
 
+
+echo "\n\nFinished running all tests.\n";
 
 ?>
