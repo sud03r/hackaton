@@ -16,7 +16,7 @@ class Movie {
 		$this->rFamily = $imdbData['Rated'];
 		$this->date = $imdbData['Released'];
 		$this->runtime = $imdbData['Runtime'];
-		$this->genre = explode(',', $imdbData['Genre']);
+		$this->genres = explode(',', $imdbData['Genre']);
 		$this->directors = explode(',', $imdbData['Director']);
 		$this->writers = explode(',', $imdbData['Writer']);
 		$this->actors = explode(',', $imdbData['Actors']);
@@ -33,8 +33,5 @@ class Movie {
 	# Populate the rotten tomatoes
 	public function populateFromRottenTomatoes($rRotTom) {
 	}
-
 }
-
-	
 ?>

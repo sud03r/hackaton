@@ -7,8 +7,6 @@
  */
 
  include '/includes/env.php';
-
- $APP_NAME = 'Influx';	// TODO: Move this to env.php or something
 ?>
 <!DOCTYPE html>
 <html lang="en">
