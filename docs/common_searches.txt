@@ -1,0 +1,50 @@
+Simple Searches (besides movies you can search for TV Shows as well)
+movies like ... (title of the movie)
+	"The Notebook" 
+movies with ... (person: actor, director, writer)
+	"Ryan Gosling" 
+	"Woodie Allan" 
+... movies (genre)
+	"romantic"
+	"horror"
+	"funny"
+	"scary"
+	"romcom"
+	"romantic comedies"
+movies after ... (date)
+	"2012"
+movies before ... (date)
+	"2012"
+movies rated higher than ... (rating)
+	"8.0" (on IMDb)
+	"80%" (on Rotten Tomatoes)
+... movies (family rating)
+	"PG"
+	"R"
+	"G"
+movies shorter than ... (length of movie)
+	"1 hour"
+	"90 minutes"
+movies longer than ... (length of the movie"
+	"1 hour"
+	"120 minutes"
+
+	
+Complex Searches (combining the simple searches, I'm not going to list all the combinations)
+... movies (genre) with ... (person)
+	"romantic" movies with "Ryan Gosling"
+movies like ... (title of the movie) with ... (person)
+	movies like "The Notebook" with "Scarlett Johannson"
+movies after ... (date) with ... (person)
+	movies after "2010" with "Ryan Gosling"
+... movies (genre) before ... (date)
+	"romantic" movies before "1990"
+movies with ... (person) AND rated higher than ... (rating)
+	movies with "Ryan Gosling" AND rated higher than "8.0"
+... movies (family rating) rated higher than ... (rating)
+	"PG" movies rated higher than "8.0"
+
+
+
+
+	
