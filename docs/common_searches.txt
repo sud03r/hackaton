@@ -1,3 +1,18 @@
+* -------------------------------------- *
+* Some searches people actually type     *
+* -------------------------------------- *
+Movies with Ryan Gosling before 2000
+quentin tarantino movies
+The Princess Bride
+tarantino 2009
+Scary movies rated higher than 7 on imdb
+movies directed by Tom Hanks with rating higher than 61% on rotten tomato [critic|audiance]
+
+
+* -------------------------------------- *
+* More of a breakdown                    *
+* -------------------------------------- *
+
 Accessed via the APIs
 =======================
 Simple Searches (besides movies you can search for TV Shows as well)
