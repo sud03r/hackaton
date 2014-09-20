@@ -29,21 +29,23 @@
     <![endif]-->
   </head>
   <body>
-    <h1>Hello, world!</h1>
+  	<div class="container" id="app-container">
+		<!-- The main page is loaded here-->
+		<div id="page-content"> </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
+		<div class="footer">
+		Copyright stuff here.
+		</div>
+	</div>
+
+    <!-- Library javascript files -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+	<script src="js/underscore-min.js"></script>
+	<script src="js/backbone-min.js"></script>
+
+	<!-- Custom javascript files -->
+	<script src="js/custom/app.js"></script>
   </body>
 </html>
 
-
-<html>
-
-<head>
-</head>
-
-<body>
-HELLO WORLD!!!
-</body>
