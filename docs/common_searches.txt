@@ -22,7 +22,7 @@ movies rated higher than ... (rating)
 	"PG"
 	"R"
 	"G"
-movies shortan than ... (length of movie)
+movies shorter than ... (length of movie)
 	"1 hour"
 	"90 minutes"
 movies longer than ... (length of the movie"
