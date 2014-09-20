@@ -1,9 +1,13 @@
+Accessed via the APIs
+=======================
 Simple Searches (besides movies you can search for TV Shows as well)
-movies like ... (title of the movie)
-	"The Notebook" 
 movies with ... (person: actor, director, writer)
 	"Ryan Gosling" 
 	"Woodie Allan" 
+movies released in year
+
+Accessed by Post-Processing at our end
+========================================
 ... movies (genre)
 	"romantic"
 	"horror"
@@ -11,6 +15,9 @@ movies with ... (person: actor, director, writer)
 	"scary"
 	"romcom"
 	"romantic comedies"
+
+movies like ... (title of the movie)
+	"The Notebook" 
 movies after ... (date)
 	"2012"
 movies before ... (date)
@@ -28,7 +35,6 @@ movies shorter than ... (length of movie)
 movies longer than ... (length of the movie"
 	"1 hour"
 	"120 minutes"
-
 	
 Complex Searches (combining the simple searches, I'm not going to list all the combinations)
 ... movies (genre) with ... (person)
@@ -43,8 +49,4 @@ movies with ... (person) AND rated higher than ... (rating)
 	movies with "Ryan Gosling" AND rated higher than "8.0"
 ... movies (family rating) rated higher than ... (rating)
 	"PG" movies rated higher than "8.0"
-
-
-
-
 	
