@@ -5,7 +5,7 @@ class Movie {
 	# Construct the movie object from netflix data
 	public function __construct($name, $rNetfLix, $netflixId, $date) {
 		$this->mName = $name;
-		$this->rNetfLix = $rNetfLix;
+		$this->rating['netflix'] = $rNetfLix;
 		$this->netflixId = $netflixId;
 		$this->date = $date;
 	}  
@@ -25,13 +25,15 @@ class Movie {
 		$this->country = $imdbData['Country'];
 		$this->awards = $imdbData['Awards'];
 		$this->image = $imdbData['Poster'];
-		$this->rImdb = $imdbData['imdbRating'];
+		$this->rating['imdb'] = $imdbData['imdbRating'];
 		$this->imdbVotes = $imdbData['imdbVotes'];
 		$this->mType = $imdbData['Type'];
 	}
 
 	# Populate the rotten tomatoes
-	public function populateFromRottenTomatoes($rRotTom) {
+	public function populateFromRottenTomatoes($criticRating, $viewerRating) {
+		$this->rating['rotTomCritic'] = $criticRating;
+		$this->rating['rotTomViewers'] = $viewerRating;
 	}
 
 	# This shall work irrespective of how release date is stored

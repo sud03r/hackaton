@@ -6,16 +6,17 @@ require_once(dirname(__FILE__) . "/movie.php");
 
 
 /* Performs searches that requires pre-processing at our end, return an array of matching movies.
-	- movies (genre)
-	- movies like ... (title of the movie)
-    "The Notebook"
-	- movies after ... (date) "2012"
-	- movies before ... (date) "2012"
-	- movies rated higher than ... (rating)
-	- movies (family rating)
-	- movies shorter than ... (length of movie)
-	- movies longer than ... (length of the movie"
-- Complex Searches (combining the simple searches, I'm not going to list all the combinations)
+	- (We expect movie list here, all operations are Linear-time wrt to that list, so the shorter the input
+		list is, better off we are)
+	- (DONE) movies (genre)
+	- (TODO: with david)movies like ... (title of the movie) "The Notebook"
+	- (TODO) movies after ... (date) "2012"
+	- (TODO) movies before ... (date) "2012"
+	- (Linear-Time) movies rated higher than ... (rating)
+	- (Linear-time) movies (family rating)
+	- (Linear-time) movies shorter than ... (length of movie)
+	- (Linear-time) movies longer than ... (length of the movie"
+	- (Linear-time) Complex Searches (combining the simple searches, I'm not going to list all the combinations)
 	- movies (genre) with ... (person)
     	"romantic" movies with "Ryan Gosling"
 	- movies like ... (title of the movie) with ... (person)
@@ -42,7 +43,6 @@ class SmartSearch {
 					$genreToIdx[$genre] = "$idx";
 			}
 		}
-		var_dump($genreToIdx);
 		return $genreToIdx;
 	}
 
@@ -51,7 +51,7 @@ class SmartSearch {
 		$filteredIndices = str_split($genreToIdx[$genre]);
 		$filteredMovies = array();
         foreach($filteredIndices as $idx) {
-            array_push($filteredIndices, $movies[$idx]);
+            array_push($filteredMovies, $movies[$idx]);
         }
         return $filteredMovies;
 	}
@@ -70,9 +70,24 @@ class SmartSearch {
 		
 		$filteredMovies = array();
 		foreach($filteredIndices as $idx) {
-			array_push($filteredIndices, $movies[$idx]);
+			array_push($filteredMovies, $movies[$idx]);
 		}
 		return $filteredMovies;
+	}
+
+	public static function moviesRatedHigher($movieList, $where, $rValue) {
+		$filteredMovies = array();
+		foreach ($movieList as $movie) {
+			if ($movie->rating["$where"] > $rValue)
+				array_push($filteredMovies, $movie);
+		}
+		return $filteredMovies;
+	}
+	public static function moviesLike($movieName) {
+		$movieList = basicSearch("title=$movieName");
+		// Picking the first match, coz ideally there shouldn't be many matches
+		$movie = $movieList[0];
+		$movieList = basicSearch("title=$movieName");
 	}
 }
 
