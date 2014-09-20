@@ -2,9 +2,9 @@
 /*
 	This file contains search functions. 
 */
+require_once(__DIR__ . "/movie.php");
 
-
-/* Perform a basic search, return an array of matching movies.
+/* Perform a basic search, return an array of matching Movies.
 
 In the basic search you can specify a set of properties of the movie. These are:
 - title
@@ -21,10 +21,66 @@ For example:
 
 	title=The%20Boondocks&year=2005
 
+----------------------------------------------------------------------------------
+Special cases and Error handling:
+- If there are no queries matching on netflix, we simply return an empty list.
+- If the movie exists on netflix, but we cannot access the imdb data, we leave
+	the fields that were supposed to be coming from imdb empty.
 */
 function basicSearch($searchString) {
+	// TODO this is not secure... check this for better options:
+	// http://www.bin-co.com/php/scripts/load/
+	$url = "http://netflixroulette.net/api/api.php?" . $searchString;
+	$contents = @file_get_contents($url);
 
+	if ($contents === false) {
+		// the query failed, return an empty list
+		// TODO is this the best way to handle this?
+		return array();
+	}
+
+	// now we extract the name, netflix rating and id, date
+	$moviesData = json_decode($contents);
+	$movies = array(); // the list of movies we populate
+
+	if (is_array($moviesData)) {
+		foreach ($moviesData as $movie) {
+			array_push($movies, getMovieFromNetflixData($movie));
+		}
+	} else {
+		array_push($movies, getMovieFromNetflixData($moviesData));
+	}
+
+	// At this point we have a list of all movies with partial info.
+	// Fill the rest of the data in from imdb.
+	
+	foreach ($movies as $movie) {
+		$url = "http://www.omdbapi.com/?t=" . urlencode($movie->mName) . "&y=" . $movie->getYear();
+		$imdbjson = @file_get_contents($url);
+		if ($imdbjson !== false) {
+			$movie->populateFromIMDB($imdbjson);
+		}
+	}
+
+
+	return $movies;
 }
 
 
+
+// ------------------------------------------------------ //
+// These are utility functions                            //
+// ------------------------------------------------------ //
+
+// Takes an object generated from the json response of the netflix API,
+// creates and returns a Movie object based on it.
+function getMovieFromNetflixData($movieData) {
+	return new Movie($movieData->show_title, $movieData->rating, $movieData->show_id, $movieData->release_year);
+}
+
+
+
+
+
 ?>
+

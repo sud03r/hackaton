@@ -14,12 +14,12 @@ class Movie {
 	public function populateFromIMDB($imdbData) {
 		$imdbData = json_decode($imdbData, true);
 		$this->rFamily = $imdbData['Rated'];
-		$this->date = $imdbData['Released'];
+		$this->date = DateTime::createFromFormat('j M Y', $imdbData['Released']);
 		$this->runtime = $imdbData['Runtime'];
-		$this->genres = explode(',', $imdbData['Genre']);
-		$this->directors = explode(',', $imdbData['Director']);
-		$this->writers = explode(',', $imdbData['Writer']);
-		$this->actors = explode(',', $imdbData['Actors']);
+		$this->genres = array_map('trim', explode(',', $imdbData['Genre']));
+		$this->directors = array_map('trim', explode(',', $imdbData['Director']));
+		$this->writers = array_map('trim', explode(',', $imdbData['Writer']));
+		$this->actors = array_map('trim', explode(',', $imdbData['Actors']));
 		$this->plot = $imdbData['Plot'];
 		$this->language = $imdbData['Language'];
 		$this->country = $imdbData['Country'];
@@ -32,6 +32,12 @@ class Movie {
 
 	# Populate the rotten tomatoes
 	public function populateFromRottenTomatoes($rRotTom) {
+	}
+
+	# This shall work irrespective of how release date is stored
+	public function getYear() {
+		return 2005;
+		return $this->date->format('Y');
 	}
 }
 ?>
