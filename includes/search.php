@@ -3,6 +3,7 @@
 	This file contains search functions. 
 */
 require_once(__DIR__ . "/movie.php");
+require_once(__DIR__ . "/utils.php");
 
 /* Perform a basic search, return an array of matching Movies.
 
@@ -27,11 +28,12 @@ Special cases and Error handling:
 - If the movie exists on netflix, but we cannot access the imdb data, we leave
 	the fields that were supposed to be coming from imdb empty.
 */
+
 function basicSearch($searchString) {
 	// TODO this is not secure... check this for better options:
 	// http://www.bin-co.com/php/scripts/load/
 	$url = "http://netflixroulette.net/api/api.php?" . $searchString;
-	$contents = @file_get_contents($url);
+	$contents = Utils::getWebData($url);
 
 	if ($contents === false) {
 		// the query failed, return an empty list
@@ -84,7 +86,7 @@ If we are not successful, null is returned.
 function getImdbData($movie) {
 	$urlBase = "http://www.omdbapi.com/?t=" . $movie->mName;
 	echo "trying=" . $urlBase . "&y=" . $movie->year . "\n";
-	$imdbjson = file_get_contents($urlBase . "&y=" . $movie->year);
+	$imdbjson = Utils::getWebData($urlBase . "&y=" . $movie->year);
 	var_dump($imdbjson);
 	if ($imdbjson !== false) {
 		$mdata = json_decode($imdbjson, true);
@@ -94,7 +96,7 @@ function getImdbData($movie) {
 			// we could not find a matching movie...
 			// so relax the year constraint
 			echo "..trying=" . $urlBase . "\n";
-			$imdbjson = @file_get_contents($urlBase);
+			$imdbjson = @Utils::getWebData($urlBase);
 			if ($imdbjson !== false) {
 				$mdata = json_decode($imdbjson, true);
 				if ($mdata['Response']) {
@@ -107,4 +109,3 @@ function getImdbData($movie) {
 }
 
 ?>
-
