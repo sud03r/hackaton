@@ -6,9 +6,17 @@
 class Utils {
 
 	public static function printArray($arr) {
+		echo "[";
 		foreach ($arr as $entry)
-			echo "$entry";
-		echo "\n";
+			echo "$entry, ";
+		echo "]\n";
+	}
+
+	public static function printDict($dict) {
+		echo "[";
+		foreach ($dict as $key => $val)
+			echo "\"$key\"=>\"$val\", ";
+		echo "]\n";
 	}
 
 	public static function getWebData($url) {

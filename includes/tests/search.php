@@ -28,10 +28,15 @@ assert($moviesConj[0]->mName === "The Boondocks");
 echo "-- Next we check the addition info from imdb ------------------------------------\n";
 echo "[1]\n";
 assert($moviesTitan[0]->plot === "2000 years from now, humans are nearly exterminated by titans. Titans are typically several stories tall, seem to have no intelligence, devour human beings and, worst of all, seem to do it ...");
-
-
 echo "[2]\n";
 assert($moviesConj[0]->genres == array("Animation", "Action", "Comedy"));
+
+
+echo "-- Next we check the addition info from rotten tomatoes -------------------------\n";
+echo "[1]\n";
+assert(!isset($moviesTitan[0]->rating['critics_rating']));
+echo "[2]\n";
+assert($moviesTarantino[0]->rating['critics_score'] == 84);
 
 
 

@@ -37,13 +37,13 @@ class Movie {
 	#  "audience_rating": "Upright",
 	#  "audience_score": 88 }
 	public function populateFromRottenTomatoes($ratings) {
-		array_push($this->rating, $ratings);
+		$this->rating += $ratings;
 	}
 
 	# If there is another movie with a similar title we'll keep track of that here
 	# Pass in an associative array with "Name"->rotten_tomato_id
 	public function addSimilarTitles($movies) {
-		array_push($this->otherTitles, movies);
+		$this->otherTitles += $movies;
 	}
 }
 ?>
