@@ -11,7 +11,7 @@ class Movie {
 	}  
 
 	# From the key-value pairs, populate the unfilled fields.
-	public function populateFromIMDB($imdbDataJson) {
+	public function populateFromIMDB($imdbData) {
 		$this->rFamily = $imdbData['Rated'];
 		$this->date = DateTime::createFromFormat('j M Y', $imdbData['Released']);
 		$this->runtime = $imdbData['Runtime'];
