@@ -37,6 +37,7 @@ class SmartSearch {
 		$genreToIdx = array();
 		for ($idx = 0; $idx < count($movies); $idx++) {
 			foreach ($movies[$idx]->genres as $genre) {
+				echo "$genre";
 				if (array_key_exists($genre, $genreToIdx))
 					$genreToIdx[$genre] = $genreToIdx[$genre] . "$idx";
 				else
@@ -92,6 +93,25 @@ class SmartSearch {
 		}
 		return $filteredMovies;
 	}
+
+	public static function moviesShorterThan($movieList, $duration) {
+		$filteredMovies = array();
+		foreach ($movieList as $movie) {
+			if ($movie->runtime <= $duration)
+				array_push($filteredMovies, $movie);
+		}
+		return $filteredMovies;
+	}
+	
+	public static function moviesLongerThan($movieList, $duration) {
+		$filteredMovies = array();
+		foreach ($movieList as $movie) {
+			if ($movie->runtime >= $duration)
+				array_push($filteredMovies, $movie);
+		}
+		return $filteredMovies;
+	}
+	
 	public static function moviesLike($movieName) {
 		$movieList = basicSearch("title=$movieName");
 		// Picking the first match, coz ideally there shouldn't be many matches
