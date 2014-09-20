@@ -3,7 +3,14 @@
 	This file does some tests on the search functionality.
 */
 require_once(dirname(__FILE__). "/../smartSearch.php");
+require_once(dirname(__FILE__) . "/../utils.php");
 
+function printMovieList($test, $movies) {
+	print "Test: $test\n";
+	foreach ($movies as $movie)
+		echo "$movie->mName, ";
+	echo "\n";
+}
 
 $movieList = array();
 
@@ -13,13 +20,18 @@ $movie->populateFromIMDB($exampleJsonData);
 array_push($movieList, $movie);
 
 $exampleJsonData = '{"Title":"Sleepless in Seattle","Year":"1993","Rated":"PG","Released":"25 Jun 1993","Runtime":"105 min","Genre":"Comedy, Drama, Romance","Director":"Nora Ephron","Writer":"Jeff Arch (story), Nora Ephron (screenplay), David S. Ward (screenplay), Jeff Arch (screenplay)","Actors":"Tom Hanks, Ross Malinger, Rita Wilson, Victor Garber","Plot":"A recently widowed man\'s son calls a radio talk-show in an attempt to find his father a partner.","Language":"English","Country":"USA","Awards":"Nominated for 2 Oscars. Another 4 wins & 10 nominations.","Poster":"http://ia.media-imdb.com/images/M/MV5BNzc0MDkwNjI0NF5BMl5BanBnXkFtZTgwMTY1MjEyMDE@._V1_SX300.jpg","Metascore":"72","imdbRating":"6.8","imdbVotes":"102,376","imdbID":"tt0108160","Type":"movie","Response":"True"}';
-$movie = new Movie("Sleepless in Seattle", '9', '12345', '1994');
+$movie = new Movie("Sleepless in Seattle", '5', '12345', '1993');
 $movie->populateFromIMDB($exampleJsonData);
 array_push($movieList, $movie);
 
-$filtered = SmartSearch::filterByGenre($movieList, "Romance");
-#foreach ($filtered as $movie) {
-#	echo "$movie\n";
-#}*/
+
+$filtered = SmartSearch::filterByGenre($movieList, "Comedy");
+printMovieList("filterByGenre", $filtered);
+$filtered = SmartSearch::filterByGenreAdv($movieList, "Romance", "NOT", "Comedy");
+printMovieList("filterByGenreAdv", $filtered);
+$filtered = SmartSearch::moviesRatedHigher($movieList, "imdb", "6.79");
+printMovieList("moviesRatedHigher:Imdb", $filtered);
+$filtered = SmartSearch::moviesRatedHigher($movieList, "netflix", "6.79");
+printMovieList("moviesRatedHigher:netflix", $filtered);
 
 ?>
