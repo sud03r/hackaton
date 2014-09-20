@@ -21,6 +21,11 @@ For example:
 
 	title=The%20Boondocks&year=2005
 
+----------------------------------------------------------------------------------
+Special cases and Error handling:
+- If there are no queries matching on netflix, we simply return an empty list.
+- If the movie exists on netflix, but we cannot access the imdb data, we leave
+	the fields that were supposed to be coming from imdb empty.
 */
 function basicSearch($searchString) {
 	// TODO this is not secure... check this for better options:
@@ -29,24 +34,34 @@ function basicSearch($searchString) {
 	$contents = @file_get_contents($url);
 
 	if ($contents === false) {
-		# the query failed, return an empty list
+		// the query failed, return an empty list
 		// TODO is this the best way to handle this?
 		return array();
 	}
 
-	# now we extract the name, netflix rating and id, date
+	// now we extract the name, netflix rating and id, date
 	$moviesData = json_decode($contents);
 	$movies = array(); // the list of movies we populate
 
 	if (is_array($moviesData)) {
 		foreach ($moviesData as $movie) {
-//			var_dump($movie);
 			array_push($movies, getMovieFromNetflixData($movie));
 		}
 	} else {
-//		var_dump($moviesData);
 		array_push($movies, getMovieFromNetflixData($moviesData));
 	}
+
+	// At this point we have a list of all movies with partial info.
+	// Fill the rest of the data in from imdb.
+	
+	foreach ($movies as $movie) {
+		$url = "http://www.omdbapi.com/?t=" . urlencode($movie->mName) . "&y=" . $movie->getYear();
+		$imdbjson = @file_get_contents($url);
+		if ($imdbjson !== false) {
+			$movie->populateFromIMDB($imdbjson);
+		}
+	}
+
 
 	return $movies;
 }
