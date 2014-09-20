@@ -3,16 +3,15 @@
 class Movie {
 
 	# Construct the movie object from netflix data
-	public function __construct($name, $rNetfLix, $netflixId, $date) {
+	public function __construct($name, $rNetfLix, $netflixId, $year) {
 		$this->mName = $name;
 		$this->rNetfLix = $rNetfLix;
 		$this->netflixId = $netflixId;
-		$this->date = $date;
+		$this->year = $year;
 	}  
 
-	# From the key-value pairs, populate the unfilled fields
-	public function populateFromIMDB($imdbData) {
-		$imdbData = json_decode($imdbData, true);
+	# From the key-value pairs, populate the unfilled fields.
+	public function populateFromIMDB($imdbDataJson) {
 		$this->rFamily = $imdbData['Rated'];
 		$this->date = DateTime::createFromFormat('j M Y', $imdbData['Released']);
 		$this->runtime = $imdbData['Runtime'];
@@ -34,10 +33,5 @@ class Movie {
 	public function populateFromRottenTomatoes($rRotTom) {
 	}
 
-	# This shall work irrespective of how release date is stored
-	public function getYear() {
-		return 2005;
-		return $this->date->format('Y');
-	}
 }
 ?>

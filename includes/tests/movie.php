@@ -9,6 +9,7 @@ $exampleJsonData = '{"Title":"Forrest Gump","Year":"1994","Rated":"PG-13","Relea
 
 $movie = new Movie("Forrest Gump", '9', '12345', '1994');
 $movie->populateFromIMDB($exampleJsonData);
+echo "year the movie was made: " . $movie->getYear() . "\n";
 var_dump($movie);
 
 ?>
