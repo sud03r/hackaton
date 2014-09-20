@@ -31,6 +31,9 @@ Special cases and Error handling:
 */
 
 function basicSearch($searchString) {
+	require_once(__DIR__ . "/tests/createMovies.php");
+	return getMovies();
+
 	// TODO this is not secure... check this for better options:
 	// http://www.bin-co.com/php/scripts/load/
 	$url = "http://netflixroulette.net/api/api.php?" . $searchString;
