@@ -7,7 +7,6 @@ var ResultsView = Backbone.View.extend({
 	className : "results-page",
 	
 	events: {
-		"click #search-submit" : "search"
 	},
 
 	loadTemplate: function(callback) {

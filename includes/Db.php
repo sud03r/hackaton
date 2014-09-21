@@ -1,7 +1,6 @@
 <?php
-
+require_once(dirname(__FILE__). "/env.php");
 define('QUERY_FAILURE', 'query_failure');
-
 class Db {
 
     private static $conn = FALSE;
@@ -63,7 +62,5 @@ class Db {
 	}	
 	
 }
-
 Db::init();
-
 ?>
