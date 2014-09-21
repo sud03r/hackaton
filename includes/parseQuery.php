@@ -4,6 +4,8 @@
 	the predefined set of base queries.
 */
 
+require_once(__DIR__ . "/queries.php");
+
 class Pq {
 
 	/*
@@ -129,8 +131,13 @@ class Pq {
 		Takes a query and returns a list of appropriate movies.
 	 */
 	public static function parseQuery($query) {
+	
 		
-		// analyze for tokens
+		// first thing we do is see if this is a movie title:
+		$res = Query::byTitle($query);
+		if (!is_null($res)) return $res;
+
+		// -- we don't have a title;  analyze for tokens
 		$words = explode(" ", $query);
 		$numWords = count($words);
 		$tokenLim = array();
@@ -154,6 +161,23 @@ class Pq {
 
 		// we represent it as a string now
 		echo "$query\n";
+		echo getStringRepOfCats($base, $tokenLim);
+		echo "\n\n";
+
+
+
+	}
+
+	/* ---------------------------------------------------- */
+	/* Utilities...                                         */
+	/* ---------------------------------------------------- */
+
+	public static function updateData(&$arrayUpdate, $add) {
+		$arrayUpdate = array_merge($arrayUpdate, $add);
+	}
+
+	public static function getStringRepOfCats($base, $tokenLim) {
+		$toRet = "";
 		for ($i = 0; $i < $numWords; $i += 1) {
 			$desc = "";
 			if (($tokenLim[$i] & Pq::ST) != 0) $desc .= "[";
@@ -163,17 +187,9 @@ class Pq {
 			else
 				$desc .= $tmp;
 			if (($tokenLim[$i] & Pq::EN) != 0) $desc .= "]";
-			echo "$desc ";
+			$toRet .= " $desc";
 		}
-		echo "\n\n";
-	}
-
-	/* ---------------------------------------------------- */
-	/* Utilities...                                         */
-	/* ---------------------------------------------------- */
-
-	public static function updateData(&$arrayUpdate, $add) {
-		$arrayUpdate = array_merge($arrayUpdate, $add);
+		return toRet;
 	}
 }
 
