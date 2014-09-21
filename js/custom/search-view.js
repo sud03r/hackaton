@@ -3,15 +3,17 @@
 
 var SearchView = Backbone.View.extend({
 	tagName: "div",
-	el : "#page-content",
 	template: "search.html",
 	
 	events: {
-		"click #submit-search" : "search"
+		"click #search-submit" : "search"
 	},
 
 	search: function() {
 		alert("SEAR");
-	}
+	},
 
+	initialize: function() {
+		this.$el.append($("<div>").load("layouts/" + this.template));
+	}
 });

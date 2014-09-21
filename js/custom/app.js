@@ -8,25 +8,20 @@
 // Wait for jquery to load
 $(function(){
 	// Our overall **AppView** is the top-level piece of UI.
+
 	var AppView = Backbone.View.extend({
 		// Instead of generating a new element, bind to the existing skeleton of
 		// the App already present in the HTML.
 		el: "#app-container",
 
 		urlMapper: new Backbone.Router(),
-
+		
 		pageViews : {
 			"search" : new SearchView()
 		},
 		
 		// TODO: Fill in the events if necessary
 		events: {
-			//"click #search-submit": "blah"
-			//"click #toggle-all": "toggleAllComplete"
-		},
-
-		blah: function() {
-			alert("BALLIN");
 		},
 
 		// At initialization we bind to the relevant events on the `Todos`
@@ -40,7 +35,6 @@ $(function(){
 		// of the app doesn't change.
 		render: function() {
 		  // TODO: Render function
-		  //$("#page-content").load("layouts/search.html");
 		},
 
 		loadPage: function(pageName) {
@@ -51,9 +45,9 @@ $(function(){
 			}
 			
 			// Change views if needed
-			$("#page-content").load("layouts/"+pageView.template);
-			pageView.$el = $("#page-content");
-			pageView.el = $("#page-content").el;
+			$("#page-content").empty();
+			$("#page-content").append(pageView.$el);
+			pageView.render();
 
 			// Pass this to the URL mapper if needed
 			this.urlMapper.navigate("/" + pageName);
