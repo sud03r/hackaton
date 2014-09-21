@@ -10,7 +10,19 @@ var SearchView = Backbone.View.extend({
 	},
 
 	search: function() {
-		alert("SEAR");
+		var args = $('#search-text').val();
+		$.get('ajax/search_movie.php?q=', args, function(result) {
+			if (result.success) {
+				var movies = new MovieCollection;
+				var movieInfo = result.data;
+				for (var i = 0; i < movieInfo.length; i++) 
+				{
+					movies.add(movieInfo[i]);
+				}
+				alert(movies.at(6).get('mName'));
+				return movies;
+			}
+		}, 'json');
 	},
 
 	initialize: function() {
