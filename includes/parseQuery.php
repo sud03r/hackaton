@@ -59,15 +59,8 @@ class Pq {
 
 	// this is just the ones people may search for
 	public static $familyRating = array(
-		"G"=>array(),
-		"PG"=>array(),
-		"PG-13"=>array(),
-		"14A"=>array(),
-		"NC-17"=>array(),
-		"18A"=>array(),
-		"R"=>array(),
-		"X"=>array(), 
-	); // TODO this is in the correct order... we WILL have to use this order
+		"G", "PG", "PG-13", "14A", "NC-17", "18A", "R", "X" 
+	);
 
 	public static $regexRules = array(
 		"/^\d{4}$/"=> array("base"=>"year", "oLim"=>Pq::EN),
@@ -99,7 +92,7 @@ class Pq {
 				Pq::updateData($toRet, array("base"=>"genre", "oLim"=>Pq::ST|Pq::EN));
 			} elseif (isset(Pq::$logicOps[$word])) {
 				Pq::updateData($toRet, array("base"=>"lOp",             "pLim"=>Pq::EN, "nLim"=>Pq::ST, "oLim"=>Pq::ST|Pq::EN));
-			} elseif (isset(Pq::$familyRating[$word])) {
+			} elseif (in_array($word, Pq::$familyRating)) {
 				Pq::updateData($toRet, array("base"=>"rated", "oLim"=>Pq::EN));
 			} else {
 				// there's some other rules: digits
@@ -140,6 +133,7 @@ class Pq {
 
         // rest of the stuff we compose / intersect movie lists
         $movieList = array();
+        $constraints = array();
         
         // look for "movie[s] like _stuff_ [with/and]"
         $pattern = '/movies? like (.*) (with|and|\s*$) /i';
@@ -152,10 +146,14 @@ class Pq {
 		// -- we don't have a title;  analyze for tokens
 		$queryC = strtolower($query); // TODO could find names by capital letter maybe
 		$queryC = str_replace(" with ", " and ", $queryC);
+        $queryC = str_replace(" but ", " and ", $queryC);
 		$queryC = Pq::cleanQuery($queryC);
 		
-		$words = explode(" ", $queryC);
-		$numWords = count($words);
+		Pq::updateData($constraints, Pq::findDateRangeConstraints($queryC));
+		
+		
+        $words = explode(" ", $queryC);
+        $numWords = count($words);
 		$tokenLim = array();
 		$base = array();
 		for ($i = 0; $i < $numWords; $i += 1) {
@@ -189,9 +187,9 @@ class Pq {
 		echo Pq::getStringRepOfCats($base, $tokenLim, $numWords);
 		echo "\n\n";
 
-		
 
-
+        // TODO at this point we have a list of movies $movieList
+        // and a list of constraints .. run them
 	}
 
 	/* ---------------------------------------------------- */
@@ -235,9 +233,88 @@ class Pq {
         }
         return $queryC;
 	}
+	
+	// returns an array of constraint (related to date)
+	// removes the found constraints from the argument
+	public static function findDateRangeConstraints(&$query) {
+        $patterns = array(
+            "/before ('\d{2}|\d{4})/"=>0,
+            "/after ('\d{2}|\d{4})/"=>1,
+            "/between ('\d{2}|\d{4}) and ('\d{2}|\d{4})/"=>2,
+            "/from ('\d{2}|\d{4}) to ('\d{2}|\d{4})/"=>2
+        );
+        $toRet = array();
+        // look for these
+        foreach ($patterns as $pattern => $id) {
+            if (preg_match($pattern, $query, $matches) == 1) {
+                $start = null;
+                $end = null;
+                $date1 = Pq::fixDate($matches[1]);
+                switch ($id) {
+                    case 0:
+                        $end = $date1;
+                        break;
+                    case 1:
+                        $start = $date1;
+                        break;
+                    case 2:
+                        $start = $date1;
+                        $end = Pq::fixDate($matches[2]);
+                        break;
+                }
+                // now delete this stuff!
+                $query = preg_replace($pattern, "", $query);
+                
+                array_push($toRet, new Constraint("dateRange", array("start"=>$start, "end"=>$end)));
+            }
+        }
+        return $toRet;
+	}
+	
+	// $date is either 1942 or '85 style... change the second into first
+	public static function fixDate($date) {
+        if ($date[0] == "'") {
+            $num = substr($date, 1);
+            if (intval($num)<20) // TODO this is horrible
+                return (2000+intval($num));
+            else
+                return (1900+intval($num));
+        }
+        return intval($date);
+	}
 }
 
 
+
+class Constraint {
+    public static $types = array(
+        "dateRange"=>array("start"=>null, "end"=>null),
+        "dateExact"=>array("year"=>null),
+        "length"=>array("min"=>null, "max"=>null),
+        "genre"=>array("acceptable"=>array()),
+        "famRating"=>array("lastAcceptable"=>array())
+    );
+    
+    // returns a list of all ratings that are ok
+    public static function getFamilyFriendly($lastAcceptable) {
+        $okay = array($lastAcceptable);
+        foreach (Pq::$familyRating as $rating) {
+            if ($rating == $lastAcceptable) break;
+            array_push($okay, $rating);
+        }
+    }
+    
+    // $type should be one of the listed ones, and
+    // $data should be an array like what the $type is associated to
+    public function __construct($type, $data) {
+        if (!isset(Constraint::$types[$type]))
+            trigger_error("Not a valid type of constraint", E_USER_ERROR);
+        
+        $this->type = $type;
+        // $values = Constraint::$types[$type];
+        $this->data = $data;
+    }
+}
 
 
 ?>
