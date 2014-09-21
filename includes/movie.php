@@ -3,11 +3,12 @@
 class Movie {
 
 	# Construct the movie object from netflix data
-	public function __construct($name, $rNetfLix, $netflixId, $year) {
+	public function __construct($name, $rNetfLix, $netflixId, $year, $imageURL) {
 		$this->mName = $name;
 		$this->rating['netflix'] = $rNetfLix;
 		$this->netflixId = $netflixId;
 		$this->year = $year;
+		$this->image = $imageURL;
 
 		$this->otherTitles = array();
 	}  
@@ -25,7 +26,6 @@ class Movie {
 		$this->language = $imdbData['Language'];
 		$this->country = $imdbData['Country'];
 		$this->awards = $imdbData['Awards'];
-		$this->image = $imdbData['Poster'];
 		$this->rating['imdb'] = $imdbData['imdbRating'];
 		$this->imdbVotes = $imdbData['imdbVotes'];
 		$this->mType = $imdbData['Type'];
