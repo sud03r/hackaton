@@ -30,7 +30,7 @@
 </div>
 
 <div class="main-movie-area">
-	<img src="<%= encodeURI(image) %>" class="thumbnail large">
+	<img src="<%= encodeURI(image || 'images/assets/poster-not-available.jpg') %>" class="thumbnail large">
 	<div class="movie-info">
 		<div class="movie-title">
 			<h3 class="movie-name"><%= mName %></h3>
@@ -39,8 +39,14 @@
 		</div>
 
 		<!-- Ratings -->
-		<div class="rating-group">
-					
+		<div class="rating-group">		
+			<span class="rating imdb-rating"><%= rating.imdb || "N/A"  %></span>
+			<img src="images/assets/rt_tomatometer.png" class="rating-icon tomatometer">
+			<span class="rating critics-rating"><%= rating.critics_score || "N/A" %>%</span>
+			<img src="images/assets/rt_audience.png" class="rating-icon audience">
+			<span class="rating audience-rating"><%= rating.audience_score || "N/A" %>%</span>
+			<br />
+
 			<!-- Classification -->
 			<span class="rating rating-icon family-rating <%= rFamily %>"> </span>
 			<span class="rating run-time"><%= runtime || "" %></span> 
@@ -64,15 +70,10 @@
 		<p class="plot"><%= plot %></p>	
 			
 			<!--
-			<span class="rating imdb-rating"><%= rating.imdb || "N/A"  %></span>
 			<img src="images/assets/rt_tomatometer.png" class="rating-icon tomatometer">
 			<span class="rating critics-rating"><%= rating.critics_score || "N/A" %>%</span>
 			<img src="images/assets/rt_audience.png" class="rating-icon audience">
 			<span class="rating audience-rating"><%= rating.audience_score || "N/A" %>%</span>
 			-->
 	</div>
-</div>
-
-<div class="movie-details">
-	YOU ARE LOOKING AT <%= mName %>
 </div>

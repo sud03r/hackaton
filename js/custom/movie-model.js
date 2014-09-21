@@ -2,7 +2,28 @@
 // For example, we define a MovieCollection class too!
 
 var MovieModel = Backbone.Model.extend({
-	
+	defaults: {
+		image: "images/assets/poster-not-available.jpg",
+		actors: ["(Not Available)"],
+		mName: "(Not Available)",
+		awards: "None",
+		country: "USA",
+		date: Date.now(),
+		directors: ["(Not Available)"],
+		genres: [],
+		imdbVotes: 0,
+		language: "English",
+		mType: "movie",
+		netflixId: -1,
+		otherTitles: {},
+		plot: "",
+		rFamily: "PG-13",
+		rating: {},
+		runtime: "0 mins",
+		similarLink: {},
+		writers: ["(Not Available)"],
+		year: 1999
+	}
 });
 
 
