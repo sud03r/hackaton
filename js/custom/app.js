@@ -24,6 +24,8 @@ $(function(){
 		// collection, when items are added or changed. Kick things off by
 		// loading any preexisting todos that might be saved in *localStorage*.
 		initialize: function() {
+		  $.ajaxSetup({timeout:10000}); //in milliseconds
+
 		  // TODO: Fill this in somehow
 		  movieCollection = new MovieCollection;
 		  this.pageViews = {

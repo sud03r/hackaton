@@ -12,13 +12,14 @@ var SearchView = Backbone.View.extend({
 	search: function() {
 		var args = $('#search-text').val();
 		self = this;
-		$.get('ajax/search_movie.php?q=', args, function(result) {
+		$.get('ajax/search_movie.php', {q : args}, function(result) {
 			if (result.success) {
 				var movies = new MovieCollection;
 				var movieInfo = result.data;
-				for (var i = 0; i < movieInfo.length; i++) 
+				var MAX_MOVIES = Math.min(100,movieInfo.length);
+				for (var i = 0; i < MAX_MOVIES; i++) 
 				{
-					movies.add(movieInfo[i]);
+					movies.add(new MovieModel(movieInfo[i]));
 				}
 
 				// Apply the parent application's call-back function
