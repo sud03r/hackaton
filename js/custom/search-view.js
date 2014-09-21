@@ -14,6 +14,6 @@ var SearchView = Backbone.View.extend({
 	},
 
 	initialize: function() {
-		this.$el.append($("<div>").load("layouts/" + this.template));
+		this.$el.load("layouts/" + this.template);
 	}
 });

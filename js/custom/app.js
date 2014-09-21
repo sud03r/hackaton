@@ -17,7 +17,8 @@ $(function(){
 		urlMapper: new Backbone.Router(),
 		
 		pageViews : {
-			"search" : new SearchView()
+			"search"  : new SearchView(),
+			"results" : new ResultsView()
 		},
 		
 		// TODO: Fill in the events if necessary
@@ -58,6 +59,6 @@ $(function(){
 	var app = new AppView;
 
 	// Start the history
-	app.loadPage("search");
+	app.loadPage("results");	// TODO: CHANGE THIS BACK
 	app.render();
 });

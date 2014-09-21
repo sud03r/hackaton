@@ -1,0 +1,30 @@
+<div class="row" class="search-title-container">
+	<div class="col-md-6">
+		<img class="small-logo" src="images/assets/logo.png">
+		<input type="text" class="form-control search-title" style="width:80%;" id="search-text">
+		<a href="#" class="glyphicon glyphicon-search block-icon"></a>
+	</div>
+
+	<div class="col-md-4">
+	</div>
+
+	<div class="col-md-2 sort-functions">
+		<!--<a href="#" class="glyphicon glyphicon-eye-open"></a>-->
+		<a href="#" id="low-high-btn">high to low <i class="glyphicon glyphicon-sort" /></a>
+		<a href="#" id="sort-by-btn">sort by <i class="glyphicon glyphicon-chevron-down" /></a>
+	</div>
+</div>
+
+<div class="results-collection">
+	<!-- See underscore.js and backbone.js -->
+	<% _.each(movies, function(movie) { %>
+		<% console.log (movie); %>
+		<div class="movie-result">
+			<img src="<%= movie.url %>" class="thumbnail">
+			<h2><%= movie.title %></h2>
+			<h3>(<%= movie.year %>)</h3>
+
+			<!-- TODO: FILL THE REST OF THIS -->
+		</div>
+	<% }); %>
+</div>
