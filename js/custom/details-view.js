@@ -23,13 +23,13 @@ var DetailsView = Backbone.View.extend({
 	},
 
 	initialize: function() {
-		this.collection = new MovieCollection;
+		if (!this.model) this.model = new MovieModel;
 		this.loaded = false;
 	},
 
 	render: function() {
 		this.loadTemplate(function () {
-			this.$el.html(this.template({movies: this.collection.toJSON()}));
+			this.$el.html(this.template(this.model.attributes));
 		});
 	}
 });
