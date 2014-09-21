@@ -163,6 +163,7 @@ class Pq {
         Pq::updateData($constraints, Pq::findGenreConstraints($queryC));
         // clean some more again
 		
+		/*
         $words = explode(" ", $queryC);
         $numWords = count($words);
 		$tokenLim = array();
@@ -201,8 +202,8 @@ class Pq {
             echo " $const->type";
 		}
 		echo "\n\n";
-
-        return findMatches($movieList, $constraints);
+		*/
+        return Pq::findMatches($movieList, $constraints);
 	}
 
 	// take a $movieList -- if not empty, we select things from there
