@@ -7,12 +7,18 @@ var ResultsView = Backbone.View.extend({
 	className : "results-page",
 	
 	events: {
-		"click .glyphicon-search" : "handler"
+		"click .glyphicon-search" : "handler",
+		"keypress" : "searchOnEnter"
+	},
+
+	searchOnEnter: function(e) {
+		if(e.keyCode == 13){
+			this.handler();
+		}
 	},
 
 	handler: function(e) {
 		var args = $('#search-text').val();
-		alert(args);
 		self = this;
 		$.get('ajax/search_movie.php', {q : args}, function(result) {
 			if (result.success) {
