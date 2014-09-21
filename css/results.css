@@ -170,6 +170,7 @@ a#sort-by-btn:hover + div, a#sort-by-btn + div:hover {
 	background-repeat: no-repeat;
 	position: relative;
 	top: 3px;
+	z-index: -1;
 }
 
 .key-people {
