@@ -60,6 +60,7 @@
 	<!-- Views -->
 	<script src="js/custom/search-view.js"></script>
 	<script src="js/custom/results-view.js"></script>
+	<script src="js/custom/details-view.js"></script>
 
   </body>
 </html>

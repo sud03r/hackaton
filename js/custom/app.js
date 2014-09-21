@@ -28,7 +28,8 @@ $(function(){
 		  movieCollection = new MovieCollection;
 		  this.pageViews = {
 			"search"  : new SearchView({app: this}),
-			"results" : new ResultsView({app: this})
+			"results" : new ResultsView({app: this}),
+			"details" : new DetailsView({app: this})
 		  }
 		},
 
@@ -42,6 +43,12 @@ $(function(){
 			resultsPage = this.pageViews["results"];
 			resultsPage.collection = movieCollection;
 			this.loadPage("results");
+		},
+
+		showMovieDetails: function(movieModel) {
+			detailsPage = this.pageViews["details"];
+			detailsPage.model = movieModel;
+			this.loadPage("details");
 		},
 
 		loadPage: function(pageName) {

@@ -21,7 +21,7 @@ var SearchView = Backbone.View.extend({
 					movies.add(movieInfo[i]);
 				}
 
-				// Apply the callback function passed into the constructor
+				// Apply the parent application's call-back function
 				if (_.isFunction(self.app.searchCallback)) {
 					self.app.searchCallback(movies);
 				}

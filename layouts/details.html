@@ -1,4 +1,4 @@
-<div class="row" class="search-title-container">
+<div class="row search-title-container">
 	<div class="col-md-6">
 		<a href="index.php"> <img class="small-logo" src="images/assets/logo.svg"> </a>
 		<input type="text" class="form-control search-title" style="width:80%;" id="search-text">
@@ -25,50 +25,54 @@
 	</div>
 </div>
 
-<div class="results-collection">
-	<!-- See underscore.js and backbone.js -->
-	<!-- One of these for each individual movie item -->
-	<% _.each(movies, function(movie,index) { %>
-		<% console.log(movie) %>
-		<div class="movie-result parity-<%= (index%2) %>">
-			<!-- Basic info -->
-			<img src="<%= encodeURI(movie.image) %>" class="thumbnail">
-			<div class="movie-info">
-				<div class="movie-title">
-					<h3 class="movie-name"><%= movie.mName %></h3>
-					<h4 class="movie-year">(<%= movie.year %>)</h4>
-				</div>
+<div class="row">
+	<a href="#" id="back-button"><i class="glyphicon glyphicon-arrow-left"></i> go back</a>
+</div>
 
-				<!-- Ratings -->
-				<div class="rating-group">
-					<span class="rating imdb-rating"><%= movie.rating.imdb || "N/A"  %></span>
-					<img src="images/assets/rt_tomatometer.png" class="rating-icon tomatometer">
-					<span class="rating critics-rating"><%= movie.rating.critics_score || "N/A" %></span>
-					<img src="images/assets/rt_audience.png" class="rating-icon audience">
-					<span class="rating audience-rating"><%= movie.rating.audience_score || "N/A" %></span>
-							
-					<!-- Classification -->
-					<span class="rating rating-icon family-rating <%= movie.rFamily %>"> </span>
-					<span class="rating run-time"><%= movie.runtime || "" %></span>
-					<span class="rating genre"><% (movie.genres || []).join(" ") %></span>
-				</div>
-
-				<!-- Key People -->
-				<div class="key-people">
-					<strong>Director: </strong> 
-						<%= (movie.directors || ["(Not Available)"]).join(", ") %>
-					<br />
-					<strong>Writers: </strong>
-						<%= (movie.writers || ["(Not Available)"]).join(", ") %>
-					<br />
-					<strong>Stars: </strong> 
-						<%= (movie.actors || ["(Not Available)"]).join(", ") %>
-					<br />
-				</div>
-
-				<!-- Description -->
-				<p class="plot"><%= movie.plot %></p>
-			</div>
+<div class="main-movie-area">
+	<img src="<%= encodeURI(image) %>" class="thumbnail large">
+	<div class="movie-info">
+		<div class="movie-title">
+			<h3 class="movie-name"><%= mName %></h3>
+			<h4 class="movie-year">(<%= year %>)</h4>
+			<h4><a id="watch-movie" target="_blank" href=""><i class="glyphicon large glyphicon-play-circle"></i></a></h4>
 		</div>
-	<% }); %>
+
+		<!-- Ratings -->
+		<div class="rating-group">
+					
+			<!-- Classification -->
+			<span class="rating rating-icon family-rating <%= rFamily %>"> </span>
+			<span class="rating run-time"><%= runtime || "" %></span> 
+			<span class="rating genre"><%= (genres || []).join("&nbsp; &nbsp; &nbsp;") %></span>
+		</div>
+
+		<!-- Key People -->
+		<div class="key-people">
+			<strong>Director: </strong> 
+				<%= (directors || ["(Not Available)"]).join(", ") %>
+			<br />
+			<strong>Writers: </strong>
+				<%= (writers || ["(Not Available)"]).join(", ") %>
+			<br />
+			<strong>Stars: </strong> 
+				<%= (actors || ["(Not Available)"]).join(", ") %>
+			<br />
+		</div>
+
+		<!-- Description -->
+		<p class="plot"><%= plot %></p>	
+			
+			<!--
+			<span class="rating imdb-rating"><%= rating.imdb || "N/A"  %></span>
+			<img src="images/assets/rt_tomatometer.png" class="rating-icon tomatometer">
+			<span class="rating critics-rating"><%= rating.critics_score || "N/A" %>%</span>
+			<img src="images/assets/rt_audience.png" class="rating-icon audience">
+			<span class="rating audience-rating"><%= rating.audience_score || "N/A" %>%</span>
+			-->
+	</div>
+</div>
+
+<div class="movie-details">
+	YOU ARE LOOKING AT <%= mName %>
 </div>
