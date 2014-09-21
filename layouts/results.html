@@ -19,37 +19,48 @@
 	<!-- See underscore.js and backbone.js -->
 	<!-- One of these for each individual movie item -->
 	<% _.each(movies, function(movie,index) { %>
-		<% console.log(movie); %>
-		<div class="movie-result parity-<%= (movie.index%2) %>">
+		<div class="movie-result parity-<%= (index%2) %>">
 			<!-- Basic info -->
+			<!-- TODO FIX THIS -->
 			<img src="<%= encodeURI(movie.image) %>" class="thumbnail">
-			<h2 class="movie-name"><%= movie.mName %></h2>
-			<h3 class="movie-year">(<%= movie.year %>)</h3>
+			<div class="movie-info">
+				<div class="movie-title">
+					<h3 class="movie-name"><%= movie.mName %></h3>
+					<h4 class="movie-year">(<%= movie.year %>)</h4>
+				</div>
 
-			<!-- Ratings -->
-			<span class="rating imdb-rating"><%= movie.rating.imdb  %></span>
-			<span class="rating critics-rating"><%= movie.rating.critics_score %></span>
-			<span class="rating audience-rating"><%= movie.rating.audience_score %></span>
+				<!-- Ratings -->
+				<div class="rating-group">
+					<span class="rating imdb-rating"><%= movie.rating.imdb  %></span>
+					<img src="images/assets/rt_tomatometer.png" class="rating-icon tomatometer">
+					<span class="rating critics-rating"><%= movie.rating.critics_score %></span>
+					<img src="images/assets/rt_audience.png" class="rating-icon audience">
+					<span class="rating audience-rating"><%= movie.rating.audience_score %></span>
+							
+					<!-- Classification -->
+					<span class="rating rating-icon family-rating <%= movie.rFamily %>"> </span>
+					<span class="rating run-time"><%= movie.runtime %></span>
+					<span class="rating genre"><% if (!!movie.genres) movie.genres.join(" ") %></span>
+				</div>
 
-			<!-- Classification -->
-			<span class="family-rating <%= movie.rFamily %>"></span>
-			<span class="run-time"><%= movie.runtime %></span>
-			<span class="genre"><% if (!!movie.genres) movie.genres.join(" ") %></span>
+				<!-- Key People -->
+				<div class="key-people">
+					<strong>Director: </strong> 
+						<% _.each(movie.directors, function (dire) { %>
+							<span><%= dire %> </span>
+						<% }); %>
+					<br />
 
-			<!-- Key People -->
-			<div class="key-people">
-				<strong>Director: </strong> 
-					<% _.each(movie.directors, function (dire) { %>
-						<span><%= dire %>
-					<% }); %>
-				<br />
+					<strong>Writers: </strong><span> <% if (!!movies.writers) movie.writers.join(', '); %></span> <br />
+					<strong>Stars: </strong><span><% if (!!movies.actors) movie.actors.join(', '); %></span>	<br />
+				</div>
 
-				<strong>Writers: </strong><span> <% if (!!movies.writers) movie.writers.join(','); %></span> <br />
-				<strong>Stars: </strong><span><% if (!!movies.actors) movie.actors.join(','); %></span>	<br />
+				<!-- Description -->
+				<!--
+				<%= movie.plot %>
+				<p class="plot">ads dasd oajsdoajsd ads jaosd aosdj asdj oajsdoajsodj asodj a </p>
+				-->
 			</div>
-
-			<!-- Description -->
-			<p class="plot"><%= movie.plot %></p>
 		</div>
 	<% }); %>
 </div>
