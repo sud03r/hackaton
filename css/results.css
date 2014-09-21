@@ -41,7 +41,7 @@
 
 .movie-result {
 	display: inline-block;
-	height: 200px;
+	height: 220px;
 	margin-bottom: 30px;
 	width: 550px;
 }
@@ -52,16 +52,19 @@
 
 .thumbnail {
 	display: inline-block;
-	height: 200px;
+	height: 100%;
 	border: none;
 	clear: none;
+	max-width: 33%;
 }
 
 .movie-info {
 	display: inline-block;
-	height: 200px;
+	height: 100%;
 	clear: none;
 	vertical-align: top;
+	max-width: 66%;
+	width: 400px;
 }
 
 .movie-title {
@@ -127,6 +130,12 @@
 
 .key-people {
 	margin-left: 10px;
+	display: block;
+}
+
+.plot {
+	margin-left: 10px;
+	margin-top: 10px;
 }
 
 .PG-13 {
