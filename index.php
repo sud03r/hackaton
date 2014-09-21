@@ -6,7 +6,7 @@
  * like the page title, etc.
  */
 
- include '/includes/env.php';
+ include 'includes/env.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,6 +18,7 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -29,8 +30,7 @@
   <body>
   	<div class="container" id="app-container">
 		<!-- The main page is loaded here-->
-		<div id="page-content"> </div>
-
+		<div id="page-content"></div>
 		<div class="footer">
 		Copyright stuff here.
 		</div>
