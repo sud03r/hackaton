@@ -1,0 +1,25 @@
+
+#back-button {
+	margin-left: 15px;
+}
+
+.main-movie-area {
+	padding-top: 10px;
+	display: block;
+}
+
+.thumbnail-large {
+	width: 250px;
+}
+
+#watch-movie {
+	display: inline-block;
+	margin-top: 1px;
+	margin-left: 10px;
+	font-size: 20px;
+}
+
+.movie-info p {
+	margin-left: 10px;
+	font-weight: bold;
+}

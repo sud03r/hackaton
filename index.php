@@ -20,6 +20,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
 	<link href="css/results.css" rel="stylesheet">
+	<link href="css/details.css" rel="stylesheet">
 	
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
 
