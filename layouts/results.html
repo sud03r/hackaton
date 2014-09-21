@@ -18,10 +18,9 @@
 <div class="results-collection">
 	<!-- See underscore.js and backbone.js -->
 	<% _.each(movies, function(movie) { %>
-		<% console.log (movie); %>
 		<div class="movie-result">
-			<img src="<%= movie.url %>" class="thumbnail">
-			<h2><%= movie.title %></h2>
+			<img src="<%= movie.image %>" class="thumbnail">
+			<h2><%= movie.mName %></h2>
 			<h3>(<%= movie.year %>)</h3>
 
 			<!-- TODO: FILL THE REST OF THIS -->

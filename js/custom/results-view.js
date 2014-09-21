@@ -24,16 +24,13 @@ var ResultsView = Backbone.View.extend({
 	},
 
 	initialize: function() {
-		this.collection = [
-			{ title: "Random crap" }
-		];
-
+		this.collection = new MovieCollection;
 		this.loaded = false;
 	},
 
 	render: function() {
 		this.loadTemplate(function () {
-			this.$el.html(this.template({movies: this.collection}));
+			this.$el.html(this.template({movies: this.collection.toJSON()}));
 		});
 	}
 });

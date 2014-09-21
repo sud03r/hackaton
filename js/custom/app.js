@@ -16,11 +16,6 @@ $(function(){
 
 		urlMapper: new Backbone.Router(),
 		
-		pageViews : {
-			"search"  : new SearchView(),
-			"results" : new ResultsView()
-		},
-		
 		// TODO: Fill in the events if necessary
 		events: {
 		},
@@ -30,12 +25,23 @@ $(function(){
 		// loading any preexisting todos that might be saved in *localStorage*.
 		initialize: function() {
 		  // TODO: Fill this in somehow
+		  movieCollection = new MovieCollection;
+		  this.pageViews = {
+			"search"  : new SearchView({app: this}),
+			"results" : new ResultsView({app: this})
+		  }
 		},
 
 		// Re-rendering the App just means refreshing the statistics -- the rest
 		// of the app doesn't change.
 		render: function() {
 		  // TODO: Render function
+		},
+
+		searchCallback: function(movieCollection) {
+			resultsPage = this.pageViews["results"];
+			resultsPage.collection = movieCollection;
+			this.loadPage("results");
 		},
 
 		loadPage: function(pageName) {
@@ -59,6 +65,6 @@ $(function(){
 	var app = new AppView;
 
 	// Start the history
-	app.loadPage("results");	// TODO: CHANGE THIS BACK
+	app.loadPage("search");	// TODO: CHANGE THIS BACK
 	app.render();
 });
