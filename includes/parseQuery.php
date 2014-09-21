@@ -21,11 +21,13 @@ class Pq {
 	*/
 	const ST = 1;
 	const EN = 2;
+	
+	const SEP = "|"; // we insert this whereever we take stuff out from the query
 
 	// there are a couple of categories of basic queries; we keep track of them
 	public static $baseQueries = array(
 		"year", "genre", "director", "actor", "rating", "rated", "length",
-		"lOp", /* should these be here? : not queries, categories */
+		"lOp", "sep" /* should these be here? : not queries, categories */
 	);
 
 	public static $logicOps = array(
@@ -84,7 +86,9 @@ class Pq {
 				}
 			}
 		} else {
-			if (isset(Pq::$keywords[$word])) {
+            if ($word == Pq::SEP) {
+                Pq::updateData($toRet, array("base"=>"sep", "oLim"=>Pq::ST|Pq::EN));
+            } elseif (isset(Pq::$keywords[$word])) {
 				Pq::updateData($toRet, Pq::$keywords[$word]);
 			} elseif (isset(Pq::$rateSites[$word])) {
 				Pq::updateData($toRet, ( array("base"=>"rating") + Pq::$rateSites[$word]));	
@@ -136,11 +140,11 @@ class Pq {
         $constraints = array();
         
         // look for "movie[s] like _stuff_ [with/and]"
-        $pattern = '/movies? like (.*) (with|and|\s*$) /i';
+        $pattern = '/(movies?)? like (.*)( with| and|\s*$)/i';
         if (preg_match($pattern, $query, $matches) == 1) {
             Pq::updateData($movieList, Query::bySimilarity($matches[1]));
             // adds to it -- also delete this section of the query
-            $query = preg_replace($pattern, "", $query);
+            $query = preg_replace($pattern, Pq::SEP, $query);
         }
 		
 		// -- we don't have a title;  analyze for tokens
@@ -150,7 +154,7 @@ class Pq {
 		$queryC = Pq::cleanQuery($queryC);
 		
 		Pq::updateData($constraints, Pq::findDateRangeConstraints($queryC));
-		
+		Pq::updateData($constraints, Pq::findLengthConstraints($queryC));
 		
         $words = explode(" ", $queryC);
         $numWords = count($words);
@@ -238,10 +242,10 @@ class Pq {
 	// removes the found constraints from the argument
 	public static function findDateRangeConstraints(&$query) {
         $patterns = array(
-            "/before ('\d{2}|\d{4})/"=>0,
-            "/after ('\d{2}|\d{4})/"=>1,
-            "/between ('\d{2}|\d{4}) and ('\d{2}|\d{4})/"=>2,
-            "/from ('\d{2}|\d{4}) to ('\d{2}|\d{4})/"=>2
+            "/before ('\d{2}|\d{4})/i"=>0,
+            "/after ('\d{2}|\d{4})/i"=>1,
+            "/between ('\d{2}|\d{4}) and ('\d{2}|\d{4})/i"=>2,
+            "/from ('\d{2}|\d{4}) to ('\d{2}|\d{4})/i"=>2
         );
         $toRet = array();
         // look for these
@@ -263,10 +267,35 @@ class Pq {
                         break;
                 }
                 // now delete this stuff!
-                $query = preg_replace($pattern, "", $query);
+                $query = preg_replace($pattern, Pq::SEP, $query);
                 
                 array_push($toRet, new Constraint("dateRange", array("start"=>$start, "end"=>$end)));
             }
+        }
+        return $toRet;
+	}
+	
+	// returns an array of constraints 
+	public static function findLengthConstraints(&$query) {
+        $toRet = array();
+        $pattern = "/(longer|shorter) than (\d+)\s*(\w+)\b/i";
+        $min = null;
+        $max = null;
+        if (preg_match($pattern, $query, $matches) == 1) {
+            // delete the matched thing 
+            $query = preg_replace($pattern, Pq::SEP, $query);
+ 
+            // we don't deal with hours
+            if ($matches[3][0] != "m")
+                return $toRet;
+            
+            $mins = intval($matches[2]);
+            if ($matches[1][0] == "l")
+                $min = $mins;
+            else
+                $max = $mins;
+            
+            array_push($toRet, new Constraint("length", array("min"=>$min, "max"=>$max)));
         }
         return $toRet;
 	}
