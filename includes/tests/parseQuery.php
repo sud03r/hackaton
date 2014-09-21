@@ -18,7 +18,9 @@ $queries = array(
     "movies like Drive and drama"=>"should match -movies like-",	
 	"Hitchhiker's Guide to the Galaxy"=>"missing 'the' from the beginning",
 	"The Princess Bride"=>"easy",
-	"tarantino 2009"=>"ahh"
+	"tarantino 2009"=>"ahh",
+	"movies since 2000 that are PG-13" => "jesus christ",
+	"family movie that is shorter than 90 minutes"=>"why not?",
 );
 
 $iter = 0;
