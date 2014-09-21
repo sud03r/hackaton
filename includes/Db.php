@@ -22,7 +22,6 @@ class Db {
 	}
 
 	public static function query($q) {
-		echo "Running: $q\n";
 		$result = mysql_query($q, self::$conn);
 		if( $result===FALSE ) {
 			self::logError(QUERY_FAILURE, $q, mysql_error(self::$conn));
