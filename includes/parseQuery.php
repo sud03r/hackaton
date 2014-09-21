@@ -135,10 +135,15 @@ class Pq {
 		
 		// first thing we do is see if this is a movie title:
 		$res = Query::byTitle($query);
-		if (!is_null($res)) return $res;
+		if (count($res) > 0) return $res;
 
 		// -- we don't have a title;  analyze for tokens
-		$words = explode(" ", $query);
+		$queryC = strtolower($query); // TODO could find names by capital letter maybe
+		$queryC = str_replace(" with ", " and ", $queryC);
+		$queryC = Pq::cleanQuery($queryC);
+		
+		
+		$words = explode(" ", $queryC);
 		$numWords = count($words);
 		$tokenLim = array();
 		$base = array();
@@ -152,18 +157,24 @@ class Pq {
 				// see if the previous one had a suggestion for us
 				if (($prevRes["nLim"] & Pq::EN) != 0)
 					$res["oLim"] |= Pq::ST;
+			} else {
+                // first one always starts! :)
+                $res["oLim"] |= Pq::ST;
 			}
 			array_push($base, $res["base"]);
 			array_push($tokenLim, $res["oLim"]);
 
 			$prevRes = $res;
 		}
+		// last one always finishes
+		$tokenLim[$numWords-1] |= Pq::EN;
 
 		// we represent it as a string now
-		echo "$query\n";
-		echo getStringRepOfCats($base, $tokenLim);
+		echo "$queryC\n";
+		echo Pq::getStringRepOfCats($base, $tokenLim, $numWords);
 		echo "\n\n";
 
+		
 
 
 	}
@@ -176,7 +187,7 @@ class Pq {
 		$arrayUpdate = array_merge($arrayUpdate, $add);
 	}
 
-	public static function getStringRepOfCats($base, $tokenLim) {
+	public static function getStringRepOfCats($base, $tokenLim, $numWords) {
 		$toRet = "";
 		for ($i = 0; $i < $numWords; $i += 1) {
 			$desc = "";
@@ -189,7 +200,25 @@ class Pq {
 			if (($tokenLim[$i] & Pq::EN) != 0) $desc .= "]";
 			$toRet .= " $desc";
 		}
-		return toRet;
+		return $toRet;
+	}
+	
+	public static function cleanQuery($queryC) {
+        $toRemove = array(
+            "movie " => "", 
+            "movies " => "",
+            " movie" => "", 
+            " movies" => "",
+            " the " => " ",
+            " a " => " ", 
+            " by " => " ", 
+            " of " => " ", 
+            " an " => " "
+        );
+        foreach ($toRemove as $pat => $gone) {
+            $queryC = str_replace($pat, $gone, $queryC);
+        }
+        return $queryC;
 	}
 }
 

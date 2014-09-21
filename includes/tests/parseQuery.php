@@ -18,12 +18,12 @@ $queries = array(
 
 $iter = 0;
 foreach ($queries as $query => $descr) {
-	if ($iter > 3) break;
+# 	if ($iter > 3) break;
 	$iter += 1;
 	echo "-- query: $query\n";
 	echo "          $descr\n";
 	$movieMatching = Pq::parseQuery($query);
-	# TODO var_dump($movieMatching);
+	var_dump($movieMatching);
 	echo "\n";
 }
 
