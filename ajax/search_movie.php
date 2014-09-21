@@ -18,6 +18,7 @@ if(isset($_GET['q']))
 	$movies = Pq::parseQuery($query);
 	$response["success"] = true;
 	$response["data"] = $movies;
+	var_dump($movies);
 }
 
 echo json_encode($response);
