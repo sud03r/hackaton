@@ -6,7 +6,7 @@
  * like the page title, etc.
  */
 
- include '/includes/env.php';
+ include 'includes/env.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,8 +30,7 @@
   <body>
   	<div class="container" id="app-container">
 		<!-- The main page is loaded here-->
-		<div id="page-content"> </div>
-
+		<div id="page-content"></div>
 		<div class="footer">
 		Copyright stuff here.
 		</div>
