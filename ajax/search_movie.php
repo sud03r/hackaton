@@ -16,10 +16,10 @@ $response = array("success"=>false);
 if(isset($_GET['q']))
 {
     $query = $_GET['q'];
-	echo "$query\n";
+#	echo "$query\n";
 	try {
 		$movies = Pq::parseQuery($query);
-		print_r($movies);
+#		print_r($movies);
 		$response["success"] = true;
 		$response["data"] = $movies;
 	} catch (Exception $e) {
