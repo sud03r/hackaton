@@ -12,7 +12,9 @@ $queriesDate = array(
 
 foreach($queriesDate as $q) {
     echo "$q:\n";
-    var_dump(Pq::findDateRangeConstraints($q));
+    $cons = Pq::findDateRangeConstraints($q);
+    foreach ($cons as $con)
+        echo $con->getSQLCondition() . "\n";
     echo "$q:\n";
 }
 
@@ -26,7 +28,9 @@ $queriesLength = array(
 
 foreach($queriesLength as $q) {
     echo "$q:\n";
-    var_dump(Pq::findLengthConstraints($q));
+    $cons = Pq::findLengthConstraints($q);
+    foreach ($cons as $con)
+        echo $con->getSQLCondition() . "\n";
     echo "$q:\n";
 }
 
@@ -40,7 +44,9 @@ $queriesGenre = array(
 
 foreach($queriesGenre as $q) {
     echo "$q:\n";
-    var_dump(Pq::findGenreConstraints($q));
+    $cons = Pq::findGenreConstraints($q);
+    foreach ($cons as $con)
+        echo $con->getSQLCondition() . "\n";
     echo "$q:\n";
 }
 
