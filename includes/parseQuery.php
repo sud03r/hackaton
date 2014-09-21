@@ -8,7 +8,6 @@ require_once(__DIR__ . "/queries.php");
 
 class Pq {
     
-    const NUM_SIMILAR_MOVIE = 20;
     // TODO romantic should map to romance, and a lot of similar things
 
 	/*
@@ -146,7 +145,7 @@ class Pq {
             $myMovies = Query::byTitle($matches[1]);
             foreach ($myMovies as $movie){
                 //collect the similar movies
-                Pq::updateData($movieList, Query::bySimilarity($movie, NUM_SIMILAR_MOVIE));
+                Pq::updateData($movieList, Query::bySimilarity($movie));
             }
             // also delete this section of the query
             $query = preg_replace($pattern, Pq::SEP, $query);
@@ -203,11 +202,37 @@ class Pq {
 		}
 		echo "\n\n";
 
-
-        // TODO at this point we have a list of movies $movieList
-        // and a list of constraints .. run them
+        return findMatches($movieList, $constraints);
 	}
 
+	// take a $movieList -- if not empty, we select things from there
+	// if empty, we select things from the whole database
+	// --------- always according to the constraints
+	public static function findMatches($movieList, $constraints) {
+        // if there is a movie list... for now we'll cheat and
+        // just make an sql query that includes only those movies
+        $query = "select * from movies where ";
+        // now we specify each movie 
+        $hadStuff = false;
+        if (count($movieList) > 0) {
+            $hadStuff = true;
+            $query .= "(";
+            foreach ($movieList as $movie) {
+                $query .= "(name=" . $movie->mName . " and year=" . $movie->year . ") OR ";
+            }
+            $query .= "1=0 )"; // so this last condition is always false
+        }
+        if (count($constraints) > 0) {
+            if (hadStuff) $query .= " AND ";
+            foreach ($constraints as $con) {
+                $query .= $con->getSQLCondition();
+                $query .= " AND ";
+            }
+            $query .= "1=1;"; // so this last condition is always false
+        }
+        
+	}
+	
 	/* ---------------------------------------------------- */
 	/* Utilities...                                         */
 	/* ---------------------------------------------------- */
@@ -367,11 +392,11 @@ class Pq {
                         $qWords[$index-1] = "";
                     }
                     while ($index+2 < $numWords && $qWords[$index+1] == "or" && in_array($qWords[$index+2], Pq::$genres)) {
+                        array_push($appearing, $qWords[$index+2]);
                         $qWords[$index+1] = "";
                         $qWords[$index+2] = "";
                         $index += 2;
-                        array_push($appearing, $qWords[$index]);
-                    }
+                    } 
                     // now we can create a constraint
                     $listN = "acceptable"; // default
                     if ($negated) $listN = "not_acceptable";
@@ -395,7 +420,7 @@ class Constraint {
         "dateRange"=>array("start"=>null, "end"=>null), // done
         "dateExact"=>array("year"=>null),
         "length"=>array("min"=>null, "max"=>null), // done
-        "genre"=>array("acceptable"=>array(), "not_acceptable"=>array()),
+        "genre"=>array("acceptable"=>array(), "not_acceptable"=>array()), // done
         "famRating"=>array("lastAcceptable"=>array()) //done
     );
     
@@ -418,7 +443,65 @@ class Constraint {
         // $values = Constraint::$types[$type];
         $this->data = $data;
     }
+    
+    // returns in string the condition represented by this instance
+    // eg.: (year > start and year < end)
+    public function getSQLCondition() {
+        $q = "(";
+        switch ($this->type) {
+            case "dateRange":
+                $other = false;
+                if (!is_null($this->data["start"])) {
+                    $q .= "year >= " . $this->data["start"];
+                    $other = true;
+                }
+                if (!is_null($this->data["end"])) {
+                    if ($other) $q .= " AND ";
+                    $q .= "year <= " . $this->data["end"];
+                }
+                break;
+            case "length":
+                $other = false;
+                if (!is_null($this->data["min"])) {
+                    $q .= "runtime >= " . $this->data["min"];
+                    $other = true;
+                }
+                if (!is_null($this->data["max"])) {
+                    if ($other) $q .= " AND ";
+                    $q .= "runtime <= " . $this->data["max"];
+                }
+                break;
+            case "famRating":
+                $oklist = Constraint::getFamilyFriendly($this->data["lastAcceptable"]);
+                foreach ($oklist as $ok) {
+                    $q .= "fRating=" . $ok . " OR ";
+                }
+                $q .= "1=0";
+                break;
+            case "genre":
+                // TODO at the moment only one is set any time... later make safer
+                if (isset($this->data["acceptable"])) {
+                    foreach ($this->data["acceptable"] as $okg) {
+                        $q .= "genre LIKE '%" . $okg . "%' OR ";
+                    }
+                    $q .= "1=0";
+                }
+                
+                if (isset($this->data["not_acceptable"])) {
+                    foreach ($this->data["not_acceptable"] as $okg) {
+                        $q .= "genre NOT LIKE '%" . $okg . "%' AND ";
+                    }
+                    $q .= "1=1";
+                }
+                break;
+        }
+        $q .= ")";
+        return $q;
+    }
+    
+    
 }
+
 
 
 ?>
