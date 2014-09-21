@@ -29,17 +29,19 @@
     <![endif]-->
   </head>
   <body>
-  	<div class="container" id="app-container">
-		<!-- The main page is loaded here-->
-		<div id="page-content"></div>
-	</div>
+    <div class="wrapper">
+		<div class="container" id="app-container">
+			<!-- The main page is loaded here-->
+			<div id="page-content"></div>
+		</div>
 
-	<div class="footer">
-		<div class="footer-centered">
-			<div class="footer-style"> <a href="/help">Help</a> </div>
-			<div class="footer-style"> <a href="/contact">Contact</a> </div>
-			<div class="footer-style"> <a href="/about">About</a> </div>
-			<div class="footer-style"><a href="/copyright">Copyright</a></div>
+		<div class="footer">
+			<div class="footer-centered">
+				<div class="footer-style"> <a href="/help">Help</a> </div>
+				<div class="footer-style"> <a href="/contact">Contact</a> </div>
+				<div class="footer-style"> <a href="/about">About</a> </div>
+				<div class="footer-style"><a href="/copyright">Copyright</a></div>
+			</div>
 		</div>
 	</div>
 	
