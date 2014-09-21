@@ -29,6 +29,30 @@
 	margin-top: 10px;
 }
 
+.sort-functions div {
+	margin-top: -30px;
+	margin-bottom: 10px;
+	z-index: 200;
+	display: none;
+	width: 135px;
+	float: right;
+}
+
+.sort-functions ul li {
+	display: block;
+}
+
+.sort-functions div ul {
+	margin-top: 30px;
+	background-color: #f6f6f6;
+	list-style: none;
+}
+
+a#sort-by-btn:hover + div, a#sort-by-btn + div:hover {
+	display: block;
+}
+
+
 #low-high-btn {
 	margin-right: 20px;
 }
@@ -41,10 +65,23 @@
 
 .movie-result {
 	display: inline-block;
-	height: 200px;
+	height: 220px;
 	margin-bottom: 30px;
 	width: 550px;
 }
+
+.movie-result a {
+	color: #424242;
+}
+
+.movie-result a:hover {
+	color: #424242;
+}
+
+.movie-result a:hover .movie-name, .movie-result a:hover .movie-year {
+	color: #7ac094;
+}
+
 
 .parity-0 {
 	margin-right: 36px;
@@ -52,16 +89,19 @@
 
 .thumbnail {
 	display: inline-block;
-	height: 200px;
+	height: 100%;
 	border: none;
 	clear: none;
+	max-width: 33%;
 }
 
 .movie-info {
 	display: inline-block;
-	height: 200px;
+	height: 100%;
 	clear: none;
 	vertical-align: top;
+	max-width: 66%;
+	width: 400px;
 }
 
 .movie-title {
@@ -100,6 +140,7 @@
 
 .rating {
 	display: inline-block;
+	font-weight: bold;
 }
 
 .imdb-rating {
@@ -127,6 +168,12 @@
 
 .key-people {
 	margin-left: 10px;
+	display: block;
+}
+
+.plot {
+	margin-left: 10px;
+	margin-top: 10px;
 }
 
 .PG-13 {
