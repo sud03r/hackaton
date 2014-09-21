@@ -36,8 +36,10 @@ class Movie {
 	#  "critics_score": 97,
 	#  "audience_rating": "Upright",
 	#  "audience_score": 88 }
-	public function populateFromRottenTomatoes($ratings) {
-		$this->rating += $ratings;
+	public function populateFromRottenTomatoes($similar, $criticRating, $viewerRating) {
+		$this->similarLink = $similar;
+		$this->rating['critics_score'] = $criticRating;
+		$this->rating['audience_score'] = $viewerRating;
 	}
 
 	# If there is another movie with a similar title we'll keep track of that here

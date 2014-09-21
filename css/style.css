@@ -47,6 +47,15 @@ a:hover, a:active {
 	margin-bottom: 20px;
 }
 
+#welcome-msg {
+	display: block;
+	width: 500px;
+	color: #7ac094;
+    margin-left: auto;
+    margin-right: auto;	
+	margin-bottom: 30px;
+}
+
 .search_centered {
 	width: 649px;
 	display: block;
