@@ -132,11 +132,10 @@ class Pq {
 	public static function parseQuery($query) {
 	
 		// first thing we do is see if this is a movie title:
-		$res = Query::byTitle($query);
-		if (count($res) > 0) return $res;
+		$movieListToUnion = Query::byTitle($query);
 
         // rest of the stuff we compose / intersect movie lists
-        $movieList = array();
+        $movieListToFilter = array();
         $constraints = array();
         
         // look for "movie[s] like _stuff_ [with/and]"
@@ -145,7 +144,7 @@ class Pq {
             $myMovies = Query::byTitle($matches[1]);
             foreach ($myMovies as $movie){
                 //collect the similar movies
-                Pq::updateData($movieList, Query::bySimilarity($movie));
+                Pq::updateData($movieListToFilter, Query::bySimilarity($movie));
             }
             // also delete this section of the query
             $query = preg_replace($pattern, Pq::SEP, $query);
@@ -203,7 +202,8 @@ class Pq {
 		}
 		echo "\n\n";
 		*/
-        return Pq::findMatches($movieList, $constraints);
+		$filtered = Pq::findMatches($movieListToFilter, $constraints);
+		return array_merge($movieListToUnion, $filtered);	
 	}
 
 	// take a $movieList -- if not empty, we select things from there
