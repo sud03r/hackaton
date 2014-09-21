@@ -1,6 +1,6 @@
 Colours
 	background: (light grey) #f0efee
-	theme-colour: (orange) #ff5b01
+	theme-colour: (green) #008961
 	regular text: (dark grey) #424242
 	regular link: (grey) #727272
 	hover link: (blue) #96c7d7
