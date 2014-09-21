@@ -44,9 +44,9 @@
 				<div class="rating-group">
 					<span class="rating imdb-rating"><%= movie.rating.imdb || "N/A"  %></span>
 					<img src="images/assets/rt_tomatometer.png" class="rating-icon tomatometer">
-					<span class="rating critics-rating"><%= movie.rating.critics_score || "N/A" %></span>
+					<span class="rating critics-rating"><%= movie.rating.critics_score || "N/A" %>%</span>
 					<img src="images/assets/rt_audience.png" class="rating-icon audience">
-					<span class="rating audience-rating"><%= movie.rating.audience_score || "N/A" %></span>
+					<span class="rating audience-rating"><%= movie.rating.audience_score || "N/A" %>%</span>
 							
 					<!-- Classification -->
 					<span class="rating rating-icon family-rating <%= movie.rFamily %>"> </span>
