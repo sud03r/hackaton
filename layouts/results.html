@@ -31,7 +31,7 @@
 	<% _.each(movies, function(movie,index) { %>
 		<% console.log(movie) %>
 		<div class="movie-result parity-<%= (index%2) %>">
-		<a id="view-movie-<%= (index) %>" data-movie-id="<%= (index) %>" href="#">
+		<a data-movie-id="<%= (index) %>" target="_blank" href="http://www.netflix.com/WiPlayer?movieid=<%= movie.netflixId %>">
 			<!-- Basic info -->
 			<img src="<%= encodeURI(movie.image) %>" class="thumbnail">
 			<div class="movie-info">
