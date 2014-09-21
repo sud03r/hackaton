@@ -13,12 +13,11 @@ var SearchView = Backbone.View.extend({
 		var args = $('#search-text').val();
 		self = this;
 		$.get('ajax/search_movie.php', {q : args}, function(result) {
-			alert("Got something");
-			console.log(result);
 			if (result.success) {
 				var movies = new MovieCollection;
 				var movieInfo = result.data;
-				for (var i = 0; i < movieInfo.length; i++) 
+				var MAX_MOVIES = Math.min(100,movieInfo.length);
+				for (var i = 0; i < MAX_MOVIES; i++) 
 				{
 					movies.add(movieInfo[i]);
 				}

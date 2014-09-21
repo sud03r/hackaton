@@ -65,9 +65,10 @@ a#sort-by-btn:hover + div, a#sort-by-btn + div:hover {
 
 .movie-result {
 	display: inline-block;
-	height: 220px;
+	height: 250px;
 	margin-bottom: 30px;
 	width: 550px;
+	overflow-y: hidden;
 }
 
 .movie-result a {
