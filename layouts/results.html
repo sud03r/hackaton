@@ -29,9 +29,9 @@
 	<!-- See underscore.js and backbone.js -->
 	<!-- One of these for each individual movie item -->
 	<% _.each(movies, function(movie,index) { %>
+		<% console.log(movie) %>
 		<div class="movie-result parity-<%= (index%2) %>">
 			<!-- Basic info -->
-			<!-- TODO FIX THIS -->
 			<img src="<%= encodeURI(movie.image) %>" class="thumbnail">
 			<div class="movie-info">
 				<div class="movie-title">
@@ -56,20 +56,25 @@
 				<!-- Key People -->
 				<div class="key-people">
 					<strong>Director: </strong> 
-						<% _.each(movie.directors, function (dire) { %>
-							<span><%= dire %> </span>
+						<% _.each(movie.directors, function (director) { %>
+							<span><%= director %> </span>
+						<% }); %>
+					<br />
+					<strong>Writers: </strong> 
+						<% _.each(movie.writers, function (writer) { %>
+							<span><%= writer %> </span>
 						<% }); %>
 					<br />
 
-					<strong>Writers: </strong><span> <% if (!!movies.writers) movie.writers.join(', '); %></span> <br />
-					<strong>Stars: </strong><span><% if (!!movies.actors) movie.actors.join(', '); %></span>	<br />
+					<strong>Stars: </strong> 
+						<% _.each(movie.actors, function (actor) { %>
+							<%= actor %>
+						<% }); %>
+					<br />
 				</div>
 
 				<!-- Description -->
-				<!--
-				<%= movie.plot %>
-				<p class="plot">ads dasd oajsdoajsd ads jaosd aosdj asdj oajsdoajsodj asodj a </p>
-				-->
+				<p class="plot"><%= movie.plot %></p>
 			</div>
 		</div>
 	<% }); %>
