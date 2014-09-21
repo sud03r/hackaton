@@ -34,7 +34,7 @@ class Utils {
 
 
 	public static function createMovieFromDbRow($row) {
-		$movie = new Movie($row['name'], $row['rNetflix'], $row['id'], $row['year']);
+		$movie = new Movie($row['name'], $row['rNetflix'], $row['id'], $row['year'], $row['imageURL']);
 		$movie->populateFromIMDB(json_decode($row['imdbJSON'], true));
 		$matches = array();
 		$numMatches = preg_match('/"similar":"(.*?)"/', $row['rottenJSON'], $matches);

@@ -12,7 +12,7 @@ var SearchView = Backbone.View.extend({
 	search: function() {
 		var args = $('#search-text').val();
 		self = this;
-		$.get('ajax/search_movie.php?q=', args, function(result) {
+		$.get('ajax/search_movie.php', {q : args}, function(result) {
 			if (result.success) {
 				var movies = new MovieCollection;
 				var movieInfo = result.data;
