@@ -1,5 +1,5 @@
 <?php
-	$APP_NAME = 'Influx';
+	$APP_NAME = 'Medley';
     
 	// Debug
     ob_start();

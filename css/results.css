@@ -1,7 +1,7 @@
 /* At some point we should combine this with style.css */
 
 .results-page {
-	margin-top: 20px;
+	margin-top: 10px;
 	position: relative;
 }
 
@@ -147,6 +147,9 @@ a#sort-by-btn:hover + div, a#sort-by-btn + div:hover {
 
 .genre {
 	margin-left: 10px;
+	margin-top: 6px;
+	margin-bottom: 8px;
+	color: #008961;
 }
 
 .imdb-rating {

@@ -8,7 +8,34 @@ var ResultsView = Backbone.View.extend({
 	
 	events: {
 		//"click .movie-result a": "selectMovie"
-		"click #sort-by-list li" : "sortCollection"
+		"click #sort-by-list li" : "sortCollection",
+		"click .glyphicon-search" : "handler"
+	},
+
+	handler: function(e) {
+		var args = $('#search-text').val();
+		self = this;
+		$.get('ajax/search_movie.php', {q : args}, function(result) {
+			if (result.success) {
+				var movies = new MovieCollection;
+				var movieInfo = result.data;
+				var MAX_MOVIES = Math.min(100,movieInfo.length);
+				for (var i = 0; i < MAX_MOVIES; i++) 
+				{
+					parsed = _.pick(movieInfo[i], function (value) { 
+						if (!!!value) return false;
+						if (_.isArray(value) && (_.isEmpty(value) || value[0] == "")) return false;
+						return true;
+					});
+					movies.add(new MovieModel(parsed));
+				}
+
+				// Apply the parent application's call-back function
+				if (_.isFunction(self.app.searchCallback)) {
+					self.app.searchCallback(movies);
+				}
+			}
+		}, 'json');
 	},
 
 	loadTemplate: function(callback) {
