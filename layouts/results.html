@@ -19,11 +19,10 @@
 	<!-- See underscore.js and backbone.js -->
 	<!-- One of these for each individual movie item -->
 	<% _.each(movies, function(movie,index) { %>
+		<% console.log(movie); %>
 		<div class="movie-result parity-<%= (movie.index%2) %>">
 			<!-- Basic info -->
-			<!-- TODO FIX THIS -->
-			<!--<img src="<%= encodeURI(movie.image) %>" class="thumbnail">-->
-			<img src="images/assets/forrest-gump.jpg" class="thumbnail">
+			<img src="<%= encodeURI(movie.image) %>" class="thumbnail">
 			<h2 class="movie-name"><%= movie.mName %></h2>
 			<h3 class="movie-year">(<%= movie.year %>)</h3>
 
