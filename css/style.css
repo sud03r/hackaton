@@ -1,5 +1,92 @@
 /* The global style sheet. */
 
-.test-rule {
-	color: red;
+body {
+    background-color: #f0efee;
+}
+
+.main-logo {
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+	margin-top: 50px;
+	margin-bottom: 25px;
+}
+
+.search_centered {
+	width: 649px;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+	margin-top: 15px;
+}
+
+#search-text {
+	display: inline-block;
+	width: 570px;
+	border: none;
+	margin-right: 5px;
+}
+
+#search-submit {
+	display: inline-block;
+	width: 70px;
+	color: #f0efee;
+	font-family: Open Sans;
+}
+
+#browse {
+	display: block;
+	float: right;
+	margin-top: 10px;
+	color: #727272;
+	font-size: 13px;
+	font-family: Open Sans;
+}
+
+#browse:hover {
+	text-decoration: none;
+	color: #7cc5a9;
+}
+
+#search-submit:hover {
+	background-color: #7cc5a9;
+	color: #f0efee;
+}
+
+.btn-default {
+	background-color: #008961;
+	border: none;
+}
+
+
+.third-party-logo {
+	display: inline-block;
+	margin-top: 50px;
+}
+
+.centered {
+	width: 675px;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+}
+
+.third-party-logo.imdb {
+	height: 110px;
+
+}
+
+.third-party-logo.netflix {
+    height: 80px;
+	margin-left: 80px;
+    margin-right: 80px;
+}
+
+.third-party-logo.rottentomatoes {
+    height: 105px;
+}
+
+.footer {
+	background-color: red;
+	margin-left: 0px;
 }

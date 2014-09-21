@@ -1,8 +1,27 @@
 Colours
 	background: (light grey) #f0efee
-	theme-colour: (orange) #ff5b01
+	theme-colour: (green) #008961
+	theme-colour hover: (light green) #7ac094
 	regular text: (dark grey) #424242
 	regular link: (grey) #727272
 	hover link: (blue) #96c7d7
 	dropdown block: (light grey) #f6f6f6
 	
+Use the bootstrap icons
+
+Other assets are in hackaton/images/assets
+
+For the IMDb star rating the actual numbers of the rating needs to go on top (I got this off the site, font and size are most important):
+	display: block;
+	float: left;
+	font-family: tahoma;
+	font-size: 15px;
+	font-weight: 700;
+	height: 66px;
+	line-height: 66px;
+	padding-right: 5px;
+	text-align: center;
+	vertical-align: middle;
+	width: 66px;
+	
+
