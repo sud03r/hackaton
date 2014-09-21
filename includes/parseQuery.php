@@ -231,6 +231,14 @@ class Pq {
             $query .= "1=1;"; // so this last condition is always false
         }
         
+        // now actually call the query
+        $result = Db::query($query);
+        $movies = array();
+        for ($i = 0; $i < Db::getNumRows($result); $i++) {
+            $row = Db::getNextRow($result);
+            array_push($movies, Utils::createMovieFromDbRow($row));
+        }
+        return $movies;
 	}
 	
 	/* ---------------------------------------------------- */
