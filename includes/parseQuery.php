@@ -224,14 +224,15 @@ class Pq {
             $query .= "1=0 )"; // so this last condition is always false
         }
         if (count($constraints) > 0) {
-            if (hadStuff) $query .= " AND ";
+            if ($hadStuff) $query .= " AND ";
             foreach ($constraints as $con) {
                 $query .= $con->getSQLCondition();
                 $query .= " AND ";
             }
             $query .= "1=1;"; // so this last condition is always false
         }
-        
+       
+//	   	echo "$query\n";
         // now actually call the query
         $result = Db::query($query);
         $movies = array();
