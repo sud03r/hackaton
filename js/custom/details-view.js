@@ -1,10 +1,10 @@
-// The search results.
-// A collection of movies will be given (and can also be updated dynamically)
-// These movies will be displayed in a list
+// The details view.
+// Shows all the details of a movie
+// Uses a MovieModel. Shows suggestions, reviews, watch-link.
 
-var ResultsView = Backbone.View.extend({
-	template  : "results.html",
-	className : "results-page",
+var DetailsView = Backbone.View.extend({
+	template  : "details.html",
+	className : "details-page",
 	
 	events: {
 	},

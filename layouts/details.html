@@ -22,7 +22,9 @@
 		<% console.log(movie); %>
 		<div class="movie-result parity-<%= (movie.index%2) %>">
 			<!-- Basic info -->
-			<img src="<%= encodeURI(movie.image) %>" class="thumbnail">
+			<!-- TODO FIX THIS -->
+			<!--<img src="<%= encodeURI(movie.image) %>" class="thumbnail">-->
+			<img src=http://ia.media-imdb.com/images/M/MV5BNzc0MDkwNjI0NF5BMl5BanBnXkFtZTgwMTY1MjEyMDE@._V1_SX300.jpg" class="thumbnail">
 			<h2 class="movie-name"><%= movie.mName %></h2>
 			<h3 class="movie-year">(<%= movie.year %>)</h3>
 
