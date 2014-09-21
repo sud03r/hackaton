@@ -7,7 +7,7 @@ var ResultsView = Backbone.View.extend({
 	className : "results-page",
 	
 	events: {
-		"click .movie-result a": "selectMovie"
+		//"click .movie-result a": "selectMovie"
 	},
 
 	loadTemplate: function(callback) {

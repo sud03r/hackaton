@@ -26,7 +26,12 @@ var SearchView = Backbone.View.extend({
 				var MAX_MOVIES = Math.min(100,movieInfo.length);
 				for (var i = 0; i < MAX_MOVIES; i++) 
 				{
-					movies.add(new MovieModel(movieInfo[i]));
+					parsed = _.pick(movieInfo[i], function (value) { 
+						if (!!!value) return false;
+						if (_.isArray(value) && (_.isEmpty(value) || value[0] == "")) return false;
+						return true;
+					});
+					movies.add(new MovieModel(parsed));
 				}
 
 				// Apply the parent application's call-back function
