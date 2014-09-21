@@ -10,10 +10,27 @@ var SearchView = Backbone.View.extend({
 	},
 
 	search: function() {
-		alert("SEAR");
+		var args = $('#search-text').val();
+		self = this;
+		$.get('ajax/search_movie.php?q=', args, function(result) {
+			if (result.success) {
+				var movies = new MovieCollection;
+				var movieInfo = result.data;
+				for (var i = 0; i < movieInfo.length; i++) 
+				{
+					movies.add(movieInfo[i]);
+				}
+
+				// Apply the callback function passed into the constructor
+				if (_.isFunction(self.app.searchCallback)) {
+					self.app.searchCallback(movies);
+				}
+			}
+		}, 'json');
 	},
 
-	initialize: function() {
-		this.$el.append($("<div>").load("layouts/" + this.template));
+	initialize: function(options) {
+		_.extend(this,options);
+		this.$el.load("layouts/" + this.template);
 	}
 });
