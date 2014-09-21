@@ -7,7 +7,16 @@ require_once(__DIR__ . "/../movie.php");
 
 echo "-- Some tests on the methods accessing rotten tomatoes API --------------\n";
 
-$movieGood = new Movie("Ghostbusters", '6.5', '541018', '1984');
+$myfile = fopen("../../tools/movieData.txt", "r");
+while(!feof($myfile)) {
+  $movies = explode(",", fgets($myfile));
+  $rottenData = getRottenDataByName($movies[2]);
+  $movie = json_encode(selectOurRottenMovieFromRottenYear($rottenData, $movies[3]));
+  print "$movie\n";
+}
+fclose($myfile);
+
+/*$movieGood = new Movie("Ghostbusters", '6.5', '541018', '1984');
 $movieBad = new Movie("Attack on Titan", 5, 70299043, 2013);
 
 $data = getRottenDataByName($movieBad->mName);
@@ -23,7 +32,7 @@ $movieGood->populateFromRottenTomatoes($ourMovie["ratings"]);
 $movieGood->addSimilarTitles($similarTitles);
 assert(count($movieGood->otherTitles) == count($data)); # this is because we have a fake one in otherTitles!!
 assert($movieGood->rating['audience_score'] == 88);
-
+*/
 
 echo "Finished all tests.\n"
 
