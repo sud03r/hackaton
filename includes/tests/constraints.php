@@ -31,4 +31,18 @@ foreach($queriesLength as $q) {
 }
 
 
+echo "\n\n====== GENRE CONSTRAINTS ======\n\n";
+$queriesGenre = array(
+    "something not comedy or horror and drama something",
+    "something romance comedy something",
+    "something not family movie not animation something",
+);
+
+foreach($queriesGenre as $q) {
+    echo "$q:\n";
+    var_dump(Pq::findGenreConstraints($q));
+    echo "$q:\n";
+}
+
+
 ?>
