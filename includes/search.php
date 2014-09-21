@@ -160,4 +160,21 @@ function selectOurMovieFromRotten($rottenData, $myMovie, &$similarTitles) {
 	return $selected;
 }
 
+function selectOurRottenMovieFromRottenYear($rottenData, $year) {
+
+	$selected = null;
+	foreach ($rottenData as $mData) {
+		// now this is data for just one movie.
+		if (is_null($selected) && $mData['year'] == $year) {
+			$selected = $mData;
+		}
+	}
+	// if we didn't select anything, select the first result now
+	if (is_null($selected)) {
+		$selected = $rottenData[0];
+	}
+
+	return $selected;
+}
+
 ?>
