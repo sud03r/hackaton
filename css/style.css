@@ -8,7 +8,7 @@ body {
 	display: block;
     margin-left: auto;
     margin-right: auto;
-	margin-top: 150px;
+	margin-top: 50px;
 	margin-bottom: 25px;
 }
 
@@ -34,7 +34,21 @@ body {
 	font-family: Open Sans;
 }
 
-.search-buttons:hover {
+#browse {
+	display: block;
+	float: right;
+	margin-top: 10px;
+	color: #727272;
+	font-size: 13px;
+	font-family: Open Sans;
+}
+
+#browse:hover {
+	text-decoration: none;
+	color: #7cc5a9;
+}
+
+#search-submit:hover {
 	background-color: #7cc5a9;
 	color: #f0efee;
 }
@@ -72,4 +86,7 @@ body {
     height: 105px;
 }
 
-
+.footer {
+	background-color: red;
+	margin-left: 0px;
+}
