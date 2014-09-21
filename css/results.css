@@ -7,22 +7,18 @@
 
 .search-title-container {
 	position: relative;
+	display: block;
 }
 
 .block-icon {
 	display : inline-block;
-	margin-right: 2px;
-	background: white;
-	padding: 8px;
 	position: relative;
+	font-size: 130%;
 	top: 3px;
-	font-size: 120%;
-	right: 5px;
-}
+} 
 
 .small-logo {
-	width  : 40px;
-	height : 40px;
+	height : 60px;
 	margin-right : 10px;
 }
 
@@ -30,4 +26,213 @@
 	line-height: 40px;
 	vertical-align: bottom;
 	height: 40px;
+	margin-top: 10px;
 }
+
+.sort-functions div {
+	margin-top: -30px;
+	margin-bottom: 10px;
+	z-index: 200;
+	display: none;
+	width: 135px;
+	float: right;
+}
+
+.sort-functions ul li {
+	display: block;
+}
+
+.sort-functions div ul {
+	margin-top: 30px;
+	background-color: #f6f6f6;
+	list-style: none;
+}
+
+a#sort-by-btn:hover + div, a#sort-by-btn + div:hover {
+	display: block;
+}
+
+
+#low-high-btn {
+	margin-right: 20px;
+}
+
+.results-collection {
+	width: 100%;
+	display: block;
+	margin-top: 20px;
+}
+
+.movie-result {
+	display: inline-block;
+	height: 220px;
+	margin-bottom: 30px;
+	width: 550px;
+}
+
+.movie-result a {
+	color: #424242;
+}
+
+.movie-result a:hover {
+	color: #424242;
+}
+
+.movie-result a:hover .movie-name, .movie-result a:hover .movie-year {
+	color: #7ac094;
+}
+
+
+.parity-0 {
+	margin-right: 36px;
+}
+
+.thumbnail {
+	display: inline-block;
+	height: 100%;
+	border: none;
+	clear: none;
+	max-width: 33%;
+}
+
+.movie-info {
+	display: inline-block;
+	height: 100%;
+	clear: none;
+	vertical-align: top;
+	max-width: 66%;
+	width: 400px;
+}
+
+.movie-title {
+	display: inline-block;
+	margin-top: 0px;
+}
+
+.movie-name {
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 0px;
+	margin-left: 10px;
+	color: #008961;
+	margin-bottom: 0px;
+}
+
+.movie-year {
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 4px;
+	margin-left: 10px;
+	color: #008961;
+	margin-bottom: 0px;
+}
+
+.rating-icon {
+	display: inline-block;
+	height: 30px;
+	margin-left: 10px;
+}
+
+.rating-group {
+	vertical-align: middle;
+	margin-top: 0px;
+}
+
+.rating {
+	display: inline-block;
+	font-weight: bold;
+}
+
+.imdb-rating {
+	background-image: url('../images/assets/imdb_star.png');
+	background-size: 50px 47px;
+	width: 50px;
+	height: 47px;
+	text-align: center;
+	line-height: 47px;
+	margin-left: 10px;
+}
+
+.run-time {
+	margin-left: 10px;
+}
+
+.family-rating {
+	background-position: center center;
+	width: 44px;
+	height: 15px;
+	background-repeat: no-repeat;
+	position: relative;
+	top: 3px;
+}
+
+.key-people {
+	margin-left: 10px;
+	display: block;
+}
+
+.plot {
+	margin-left: 10px;
+	margin-top: 10px;
+}
+
+.PG-13 {
+	background-image: url('../images/assets/imdb_rating_pg13.png');
+}
+
+.PG {
+	background-image: url('../images/assets/imdb_rating_pg.png');
+}
+
+.APPROVED {
+	background-image: url('../images/assets/imdb_rating_approved.png');
+}
+
+.G {
+	background-image: url('../images/assets/imdb_rating_g.png');
+}
+
+.NC-17 {
+	background-image: url('../images/assets/imdb_rating_nc17.png');
+}
+
+.NR {
+	background-image: url('../images/assets/imdb_rating_nr.png');
+}
+
+.R {
+	background-image: url('../images/assets/imdb_rating_r.png');
+}
+
+.TV14 {
+	background-image: url('../images/assets/imdb_rating_tv-14.png');
+}
+
+.TVG {
+	background-image: url('../images/assets/imdb_rating_tv-g.png');
+}
+
+.TVMA{
+	background-image: url('../images/assets/imdb_rating_tv-ma.png');
+}
+
+.TVPG {
+	background-image: url('../images/assets/imdb_rating_tv-pg.png');
+}
+
+.TVY {
+	background-image: url('../images/assets/imdb_rating_tv-y.png');
+}
+
+.TVY7 {
+	background-image: url('../images/assets/imdb_rating_tv-y7.png');
+}
+
+.UR {
+	background-image: url('../images/assets/imdb_rating_ur.png');
+}
+
+.X {
+	background-image: url('../images/assets/imdb_rating_x.png');
+}
+

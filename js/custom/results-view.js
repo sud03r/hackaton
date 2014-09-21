@@ -7,6 +7,7 @@ var ResultsView = Backbone.View.extend({
 	className : "results-page",
 	
 	events: {
+		"click .movie-result a": "selectMovie"
 	},
 
 	loadTemplate: function(callback) {
@@ -22,7 +23,8 @@ var ResultsView = Backbone.View.extend({
 		});
 	},
 
-	initialize: function() {
+	initialize: function(options) {
+		_.extend(this,options);
 		this.collection = new MovieCollection;
 		this.loaded = false;
 	},
@@ -31,5 +33,24 @@ var ResultsView = Backbone.View.extend({
 		this.loadTemplate(function () {
 			this.$el.html(this.template({movies: this.collection.toJSON()}));
 		});
+	},
+
+	selectMovie: function(obj) {
+		$el = $(obj.currentTarget);
+
+		// Get a reference to the movie object (model)
+		var movieIndex = $el.data("movie-id");
+		if (!_.isNumber(movieIndex) || movieIndex < 0 || movieIndex >= this.collection.length) {
+			throw "Invalid movie id selected. Something went wrong.";
+		}
+		var movie = this.collection.at(movieIndex);
+
+		// Apply the parent application's call-back function
+		if (_.isFunction(this.app.showMovieDetails)) {
+			this.app.showMovieDetails(movie);
+		}
+
+		// Return the movie, just in case someone else needs it
+		return movie;
 	}
 });

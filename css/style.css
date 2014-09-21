@@ -2,10 +2,26 @@
 
 body {
     background-color: #f0efee;
-	font-family: Open Sans;
+	font-family: 'Open Sans',arial,sans-serif;
 	/* add font */
-	font-size: 12px;
+	font-size: 13px;
 	color: #424242;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+.wrapper {
+	position: relative;
+	height: auto !important;
+	min-height: 100%;
+}
+
+.container {
+	padding-bottom: 40px;
 }
 
 a:link, a:visited {
@@ -121,5 +137,6 @@ a:hover, a:active {
 	bottom: 0;
 	padding-top: 9px;
 	height: 40px;
+	margin-top: 20px;
 }
 

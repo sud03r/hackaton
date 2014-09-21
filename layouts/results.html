@@ -1,6 +1,6 @@
 <div class="row" class="search-title-container">
 	<div class="col-md-6">
-		<img class="small-logo" src="images/assets/logo.svg">
+		<a href="index.php"> <img class="small-logo" src="images/assets/logo.svg"> </a>
 		<input type="text" class="form-control search-title" style="width:80%;" id="search-text">
 		<a href="#" class="glyphicon glyphicon-search block-icon"></a>
 	</div>
@@ -12,6 +12,16 @@
 		<!--<a href="#" class="glyphicon glyphicon-eye-open"></a>-->
 		<a href="#" id="low-high-btn">high to low <i class="glyphicon glyphicon-sort" /></a>
 		<a href="#" id="sort-by-btn">sort by <i class="glyphicon glyphicon-chevron-down" /></a>
+		<div>
+			<ul style="padding-left: 21px; padding-right: 21px;">
+				<li> <a id="relevance" href="#"> Relevance </a> </li>
+				<li> <a id="imdb-rating" href="#"> IMDb Rating </a> </li>
+				<li> <a id="rt-rating" href="#"> RT Rating </a> </li>
+				<li> <a id="netflix-rating" href="#"> Netflix Rating </a> </li>
+				<li> <a id="netflix-release" href="#"> Netflix Release </a> </li>
+				<li> <a id="date" href="#"> Date </a> </li>
+			</ul>
+		</div>
 	</div>
 </div>
 
@@ -19,37 +29,48 @@
 	<!-- See underscore.js and backbone.js -->
 	<!-- One of these for each individual movie item -->
 	<% _.each(movies, function(movie,index) { %>
-		<% console.log(movie); %>
-		<div class="movie-result parity-<%= (movie.index%2) %>">
+		<% console.log(movie) %>
+		<div class="movie-result parity-<%= (index%2) %>">
+		<a id="view-movie-<%= (index) %>" data-movie-id="<%= (index) %>" href="#">
 			<!-- Basic info -->
 			<img src="<%= encodeURI(movie.image) %>" class="thumbnail">
-			<h2 class="movie-name"><%= movie.mName %></h2>
-			<h3 class="movie-year">(<%= movie.year %>)</h3>
+			<div class="movie-info">
+				<div class="movie-title">
+					<h3 class="movie-name"><%= movie.mName %></h3>
+					<h4 class="movie-year">(<%= movie.year %>)</h4>
+				</div>
 
-			<!-- Ratings -->
-			<span class="rating imdb-rating"><%= movie.rating.imdb  %></span>
-			<span class="rating critics-rating"><%= movie.rating.critics_score %></span>
-			<span class="rating audience-rating"><%= movie.rating.audience_score %></span>
+				<!-- Ratings -->
+				<div class="rating-group">
+					<span class="rating imdb-rating"><%= movie.rating.imdb || "N/A"  %></span>
+					<img src="images/assets/rt_tomatometer.png" class="rating-icon tomatometer">
+					<span class="rating critics-rating"><%= movie.rating.critics_score || "N/A" %>%</span>
+					<img src="images/assets/rt_audience.png" class="rating-icon audience">
+					<span class="rating audience-rating"><%= movie.rating.audience_score || "N/A" %>%</span>
+							
+					<!-- Classification -->
+					<span class="rating rating-icon family-rating <%= movie.rFamily %>"> </span>
+					<span class="rating run-time"><%= movie.runtime || "" %></span>
+					<span class="rating genre"><% (movie.genres || []).join(" ") %></span>
+				</div>
 
-			<!-- Classification -->
-			<span class="family-rating <%= movie.rFamily %>"></span>
-			<span class="run-time"><%= movie.runtime %></span>
-			<span class="genre"><% if (!!movie.genres) movie.genres.join(" ") %></span>
+				<!-- Key People -->
+				<div class="key-people">
+					<strong>Director: </strong> 
+						<%= (movie.directors || ["(Not Available)"]).join(", ") %>
+					<br />
+					<strong>Writers: </strong>
+						<%= (movie.writers || ["(Not Available)"]).join(", ") %>
+					<br />
+					<strong>Stars: </strong> 
+						<%= (movie.actors || ["(Not Available)"]).join(", ") %>
+					<br />
+				</div>
 
-			<!-- Key People -->
-			<div class="key-people">
-				<strong>Director: </strong> 
-					<% _.each(movie.directors, function (dire) { %>
-						<span><%= dire %>
-					<% }); %>
-				<br />
-
-				<strong>Writers: </strong><span> <% if (!!movies.writers) movie.writers.join(','); %></span> <br />
-				<strong>Stars: </strong><span><% if (!!movies.actors) movie.actors.join(','); %></span>	<br />
+				<!-- Description -->
+				<p class="plot"><%= movie.plot %></p>	
 			</div>
-
-			<!-- Description -->
-			<p class="plot"><%= movie.plot %></p>
+		</a>
 		</div>
 	<% }); %>
 </div>
