@@ -143,6 +143,10 @@ a#sort-by-btn:hover + div, a#sort-by-btn + div:hover {
 	font-weight: bold;
 }
 
+.genre {
+	margin-left: 10px;
+}
+
 .imdb-rating {
 	background-image: url('../images/assets/imdb_star.png');
 	background-size: 50px 47px;
