@@ -14,7 +14,6 @@ $response = array("success"=>false);
 if(isset($_GET['q']))
 {
     $query = $_GET['q'];
-	echo "The query is '$query'\n";
 	$movies = basicSearch("Fake Data");
 	$response["success"] = true;
 	$response["data"] = $movies;

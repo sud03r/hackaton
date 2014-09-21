@@ -7,5 +7,6 @@
  * should look into this. Something about headers
  */
 
- echo '{property: value}';
+ $jsonData=json_encode(array('status'=>'success', 'message'=>'yay'));
+ echo $jsonData;
 ?>
