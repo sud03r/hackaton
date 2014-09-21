@@ -15,6 +15,14 @@ class Query {
 		return $movies;
 	}
 
+	// takes one movie title and returns an array of similar movies (object!)
+	public static function bySimilarity($movieTitle) {
+        // get the rotten tomatoes id from sql for this movie title
+        
+        // query rottenTomatoes...
+        
+        return array();
+	}
 
 }
 

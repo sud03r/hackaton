@@ -7,6 +7,8 @@
 require_once(__DIR__ . "/queries.php");
 
 class Pq {
+    
+    // TODO romantic should map to romance, and a lot of similar things
 
 	/*
 		A word about the encoding.
@@ -93,10 +95,10 @@ class Pq {
 				Pq::updateData($toRet, Pq::$keywords[$word]);
 			} elseif (isset(Pq::$rateSites[$word])) {
 				Pq::updateData($toRet, ( array("base"=>"rating") + Pq::$rateSites[$word]));	
-			} elseif (isset(Pq::$genres[$word])) {
+			} elseif (in_array($word, Pq::$genres)) {
 				Pq::updateData($toRet, array("base"=>"genre", "oLim"=>Pq::ST|Pq::EN));
 			} elseif (isset(Pq::$logicOps[$word])) {
-				Pq::updateData($toRet, array("base"=>"lOp", "pLim"=>Pq::EN, "nLim"=>Pq::ST));
+				Pq::updateData($toRet, array("base"=>"lOp",             "pLim"=>Pq::EN, "nLim"=>Pq::ST, "oLim"=>Pq::ST|Pq::EN));
 			} elseif (isset(Pq::$familyRating[$word])) {
 				Pq::updateData($toRet, array("base"=>"rated", "oLim"=>Pq::EN));
 			} else {
@@ -132,16 +134,25 @@ class Pq {
 	 */
 	public static function parseQuery($query) {
 	
-		
 		// first thing we do is see if this is a movie title:
 		$res = Query::byTitle($query);
 		if (count($res) > 0) return $res;
 
+        // rest of the stuff we compose / intersect movie lists
+        $movieList = array();
+        
+        // look for "movie[s] like _stuff_ [with/and]"
+        $pattern = '/movies? like (.*) (with|and|\s*$) /i';
+        if (preg_match($pattern, $query, $matches) == 1) {
+            Pq::updateData($movieList, Query::bySimilarity($matches[1]));
+            // adds to it -- also delete this section of the query
+            $query = preg_replace($pattern, "", $query);
+        }
+		
 		// -- we don't have a title;  analyze for tokens
 		$queryC = strtolower($query); // TODO could find names by capital letter maybe
 		$queryC = str_replace(" with ", " and ", $queryC);
 		$queryC = Pq::cleanQuery($queryC);
-		
 		
 		$words = explode(" ", $queryC);
 		$numWords = count($words);
@@ -156,7 +167,11 @@ class Pq {
 				}
 				// see if the previous one had a suggestion for us
 				if (($prevRes["nLim"] & Pq::EN) != 0)
-					$res["oLim"] |= Pq::ST;
+					$res["oLim"] |= Pq::EN;
+				// see if the previous one ended, we start 
+                if (($prevRes["oLim"] & Pq::EN) != 0)
+                    $res["oLim"] |= Pq::ST;
+					
 			} else {
                 // first one always starts! :)
                 $res["oLim"] |= Pq::ST;
@@ -205,10 +220,10 @@ class Pq {
 	
 	public static function cleanQuery($queryC) {
         $toRemove = array(
-            "movie " => "", 
             "movies " => "",
-            " movie" => "", 
             " movies" => "",
+            "movie " => "", 
+            " movie" => "", 
             " the " => " ",
             " a " => " ", 
             " by " => " ", 
