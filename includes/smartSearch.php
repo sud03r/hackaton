@@ -33,6 +33,7 @@ require_once(dirname(__FILE__) . "/movie.php");
 
 class SmartSearch {
 
+	// TODO this stuff should be more graceful when fields are not available
 	public static function mapByGenre($movies) {
 		$genreToIdx = array();
 		for ($idx = 0; $idx < count($movies); $idx++) {

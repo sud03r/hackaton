@@ -1,6 +1,6 @@
 <div class="row" class="search-title-container">
 	<div class="col-md-6">
-		<img class="small-logo" src="images/assets/logo.png">
+		<img class="small-logo" src="images/assets/logo.svg">
 		<input type="text" class="form-control search-title" style="width:80%;" id="search-text">
 		<a href="#" class="glyphicon glyphicon-search block-icon"></a>
 	</div>
@@ -17,13 +17,40 @@
 
 <div class="results-collection">
 	<!-- See underscore.js and backbone.js -->
-	<% _.each(movies, function(movie) { %>
-		<div class="movie-result">
-			<img src="<%= movie.image %>" class="thumbnail">
-			<h2><%= movie.mName %></h2>
-			<h3>(<%= movie.year %>)</h3>
+	<!-- One of these for each individual movie item -->
+	<% _.each(movies, function(movie,index) { %>
+		<div class="movie-result parity-<%= (movie.index%2) %>">
+			<!-- Basic info -->
+			<!-- TODO FIX THIS -->
+			<!--<img src="<%= encodeURI(movie.image) %>" class="thumbnail">-->
+			<img src="images/assets/forrest-gump.jpg" class="thumbnail">
+			<h2 class="movie-name"><%= movie.mName %></h2>
+			<h3 class="movie-year">(<%= movie.year %>)</h3>
 
-			<!-- TODO: FILL THE REST OF THIS -->
+			<!-- Ratings -->
+			<span class="rating imdb-rating"><%= movie.rating.imdb  %></span>
+			<span class="rating critics-rating"><%= movie.rating.critics_score %></span>
+			<span class="rating audience-rating"><%= movie.rating.audience_score %></span>
+
+			<!-- Classification -->
+			<span class="family-rating <%= movie.rFamily %>"></span>
+			<span class="run-time"><%= movie.runtime %></span>
+			<span class="genre"><% if (!!movie.genres) movie.genres.join(" ") %></span>
+
+			<!-- Key People -->
+			<div class="key-people">
+				<strong>Director: </strong> 
+					<% _.each(movie.directors, function (dire) { %>
+						<span><%= dire %>
+					<% }); %>
+				<br />
+
+				<strong>Writers: </strong><span> <% if (!!movies.writers) movie.writers.join(','); %></span> <br />
+				<strong>Stars: </strong><span><% if (!!movies.actors) movie.actors.join(','); %></span>	<br />
+			</div>
+
+			<!-- Description -->
+			<p class="plot"><%= movie.plot %></p>
 		</div>
 	<% }); %>
 </div>
