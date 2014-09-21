@@ -44,6 +44,7 @@
 
 	<!-- Custom javascript files -->
 	<script src="js/custom/app.js"></script>
+	<script src="js/custom/movie-model.js"></script>
 
 	<!-- Views -->
 	<script src="js/custom/search-view.js"></script>
