@@ -41,35 +41,28 @@
 
 				<!-- Ratings -->
 				<div class="rating-group">
-					<span class="rating imdb-rating"><%= movie.rating.imdb  %></span>
+					<span class="rating imdb-rating"><%= movie.rating.imdb || "N/A"  %></span>
 					<img src="images/assets/rt_tomatometer.png" class="rating-icon tomatometer">
-					<span class="rating critics-rating"><%= movie.rating.critics_score %></span>
+					<span class="rating critics-rating"><%= movie.rating.critics_score || "N/A" %></span>
 					<img src="images/assets/rt_audience.png" class="rating-icon audience">
-					<span class="rating audience-rating"><%= movie.rating.audience_score %></span>
+					<span class="rating audience-rating"><%= movie.rating.audience_score || "N/A" %></span>
 							
 					<!-- Classification -->
 					<span class="rating rating-icon family-rating <%= movie.rFamily %>"> </span>
-					<span class="rating run-time"><%= movie.runtime %></span>
-					<span class="rating genre"><% if (!!movie.genres) movie.genres.join(" ") %></span>
+					<span class="rating run-time"><%= movie.runtime || "" %></span>
+					<span class="rating genre"><% (movie.genres || []).join(" ") %></span>
 				</div>
 
 				<!-- Key People -->
 				<div class="key-people">
 					<strong>Director: </strong> 
-						<% _.each(movie.directors, function (director) { %>
-							<span><%= director %> </span>
-						<% }); %>
+						<%= (movie.directors || ["(Not Available)"]).join(", ") %>
 					<br />
-					<strong>Writers: </strong> 
-						<% _.each(movie.writers, function (writer) { %>
-							<span><%= writer %> </span>
-						<% }); %>
+					<strong>Writers: </strong>
+						<%= (movie.writers || ["(Not Available)"]).join(", ") %>
 					<br />
-
 					<strong>Stars: </strong> 
-						<% _.each(movie.actors, function (actor) { %>
-							<%= actor %>
-						<% }); %>
+						<%= (movie.actors || ["(Not Available)"]).join(", ") %>
 					<br />
 				</div>
 
