@@ -2,6 +2,10 @@
 
 body {
     background-color: #f0efee;
+	font-family: Open Sans;
+	/* add font */
+	font-size: 12px;
+	color: #424242;
 }
 
 a:link, a:visited {
@@ -23,7 +27,7 @@ a:hover, a:active {
 	height: 150px;
     margin-left: auto;
     margin-right: auto;
-	margin-top: 50px;
+	margin-top: 100px;
 	margin-bottom: 20px;
 }
 
@@ -46,7 +50,6 @@ a:hover, a:active {
 	display: inline-block;
 	width: 70px;
 	color: #f0efee;
-	font-family: Open Sans;
 }
 
 #browse {
@@ -54,7 +57,6 @@ a:hover, a:active {
 	float: right;
 	margin-top: 10px;
 	font-size: 13px;
-	font-family: Open Sans;
 }
 
 
@@ -71,7 +73,7 @@ a:hover, a:active {
 
 .third-party-logo {
 	display: inline-block;
-	margin-top: 35px;
+	margin-top: 40px;
 }
 
 .centered {
