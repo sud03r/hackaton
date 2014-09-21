@@ -8,6 +8,7 @@ var ResultsView = Backbone.View.extend({
 	
 	events: {
 		//"click .movie-result a": "selectMovie"
+		"click #sort-by-list li" : "sortCollection"
 	},
 
 	loadTemplate: function(callback) {
@@ -33,6 +34,15 @@ var ResultsView = Backbone.View.extend({
 		this.loadTemplate(function () {
 			this.$el.html(this.template({movies: this.collection.toJSON()}));
 		});
+	},
+
+	sortCollection: function(type) {
+		if (!_.isString(type)) {
+			type = $(type.currentTarget).data("field");
+		}
+
+		this.collection.setComparator(type);
+		this.render();
 	},
 
 	selectMovie: function(obj) {
