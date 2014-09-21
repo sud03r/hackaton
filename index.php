@@ -16,9 +16,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><?php echo $APP_NAME ?> - The smart search for movies </title>
 
-    <!-- Bootstrap -->
+    <!-- CSS Files -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -44,6 +44,9 @@
 
 	<!-- Custom javascript files -->
 	<script src="js/custom/app.js"></script>
+
+	<!-- Views -->
+	<script src="js/custom/search-view.js"></script>
   </body>
 </html>
 
