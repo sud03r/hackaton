@@ -9,7 +9,14 @@ var ResultsView = Backbone.View.extend({
 	events: {
 		//"click .movie-result a": "selectMovie"
 		"click #sort-by-list li" : "sortCollection",
-		"click .glyphicon-search" : "handler"
+		"click .glyphicon-search" : "handler",
+		"keypress" : "searchOnEnter"
+	},
+
+	searchOnEnter: function(e) {
+		if(e.keyCode == 13){
+			this.handler();
+		}
 	},
 
 	handler: function(e) {
