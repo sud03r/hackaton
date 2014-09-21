@@ -19,6 +19,7 @@
     <!-- CSS Files -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
+	<link href="css/results.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -31,11 +32,17 @@
   	<div class="container" id="app-container">
 		<!-- The main page is loaded here-->
 		<div id="page-content"></div>
-		<div class="footer">
-		Copyright stuff here.
-		</div>
 	</div>
 
+	<div class="footer">
+		<div class="footer-centered">
+			<div class="footer-style"> <a href="/help">Help</a> </div>
+			<div class="footer-style"> <a href="/contact">Contact</a> </div>
+			<div class="footer-style"> <a href="/about">About</a> </div>
+			<div class="footer-style"><a href="/copyright">Copyright</a></div>
+		</div>
+	</div>
+	
     <!-- Library javascript files -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -48,6 +55,8 @@
 
 	<!-- Views -->
 	<script src="js/custom/search-view.js"></script>
+	<script src="js/custom/results-view.js"></script>
+
   </body>
 </html>
 
