@@ -25,7 +25,6 @@ class Query {
 				$movies += Query::byTitle($sMovie["title"]);
 			}
 		}
-		var_dump($movies);
 		return $movies;
 	}
 }
