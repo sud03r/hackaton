@@ -31,6 +31,7 @@
 	<% _.each(movies, function(movie,index) { %>
 		<% console.log(movie) %>
 		<div class="movie-result parity-<%= (index%2) %>">
+		<a id="view-<%= (movie.netflixId) %>" href="#">
 			<!-- Basic info -->
 			<img src="<%= encodeURI(movie.image) %>" class="thumbnail">
 			<div class="movie-info">
@@ -74,8 +75,9 @@
 				</div>
 
 				<!-- Description -->
-				<p class="plot"><%= movie.plot %></p>
+				<p class="plot"><%= movie.plot %></p>	
 			</div>
+		</a>
 		</div>
 	<% }); %>
 </div>

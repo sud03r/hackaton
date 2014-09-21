@@ -70,6 +70,19 @@ a#sort-by-btn:hover + div, a#sort-by-btn + div:hover {
 	width: 550px;
 }
 
+.movie-result a {
+	color: #424242;
+}
+
+.movie-result a:hover {
+	color: #424242;
+}
+
+.movie-result a:hover .movie-name, .movie-result a:hover .movie-year {
+	color: #7ac094;
+}
+
+
 .parity-0 {
 	margin-right: 36px;
 }
@@ -127,6 +140,7 @@ a#sort-by-btn:hover + div, a#sort-by-btn + div:hover {
 
 .rating {
 	display: inline-block;
+	font-weight: bold;
 }
 
 .imdb-rating {
