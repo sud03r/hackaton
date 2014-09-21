@@ -1,0 +1,33 @@
+/* At some point we should combine this with style.css */
+
+.results-page {
+	margin-top: 20px;
+	position: relative;
+}
+
+.search-title-container {
+	position: relative;
+}
+
+.block-icon {
+	display : inline-block;
+	margin-right: 2px;
+	background: white;
+	padding: 8px;
+	position: relative;
+	top: 3px;
+	font-size: 120%;
+	right: 5px;
+}
+
+.small-logo {
+	width  : 40px;
+	height : 40px;
+	margin-right : 10px;
+}
+
+.sort-functions {
+	line-height: 40px;
+	vertical-align: bottom;
+	height: 40px;
+}

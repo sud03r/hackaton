@@ -11,6 +11,7 @@ var SearchView = Backbone.View.extend({
 
 	search: function() {
 		var args = $('#search-text').val();
+		self = this;
 		$.get('ajax/search_movie.php?q=', args, function(result) {
 			if (result.success) {
 				var movies = new MovieCollection;
@@ -19,13 +20,17 @@ var SearchView = Backbone.View.extend({
 				{
 					movies.add(movieInfo[i]);
 				}
-				alert(movies.at(6).get('mName'));
-				return movies;
+
+				// Apply the callback function passed into the constructor
+				if (_.isFunction(self.app.searchCallback)) {
+					self.app.searchCallback(movies);
+				}
 			}
 		}, 'json');
 	},
 
-	initialize: function() {
-		this.$el.append($("<div>").load("layouts/" + this.template));
+	initialize: function(options) {
+		_.extend(this,options);
+		this.$el.load("layouts/" + this.template);
 	}
 });
