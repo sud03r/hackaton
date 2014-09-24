@@ -1,0 +1,10 @@
+Just a list of websites:
+
+http://developer.netflix.com/         <-- closed
+http://netflixroulette.net/api/       <-- unofficial netflix.. works for now
+http://www.omdbapi.com/               <-- unofficial imdb queries
+http://stackoverflow.com/questions/1966503/does-imdb-provide-an-api          <-- more imdb ideas
+http://developer.rottentomatoes.com/io-docs                                  <-- rotten tomatoes
+
+
+
