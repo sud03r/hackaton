@@ -6,7 +6,14 @@ var SearchView = Backbone.View.extend({
 	template: "search.html",
 	
 	events: {
-		"click #search-submit" : "search"
+		"click #search-submit" : "search",
+		"keypress" : "searchOnEnter"
+	},
+
+	searchOnEnter: function(e) {
+		if(e.keyCode == 13){
+			this.search();
+		}
 	},
 
 	search: function() {

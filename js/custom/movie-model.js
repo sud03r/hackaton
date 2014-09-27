@@ -28,7 +28,32 @@ var MovieModel = Backbone.Model.extend({
 
 
 var MovieCollection = Backbone.Collection.extend({
-	model: MovieModel
+	model: MovieModel,
+	comp_field: "mName",
+	comp_multiplier: -1,
+
+	comparator: function(model) {
+		if (_.isEmpty(this.comp_field)) return 0;
+		var val = 0;
+		var f = this.comp_field
+		if (f == "rating.imdb")
+			val = model.get("rating").imdb;
+		else if (f == "rating.rotten")
+			val = model.get("rating").critics_score;
+		
+		if (val == null) val = 0;
+		return val*this.comp_multiplier;
+	},
+
+	setComparator: function(field) {
+		this.comp_field = field;
+		this.sort();
+	},
+
+	flipDirection: function() {
+		this.comp_multiplier *= -1;
+		this.sort();
+	}
 });
 
 /*movies.add([
