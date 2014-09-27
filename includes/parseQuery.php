@@ -1,108 +1,54 @@
 <?php
+namespace parsing;
 /*
 	This file / class takes care of "natural language" query parsing into
 	the predefined set of base queries.
 */
 
+echo "opened up parseQueries.php\n";
+
 require_once(__DIR__ . "/queries.php");
+require_once(__DIR__ . "/parseQueryConstants.php");
 
-class Pq {
+class ParseQuery {
     
-    // TODO romantic should map to romance, and a lot of similar things
-
-	/*
-		A word about the encoding.
-
-		"base" describes what category the given word may fall in. It always
-			exists when we categorize a word, it may be empty though "".
-		"oLim" and its friends describe whether we know that a category ends/starts
-			on the token. (Both can occur at the same time, in fact).
-			& 1 : starts, & 2 ends.
-	*/
-	const ST = 1;
-	const EN = 2;
-	
-	const SEP = "!!"; // we insert this whereever we take stuff out from the query
-
-	// there are a couple of categories of basic queries; we keep track of them
-	public static $baseQueries = array(
-		"year", "genre", "director", "actor", "rating", "rated", "length",
-		"lOp", "sep" /* should these be here? : not queries, categories */
-	);
-
-	public static $logicOps = array(
-		"and"=>array(),
-		"or"=>array(),
-		"not"=>array()
-	);
-
-	// we keep track of keywords, with associated information to them
-	public static $keywords = array(
-		"before"=> array("base"=>"year", "oLim"=>Pq::ST),
-		"after"=> array("base"=>"year", "oLim"=>Pq::ST),
-		"higher"=> array("base"=>"rating"),
-		"lower"=> array("base"=>"rating"),
-		"directed"=> array("base"=>"director"),
-		"director"=> array("base"=>"director"),
-		"rating"=> array("base"=>"rating", "oLim"=>Pq::ST),
-		"rated"=> array("base"=>array("rating", "rated"), "oLim"=>Pq::ST)
-	);
-
-	public static $rateSites = array(
-		"imdb"=> array(),
-		"rotten"=> array(),
-		"tomato"=> array(),
-		"netflix"=> array()
-	);
-	
-	public static $genres = array(
-		"action", "adventure", "animation", "biography", "comedy", "crime", "documentary", "drama", "family", "fantasy", "film-noir", "history", "horror", "music", "musical", "mystery", "romance", "sci-fi", "sport", "thriller", "war", "western"
-	);
-
-	// this is just the ones people may search for
-	public static $familyRating = array(
-		"G", "PG", "PG-13", "14A", "NC-17", "18A", "R", "X" 
-	);
-
-	public static $regexRules = array(
-		"/^\d{4}$/"=> array("base"=>"year", "oLim"=>Pq::EN),
-		"/^\d{1,3}\%?$/"=> array("base"=>array("length","rating")),
-		"/^\d{1}\.\d+$/"=> array("base"=>"rating")
-	);
-
 	/*  This function is given a word and we categorize it by everything we can:
 		- if we know it starts or ends its own expression ("oLim")
 		- if we know it delimits the previous ("pLim") / next ("nLim") expression
 		- if it infers the basequery type ("base")
 	 */
-	public static function categorize($word) {
+	public static function categorize($word, $prevData) {
+		echo "analyzing $word\n";
 		$word = strtolower($word);
 		$toRet = array("base"=>"----", "oLim"=>0, "nLim"=>0, "pLim"=>0);
 		// first check if it's one of the static keywords
 		if (is_numeric($word)) {
-			foreach (Pq::$regexRules as $rule=>$data) {
+			foreach ($regexRules as $rule=>$data) {
 				if (preg_match($rule, $word) == 1) {
-					Pq::updateData($toRet, $data);
+					self::updateData($toRet, $data);
 				}
 			}
 		} else {
-            if ($word == Pq::SEP) {
-                Pq::updateData($toRet, array("base"=>"sep", "oLim"=>Pq::ST|Pq::EN));
-            } elseif (isset(Pq::$keywords[$word])) {
-				Pq::updateData($toRet, Pq::$keywords[$word]);
-			} elseif (isset(Pq::$rateSites[$word])) {
-				Pq::updateData($toRet, ( array("base"=>"rating") + Pq::$rateSites[$word]));	
-			} elseif (in_array($word, Pq::$genres)) {
-				Pq::updateData($toRet, array("base"=>"genre", "oLim"=>Pq::ST|Pq::EN));
-			} elseif (isset(Pq::$logicOps[$word])) {
-				Pq::updateData($toRet, array("base"=>"lOp",             "pLim"=>Pq::EN, "nLim"=>Pq::ST, "oLim"=>Pq::ST|Pq::EN));
-			} elseif (in_array($word, Pq::$familyRating)) {
-				Pq::updateData($toRet, array("base"=>"rated", "oLim"=>Pq::EN));
+            if ($word == SEP) {
+                self::updateData($toRet, array("base"=>"sep", "oLim"=>ST|EN));
+            } elseif (isset($keywords[$word])) {
+				self::updateData($toRet, $keywords[$word]);
+			} elseif (isset($rateSites[$word])) {
+				self::updateData($toRet, ( array("base"=>"rating") + $rateSites[$word]));	
+			} elseif (in_array($word, $genres)) {
+				self::updateData($toRet, array("base"=>"genre", "oLim"=>ST|EN));
+			} elseif (isset($logicOps[$word])) {
+				self::updateData($toRet, array("base"=>"lOp", "pLim"=>EN, "nLim"=>ST, "oLim"=>ST|EN));
+			} elseif (in_array($word, $familyRating)) {
+				self::updateData($toRet, array("base"=>"rated", "oLim"=>EN));
+			} elseif (isset($connectors[$word])) {
+				self::updateData($toRet, array("base"=>"connector") + 
+						($connectors[$word]) );
 			} else {
 				// there's some other rules: digits
-				foreach (Pq::$regexRules as $rule=>$data) {
+				foreach ($regexRules as $rule=>$data) {
 					if (preg_match($rule, $word) == 1) {
-						Pq::updateData($toRet, $data);
+						self::updateData($toRet, $data);
 					}
 				}
 			}
@@ -110,10 +56,10 @@ class Pq {
 
 		// now we can automatically add previous and next delimiting properties
 		if (isset($toRet["oLim"])) {
-			if (($toRet["oLim"] & Pq::ST) != 0) // start 
-				$toRet["pLim"] = Pq::EN; //end
-			if (($toRet["oLim"] & Pq::EN) != 0) // end 
-				$toRet["nLim"] = Pq::ST; //end
+			if (($toRet["oLim"] & ST) != 0) // start 
+				$toRet["pLim"] = EN; //end
+			if (($toRet["oLim"] & EN) != 0) // end 
+				$toRet["nLim"] = ST; //end
 		}
 //		echo "$word\n";
 //		var_dump($toRet);
@@ -131,78 +77,121 @@ class Pq {
 	 */
 	public static function parseQuery($query) {
 	
-		// first thing we do is see if this is a movie title:
-		$movieListToUnion = Query::byTitle($query);
+	/* OVERKILL?
+		// We change this so that we keep a TREE of possible parses.
+		$root = new ParseNode($query, 1.0, array(), array());
+	*/
 
-        // rest of the stuff we compose / intersect movie lists
-        $movieListToFilter = array();
-        $constraints = array();
+		// first thing we do is see if this is a movie title:
+		$movieListToUnion = \Query::byTitle($query);
+		$results = self::getRelevanceByTitle($movieListToUnion, $query); // TODO test this
+
+        return $results; // tODO testing
+
+		// rest of the stuff we compose / intersect movie lists
+        $movieListToFilter = array(); // QResult 's
+        $constraints = array(); // Constraint 's
         
-        // look for "movie[s] like _stuff_ [with/and]"
-        $pattern = '/(movies?)? like (.*)( with| and|\s*$)/i';
-        if (preg_match($pattern, $query, $matches) == 1) {
-            $myMovies = Query::byTitle($matches[1]);
-            foreach ($myMovies as $movie){
-                //collect the similar movies
-                Pq::updateData($movieListToFilter, Query::bySimilarity($movie));
-            }
-            // also delete this section of the query
-            $query = preg_replace($pattern, Pq::SEP, $query);
-        }
+        // look for "movie[s] like _stuff_"; try with longest string possible,
+		// getting shorter and shorter. ATM report only longest match
+		$pattern = '/(movies?)? like (.*)$)/i'; // the pattern we look for
+		$queryCopy = substr($query, 0); // make a copy
+		while (strlen($queryCopy) > 0) {
+			if (preg_match($pattern, $queryCopy, $matches) == 1) {
+				// collect these movies, with relevances
+				$likeTitles = Query::byTitle($matches[1]);
+				if (count($likeTitles) === 0) continue;
+
+				// not there may be multiple movies that matched... search through all
+				$likeResults = self::getRelevanceByTitle($likeTitles, $matches[1]);
+				foreach ($likeResults as $similarTo){
+					// similarTo is (movie, relevance) pair
+					$simMovies = Query::bySimilarity($similarTo->movie);
+					// we use the same relevance for all similar movies
+					self::updateData($movieListToFilter,
+						QResult::getResults($simMovies, $similarTo->relevance) ) ;
+				}
+				// also delete this section of the query
+				//         -- this is ok here, since we already "continue'd" if this code does not apply
+				$query = preg_replace($pattern, SEP, $query);
+				break;
+			}
+			$queryCopy = Utils::removeLastWord($queryCopy);
+			// TODO test this. Also move a bunch of this code into other files it's getting annoying!!
+		}
 		
 		// -- we don't have a title;  analyze for tokens
 		$queryC = strtolower($query); // TODO could find names by capital letter maybe
-		$queryC = str_replace(" with ", " and ", $queryC);
+//		$queryC = str_replace(" with ", " and ", $queryC);
         $queryC = str_replace(" but ", " and ", $queryC);
-		$queryC = Pq::cleanQuery($queryC);
+		$queryC = self::cleanQuery($queryC);
 		
-		Pq::updateData($constraints, Pq::findDateRangeConstraints($queryC));
-		Pq::updateData($constraints, Pq::findLengthConstraints($queryC));
-        Pq::updateData($constraints, Pq::findFamilyConstraints($queryC));
-        Pq::updateData($constraints, Pq::findGenreConstraints($queryC));
+		self::updateData($constraints, Constraint::findDateRangeConstraints($queryC));
+		self::updateData($constraints, Constraint::findLengthConstraints($queryC));
+        self::updateData($constraints, Constraint::findFamilyConstraints($queryC));
+        self::updateData($constraints, Constraint::findGenreConstraints($queryC));
         // clean some more again
-		
-		/*
+
+
         $words = explode(" ", $queryC);
         $numWords = count($words);
 		$tokenLim = array();
 		$base = array();
+		$prevRes = array("base"=>"----", "oLim"=>0, "nLim"=>0, "pLim"=>0);
 		for ($i = 0; $i < $numWords; $i += 1) {
-			$res = Pq::categorize($words[$i]);
+			$res = self::categorize($words[$i], $prevRes);
+
+			// There's special rules for non-first words (relying on the prev word)
 			if ($i > 0) {
+				/*   
+					if the current word we got is a connector, we need to
+					investigate it in relation to the previous word
+				*/
+				if ($res["base"] == "connector") {
+					
+				}
+
+				/*
+					we have some rules for how delimiters from previous / next 
+					words affect each other; that's implemented here:
+				*/
 				// see if we have a suggestion for the previous one
-				if (($res["oLim"] & Pq::ST) != 0) {
-					$tokenLim[count($tokenLim)-1] |= Pq::EN;
+				if (($res["oLim"] & ST) != 0) {
+					$tokenLim[count($tokenLim)-1] |= EN;
 				}
 				// see if the previous one had a suggestion for us
-				if (($prevRes["nLim"] & Pq::EN) != 0)
-					$res["oLim"] |= Pq::EN;
+				if (($prevRes["nLim"] & EN) != 0)
+					$res["oLim"] |= EN;
 				// see if the previous one ended, we start 
-                if (($prevRes["oLim"] & Pq::EN) != 0)
-                    $res["oLim"] |= Pq::ST;
-					
+                if (($prevRes["oLim"] & EN) != 0)
+                    $res["oLim"] |= ST;
 			} else {
                 // first one always starts! :)
-                $res["oLim"] |= Pq::ST;
+                $res["oLim"] |= ST;
 			}
+
+			// ok we are all done dealing with this word
 			array_push($base, $res["base"]);
 			array_push($tokenLim, $res["oLim"]);
 
 			$prevRes = $res;
 		}
 		// last one always finishes
-		$tokenLim[$numWords-1] |= Pq::EN;
+		$tokenLim[$numWords-1] |= EN;
 
 		// we represent it as a string now
 		echo "$queryC\n";
-		echo Pq::getStringRepOfCats($base, $tokenLim, $numWords);
+		echo self::getStringRepOfCats($base, $tokenLim, $numWords);
 		echo "\nconstraints:";
 		foreach ($constraints as $const) {
             echo " $const->type";
 		}
 		echo "\n\n";
-		*/
-		$filtered = Pq::findMatches($movieListToFilter, $constraints);
+
+		// now find continuous sections
+		self::updateData($constraints, self::ExamineSections($base, $tokenLim, $numWords));
+
+		$filtered = self::findMatches($movieListToFilter, $constraints); // TODO changing type of filter
 		return array_merge($movieListToUnion, $filtered);	
 	}
 
@@ -242,7 +231,23 @@ class Pq {
         }
         return $movies;
 	}
-	
+
+	// this code looks at running sections in the code to attempt to 
+	// find people's names
+	public static function examineSections($base, $tokenLim, $numWords) {
+		$continous = array(); // will consist of start-end pairs
+		$inside = false;
+		$start = -1;
+		for ($i = 0; $i < $numWords; $i++) {
+			if (!$inside) {
+				if (($tokenLim[$i] & ST) == 1) {
+					$start = $i;
+				}
+				// we should try right now if it ends (to catch one long)
+			}
+		}
+	}
+
 	/* ---------------------------------------------------- */
 	/* Utilities...                                         */
 	/* ---------------------------------------------------- */
@@ -255,13 +260,13 @@ class Pq {
 		$toRet = "";
 		for ($i = 0; $i < $numWords; $i += 1) {
 			$desc = "";
-			if (($tokenLim[$i] & Pq::ST) != 0) $desc .= "[";
+			if (($tokenLim[$i] & ST) != 0) $desc .= "[";
 			$tmp = $base[$i];
 			if (is_array($tmp))
 				$desc .= implode("|", $tmp);
 			else
 				$desc .= $tmp;
-			if (($tokenLim[$i] & Pq::EN) != 0) $desc .= "]";
+			if (($tokenLim[$i] & EN) != 0) $desc .= "]";
 			$toRet .= " $desc";
 		}
 		return $toRet;
@@ -275,7 +280,6 @@ class Pq {
             " movie" => "", 
             " the " => " ",
             " a " => " ", 
-            " by " => " ", 
             " of " => " ", 
             " an " => " "
         );
@@ -285,233 +289,40 @@ class Pq {
         return $queryC;
 	}
 	
-	// returns an array of constraint (related to date)
-	// removes the found constraints from the argument
-	public static function findDateRangeConstraints(&$query) {
-        $patterns = array(
-            "/before ('\d{2}|\d{4})/i"=>0,
-            "/since ('\d{2}|\d{4})/i"=>1,
-            "/after ('\d{2}|\d{4})/i"=>1,
-            "/between ('\d{2}|\d{4}) and ('\d{2}|\d{4})/i"=>2,
-            "/from ('\d{2}|\d{4}) to ('\d{2}|\d{4})/i"=>2
-        );
-        $toRet = array();
-        // look for these
-        foreach ($patterns as $pattern => $id) {
-            if (preg_match($pattern, $query, $matches) == 1) {
-                $start = null;
-                $end = null;
-                $date1 = Pq::fixDate($matches[1]);
-                switch ($id) {
-                    case 0:
-                        $end = $date1;
-                        break;
-                    case 1:
-                        $start = $date1;
-                        break;
-                    case 2:
-                        $start = $date1;
-                        $end = Pq::fixDate($matches[2]);
-                        break;
-                }
-                // now delete this stuff!
-                $query = preg_replace($pattern, Pq::SEP, $query);
-                
-                array_push($toRet, new Constraint("dateRange", array("start"=>$start, "end"=>$end)));
-            }
-        }
-        return $toRet;
-	}
+	/*
+		Takes a list of movies and the title of the movie
+		and calculates relevances by how much of the $title
+		actually appears in the title of the movies listed.
+		(relevance will range between 0.5 and 1)		
 
-    // $date is either 1942 or '85 style... change the second into first
-    public static function fixDate($date) {
-        if ($date[0] == "'") {
-            $num = substr($date, 1);
-            if (intval($num)<20) // TODO this is horrible
-                return (2000+intval($num));
-            else
-                return (1900+intval($num));
-        }
-        return intval($date);
-    }
-	
-	// returns an array of constraints 
-	public static function findLengthConstraints(&$query) {
-        $toRet = array();
-        $pattern = "/(longer|shorter) than (\d+)\s*(\w+)\b/i";
-        $min = null;
-        $max = null;
-        if (preg_match($pattern, $query, $matches) == 1) {
-            // delete the matched thing 
-            $query = preg_replace($pattern, Pq::SEP, $query);
- 
-            // we don't deal with hours
-            if ($matches[3][0] != "m")
-                return $toRet;
-            
-            $mins = intval($matches[2]);
-            if ($matches[1][0] == "l")
-                $min = $mins;
-            else
-                $max = $mins;
-            
-            array_push($toRet, new Constraint("length", array("min"=>$min, "max"=>$max)));
-        }
-        return $toRet;
+		Returns a list of QResult 's.
+	*/
+	public static function getRelevanceByTitle($movieList, $title) {
+		$toRet = array();
+		foreach ($movieList as $movie) {
+			$total = str_word_count($movie->mName);
+			$mine = str_word_count($title);
+			array_push($toRet, new QResult($movie, ($mine/$total)*0.5+0.5) );
+		}
+		return $toRet;
 	}
-	
-    // returns an array of constraints 
-    public static function findFamilyConstraints(&$query) {
-        $toRet = array();
-        // take every word, see if there is an intersection
-        $qWords = explode(" ", strtoupper($query));
-        $selected = array_intersect(Pq::$familyRating, $qWords);
-        foreach ($selected as $famRating) {
-            // make constraint and delete
-            array_push($toRet, new Constraint("famRating", array("acceptable"=>$famRating)));
-            $query = str_replace(strtolower($famRating), Pq::SEP, $query);
-        }
-        return $toRet;
-    }
-
-    // returns an array of constraints:
-    // we assume all the genre information is in the same location
-    // -- can have or, or just list of things
-    public static function findGenreConstraints(&$query) {
-        $toRet = array();
-        $qWords = explode(" ", $query);
-        $numWords = count($qWords);
-        
-        $index = 0;
-        $toDelete = array();
-        while ($index < $numWords) {
-            // TODO this will not be good logic-wise
-            $negated = false;
-            $appearing = array();
-            // find the first word in the query that is a genre
-            for (; $index < $numWords; $index += 1) {
-                if (in_array($qWords[$index], Pq::$genres)) {
-                    array_push($appearing, $qWords[$index]);
-                    $qWords[$index] = Pq::SEP;
-                    array_push($toDelete, $index);
-                    
-                    
-                    // check if there was a "not" before it
-                    if ($index > 0 && $qWords[$index-1] == "not") {
-                        $negated = true;
-                        $qWords[$index-1] = "";
-                    }
-                    while ($index+2 < $numWords && $qWords[$index+1] == "or" && in_array($qWords[$index+2], Pq::$genres)) {
-                        array_push($appearing, $qWords[$index+2]);
-                        $qWords[$index+1] = "";
-                        $qWords[$index+2] = "";
-                        $index += 2;
-                    } 
-                    // now we can create a constraint
-                    $listN = "acceptable"; // default
-                    if ($negated) $listN = "not_acceptable";
-                    array_push($toRet, new Constraint("genre", array($listN=>$appearing)));
-                    // now we can restart
-                    break;
-                }
-            }
-        }
-        // all parsed --- recompile query and return
-        $query = implode(" ", $qWords);
-        return $toRet;
-    }
-    
 }
 
 
 
-class Constraint {
-    public static $types = array(
-        "dateRange"=>array("start"=>null, "end"=>null), // done
-        "dateExact"=>array("year"=>null),
-        "length"=>array("min"=>null, "max"=>null), // done
-        "genre"=>array("acceptable"=>array(), "not_acceptable"=>array()), // done
-        "famRating"=>array("lastAcceptable"=>array()) //done
-    );
-    
-    // returns a list of all ratings that are ok
-    public static function getFamilyFriendly($lastAcceptable) {
-        $okay = array($lastAcceptable);
-        foreach (Pq::$familyRating as $rating) {
-            if ($rating == $lastAcceptable) break;
-            array_push($okay, $rating);
-        }
-    }
-    
-    // $type should be one of the listed ones, and
-    // $data should be an array like what the $type is associated to
-    public function __construct($type, $data) {
-        if (!isset(Constraint::$types[$type]))
-            trigger_error("Not a valid type of constraint", E_USER_ERROR);
-        
-        $this->type = $type;
-        // $values = Constraint::$types[$type];
-        $this->data = $data;
-    }
-    
-    // returns in string the condition represented by this instance
-    // eg.: (year > start and year < end)
-    public function getSQLCondition() {
-        $q = "(";
-        switch ($this->type) {
-            case "dateRange":
-                $other = false;
-                if (!is_null($this->data["start"])) {
-                    $q .= "year >= " . $this->data["start"];
-                    $other = true;
-                }
-                if (!is_null($this->data["end"])) {
-                    if ($other) $q .= " AND ";
-                    $q .= "year <= " . $this->data["end"];
-                }
-                break;
-            case "length":
-                $other = false;
-                if (!is_null($this->data["min"])) {
-                    $q .= "runtime >= " . $this->data["min"];
-                    $other = true;
-                }
-                if (!is_null($this->data["max"])) {
-                    if ($other) $q .= " AND ";
-                    $q .= "runtime <= " . $this->data["max"];
-                }
-                break;
-            case "famRating":
-                $oklist = Constraint::getFamilyFriendly($this->data["lastAcceptable"]);
-                foreach ($oklist as $ok) {
-                    $q .= "fRating=" . $ok . " OR ";
-                }
-                $q .= "1=0";
-                break;
-            case "genre":
-                // TODO at the moment only one is set any time... later make safer
-                if (isset($this->data["acceptable"])) {
-                    foreach ($this->data["acceptable"] as $okg) {
-                        $q .= "genre LIKE '%" . $okg . "%' OR ";
-                    }
-                    $q .= "1=0";
-                }
-                
-                if (isset($this->data["not_acceptable"])) {
-                    foreach ($this->data["not_acceptable"] as $okg) {
-                        $q .= "genre NOT LIKE '%" . $okg . "%' AND ";
-                    }
-                    $q .= "1=1";
-                }
-                break;
-        }
-        $q .= ")";
-        return $q;
-    }
-    
-    
+class QResult {
+	/* Hold a movie matching the query, and the associated relevance. */
+	public function __construct($movie, $relevance) {
+		$this->movie = $movie;
+		$this->relevance = $relevance;
+	}
+
+	public static function getResults($movieList, $relevance) {
+		$ret = array();
+		foreach ($movieList as $movie) {
+			array_push($ret, new QResult($movie, $relevance));
+		}
+	}
 }
-
-
 
 ?>

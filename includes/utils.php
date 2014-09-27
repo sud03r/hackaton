@@ -20,6 +20,19 @@ class Utils {
 		echo "]\n";
 	}
 
+	/*
+		Removes everything after the last space,
+		If there's no space, return the empty string.
+	*/
+	public static function removeLastWord($string) {
+		$lastSpacePosition = strrpos($string," ");
+		if ($lastSpacePosition === false) {
+			return ""; // not found
+		} else {
+			return substr($string,0,$lastSpacePosition);
+		}
+	}
+
 	public static function getWebData($url) {
 		$url = str_replace(' ', '%20', $url);
 		return file_get_contents($url);
@@ -49,6 +62,29 @@ class Utils {
 		$movie->populateFromRottenTomatoes($similarLink, $row['rRotTomCritic'], $row['rRotTomViewer']);
 		return $movie;
 	}
+
+
+	/** 
+		This function takes a string representation of a year specified in 
+		the format '56, and returns the 4 digit version 1956. 
+		
+		Returned value is integer.
+
+		This function may be called with a four digit year representation too,
+		in which case it will simply return it as an integer.
+
+		TODO: Note that the current implementation works until 2020..
+	*/
+    public static function fixYearFormat($date) {
+        if ($date[0] == "'") {
+            $num = substr($date, 1);
+            if (intval($num)<20) // TODO this is horrible
+                return (2000+intval($num));
+            else
+                return (1900+intval($num));
+        }
+        return intval($date);
+    }
 }
 
 ?>

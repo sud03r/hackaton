@@ -1,6 +1,7 @@
 <?php
 
 require_once(__DIR__ . "/../parseQuery.php");
+use \parsing\ParseQuery;
 
 $queries = array(
 	"Scary movies rated higher than 7 on imdb"=>"mhm",
@@ -29,7 +30,7 @@ foreach ($queries as $query => $descr) {
 	$iter += 1;
 	echo "-- query: $query\n";
 	echo "          $descr\n";
-	$movieMatching = Pq::parseQuery($query);
+	$movieMatching = ParseQuery::parseQuery($query);
 //	var_dump($movieMatching);
 	echo "\n";
 }
