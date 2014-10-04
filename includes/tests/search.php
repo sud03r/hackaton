@@ -2,6 +2,9 @@
 /*
 	This file does some tests on the search functionality.
 */
+
+trigger_error("Removed functionality.", E_USER_ERROR);
+
 require_once(__DIR__ . "/../search.php");
 echo "-- First tests check the use of the Netflix API ---------------------------------\n";
 

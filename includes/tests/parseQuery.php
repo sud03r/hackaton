@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . "/../parseQuery.php");
+require_once(__DIR__ . "/../parsing/parseQuery.php");
 use \parsing\ParseQuery;
 
 $queries = array(

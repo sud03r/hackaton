@@ -2,6 +2,11 @@
 /*
 	This file does some tests on the search functionality.
 */
+
+echo "I'M PRETTY SURE THIS FILE IS OUTDATED!\N";
+echo "We will raise an error now and if there's no objections from anyone for months, I will just remove this file eventually.\n";
+trigger_error("I thought we never run this anymore..", E_USER_ERROR);
+
 require_once(dirname(__FILE__). "/../smartSearch.php");
 require_once(dirname(__FILE__) . "/../utils.php");
 

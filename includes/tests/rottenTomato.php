@@ -2,7 +2,9 @@
 /*
 	This file tests basic rotten tomato functionality.
 */
-require_once(__DIR__ . "/../search.php");
+trigger_error("Removed functionality.", E_USER_ERROR);
+
+require_once(__DIR__ . "/../search.php");  # <---- there's no file like this anymore
 require_once(__DIR__ . "/../movie.php");
 
 echo "-- Some tests on the methods accessing rotten tomatoes API --------------\n";

@@ -10,7 +10,7 @@ namespace parsing;
 echo "Going into constraint.php\n";
 
 require_once(__DIR__ . "/parseQueryConstants.php" );
-require_once(__DIR__ . "/utils.php");
+require_once(__DIR__ . "/../utils.php");
 use \Utils;   // this is so that we can access it
 
 class Constraint {

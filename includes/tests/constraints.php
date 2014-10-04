@@ -3,7 +3,7 @@ namespace parsing;
 
 echo "Going into constraint test\n";
 
-require_once(__DIR__ . "/../constraint.php");
+require_once(__DIR__ . "/../parsing/constraint.php");
 
 echo "Returned to constraint test\n";
 

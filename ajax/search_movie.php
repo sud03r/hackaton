@@ -1,6 +1,8 @@
 <?php
 header('Content-Type: application/json');
-require_once(__DIR__ . "/../includes/parseQuery.php");
+require_once(__DIR__ . "/../includes/parsing/parseQuery.php");
+use \parsing\ParseQuery as Pq;
+
 
 /* if started from commandline, wrap parameters to $_POST and $_GET */
 if (!isset($_SERVER["HTTP_HOST"])) {
