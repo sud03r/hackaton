@@ -21,6 +21,9 @@ const ST = 1;
 const EN = 2;
 const BOTH = 3;
 
+const SQL_TRUE = "1=1";
+const SQL_FALSE = "0=1";
+
 const SEP = "!!"; // we insert this whereever we take stuff out from the query
 
 class C {
@@ -81,6 +84,5 @@ class C {
 }
 
 echo "loaded all parsing constants\n";
-echo "just a test.. " . count(C::$genres) . "\n";
 
 ?>

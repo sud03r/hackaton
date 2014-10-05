@@ -1,6 +1,7 @@
 <?php
 require_once(dirname(__FILE__) . "/Db.php");
 require_once(dirname(__FILE__) . "/utils.php");
+
 class Query {
 
 	// returns an array (possibly empty) of array objects

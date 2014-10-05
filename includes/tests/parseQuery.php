@@ -1,5 +1,7 @@
 <?php
 
+$DEBUG = true;
+
 require_once(__DIR__ . "/../parsing/parseQuery.php");
 use \parsing\ParseQuery;
 

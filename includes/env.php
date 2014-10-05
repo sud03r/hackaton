@@ -3,7 +3,7 @@
     
 	// Debug
     ob_start();
-    error_reporting(E_ERROR);
+    error_reporting(E_ALL & ~E_NOTICE);
     ini_set('display_errors', true);
     ini_set('html_errors', false);
     define('DEBUG_MODE', 'ON');
@@ -14,4 +14,8 @@
     define('DB_PASSWORD', 'influx');
     define('DB_HOST', 'localhost');
     define('DB_DATABASE', 'influx');
+
+	// TODO David: I know this replicates 'DEBUG_MODE' but
+	// I find it more convenient;
+	if ($DEBUG != true) $DEBUG = true; // turn it on
 ?>

@@ -3,6 +3,6 @@
 for f in *.php
 do
 	echo -e "\033[33;34m -- Running file $f: \033[0m"
-	php $f | grep "PHP"
+	php $f | grep "PHP\|Fatal"
 done
 

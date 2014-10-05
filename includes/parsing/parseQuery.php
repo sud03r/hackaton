@@ -7,8 +7,16 @@ namespace parsing;
 
 echo "opened up parseQueries.php\n";
 
+require_once(__DIR__ . "/../env.php");
 require_once(__DIR__ . "/../queries.php");
+require_once(__DIR__ . "/../utils.php");
 require_once(__DIR__ . "/parseQueryConstants.php");
+require_once(__DIR__ . "/constraint.php");
+
+use \Utils, \Db, \Query;
+
+echo "Loaded everything\n";
+echo "debug = $DEBUG\n";
 
 class ParseQuery {
     
@@ -18,12 +26,15 @@ class ParseQuery {
 		- if it infers the basequery type ("base")
 	 */
 	public static function categorize($word, $prevData) {
-		echo "analyzing $word\n";
+		if ($DEBUG) {
+			if ($word === " ")
+				trigger_error("This is not optimal..", E_USER_WARNING);
+		}
 		$word = strtolower($word);
 		$toRet = array("base"=>"----", "oLim"=>0, "nLim"=>0, "pLim"=>0);
 		// first check if it's one of the static keywords
 		if (is_numeric($word)) {
-			foreach ($regexRules as $rule=>$data) {
+			foreach (C::$regexRules as $rule => $data) {
 				if (preg_match($rule, $word) == 1) {
 					self::updateData($toRet, $data);
 				}
@@ -31,22 +42,22 @@ class ParseQuery {
 		} else {
             if ($word == SEP) {
                 self::updateData($toRet, array("base"=>"sep", "oLim"=>ST|EN));
-            } elseif (isset($keywords[$word])) {
-				self::updateData($toRet, $keywords[$word]);
-			} elseif (isset($rateSites[$word])) {
-				self::updateData($toRet, ( array("base"=>"rating") + $rateSites[$word]));	
-			} elseif (in_array($word, $genres)) {
+            } elseif (isset(C::$keywords[$word])) {
+				self::updateData($toRet, C::$keywords[$word]);
+			} elseif (isset(C::$rateSites[$word])) {
+				self::updateData($toRet, ( array("base"=>"rating") + C::$rateSites[$word]));	
+			} elseif (in_array($word, C::$genres)) {
 				self::updateData($toRet, array("base"=>"genre", "oLim"=>ST|EN));
-			} elseif (isset($logicOps[$word])) {
+			} elseif (isset(C::$logicOps[$word])) {
 				self::updateData($toRet, array("base"=>"lOp", "pLim"=>EN, "nLim"=>ST, "oLim"=>ST|EN));
-			} elseif (in_array($word, $familyRating)) {
+			} elseif (in_array($word, C::$familyRating)) {
 				self::updateData($toRet, array("base"=>"rated", "oLim"=>EN));
-			} elseif (isset($connectors[$word])) {
+			} elseif (isset(C::$connectors[$word])) {
 				self::updateData($toRet, array("base"=>"connector") + 
-						($connectors[$word]) );
+						(C::$connectors[$word]) );
 			} else {
 				// there's some other rules: digits
-				foreach ($regexRules as $rule=>$data) {
+				foreach (C::$regexRules as $rule => $data) {
 					if (preg_match($rule, $word) == 1) {
 						self::updateData($toRet, $data);
 					}
@@ -81,45 +92,19 @@ class ParseQuery {
 		// We change this so that we keep a TREE of possible parses.
 		$root = new ParseNode($query, 1.0, array(), array());
 	*/
-
+	
 		// first thing we do is see if this is a movie title:
 		$movieListToUnion = \Query::byTitle($query);
 		$results = self::getRelevanceByTitle($movieListToUnion, $query); // TODO test this
 
-        return $results; // tODO testing
-
 		// rest of the stuff we compose / intersect movie lists
         $movieListToFilter = array(); // QResult 's
         $constraints = array(); // Constraint 's
-        
-        // look for "movie[s] like _stuff_"; try with longest string possible,
-		// getting shorter and shorter. ATM report only longest match
-		$pattern = '/(movies?)? like (.*)$)/i'; // the pattern we look for
-		$queryCopy = substr($query, 0); // make a copy
-		while (strlen($queryCopy) > 0) {
-			if (preg_match($pattern, $queryCopy, $matches) == 1) {
-				// collect these movies, with relevances
-				$likeTitles = Query::byTitle($matches[1]);
-				if (count($likeTitles) === 0) continue;
 
-				// not there may be multiple movies that matched... search through all
-				$likeResults = self::getRelevanceByTitle($likeTitles, $matches[1]);
-				foreach ($likeResults as $similarTo){
-					// similarTo is (movie, relevance) pair
-					$simMovies = Query::bySimilarity($similarTo->movie);
-					// we use the same relevance for all similar movies
-					self::updateData($movieListToFilter,
-						QResult::getResults($simMovies, $similarTo->relevance) ) ;
-				}
-				// also delete this section of the query
-				//         -- this is ok here, since we already "continue'd" if this code does not apply
-				$query = preg_replace($pattern, SEP, $query);
-				break;
-			}
-			$queryCopy = Utils::removeLastWord($queryCopy);
-			// TODO test this. Also move a bunch of this code into other files it's getting annoying!!
-		}
-		
+
+	   	self::updateData($movieListToFilter, self::trySimilarMovies($query));
+
+	
 		// -- we don't have a title;  analyze for tokens
 		$queryC = strtolower($query); // TODO could find names by capital letter maybe
 //		$queryC = str_replace(" with ", " and ", $queryC);
@@ -130,10 +115,38 @@ class ParseQuery {
 		self::updateData($constraints, Constraint::findLengthConstraints($queryC));
         self::updateData($constraints, Constraint::findFamilyConstraints($queryC));
         self::updateData($constraints, Constraint::findGenreConstraints($queryC));
-        // clean some more again
+        // clean some more again ?
+
+		list($words, $tokenLim, $categories) = self::tokenize($queryC);
+		$numWords = count($words);
+
+		var_dump($DEBUG);
+		if ($DEBUG) {
+			// we represent it as a string now
+			echo "$queryC\n";
+			echo self::getStringRepOfCats($categories, $tokenLim, $numWords);
+			echo "\nconstraints:";
+			foreach ($constraints as $const) {
+        	    echo " $const->type";
+			}
+			echo "\n\n";
+		}
+
+		// now find continuous sections
+		self::updateData($constraints, self::examineSections($words, $tokenLim, $categories));
+
+		$filteredResults = self::findMovieByConstraint($movieListToFilter, $constraints); // TODO changing type of filter
+		return array_merge($movieListToUnion, $filteredResults);	
+	}
 
 
-        $words = explode(" ", $queryC);
+	/** Try to tokenize the query, finding delimiters and categories.
+
+		Returns the array (number of entries, limit info, categories).
+	*/
+	public static function tokenize($queryC) {
+#		$words = preg_split('/\s+/', $queryC); // TODO decide which one to use
+		$words = explode(" ", $queryC); 
         $numWords = count($words);
 		$tokenLim = array();
 		$base = array();
@@ -148,7 +161,7 @@ class ParseQuery {
 					investigate it in relation to the previous word
 				*/
 				if ($res["base"] == "connector") {
-					
+					// TODO still to do.	
 				}
 
 				/*
@@ -165,6 +178,7 @@ class ParseQuery {
 				// see if the previous one ended, we start 
                 if (($prevRes["oLim"] & EN) != 0)
                     $res["oLim"] |= ST;
+
 			} else {
                 // first one always starts! :)
                 $res["oLim"] |= ST;
@@ -178,27 +192,20 @@ class ParseQuery {
 		}
 		// last one always finishes
 		$tokenLim[$numWords-1] |= EN;
-
-		// we represent it as a string now
-		echo "$queryC\n";
-		echo self::getStringRepOfCats($base, $tokenLim, $numWords);
-		echo "\nconstraints:";
-		foreach ($constraints as $const) {
-            echo " $const->type";
-		}
-		echo "\n\n";
-
-		// now find continuous sections
-		self::updateData($constraints, self::ExamineSections($base, $tokenLim, $numWords));
-
-		$filtered = self::findMatches($movieListToFilter, $constraints); // TODO changing type of filter
-		return array_merge($movieListToUnion, $filtered);	
+		
+		return array($words, $tokenLim, $base);
 	}
 
-	// take a $movieList -- if not empty, we select things from there
-	// if empty, we select things from the whole database
-	// --------- always according to the constraints
-	public static function findMatches($movieList, $constraints) {
+
+	/*
+	This function applies a set of search constraints to a set of movies.
+
+	If $movieList is non-empty, we search in the movies specified in it,
+	otherwise we search in the set of all movies in our database / on netflix.
+
+	The constraints are contained in $constraints
+	*/
+	public static function findMovieByConstraint($resultList, $constraints) {
         // if there is a movie list... for now we'll cheat and
         // just make an sql query that includes only those movies
         $query = "select * from movies where ";
@@ -207,10 +214,11 @@ class ParseQuery {
         if (count($movieList) > 0) {
             $hadStuff = true;
             $query .= "(";
-            foreach ($movieList as $movie) {
+            foreach ($resultList as $result) {
+				$movie = $result->movie;
                 $query .= "(name=" . $movie->mName . " and year=" . $movie->year . ") OR ";
             }
-            $query .= "1=0 )"; // so this last condition is always false
+            $query .= SQL_FALSE . " )";
         }
         if (count($constraints) > 0) {
             if ($hadStuff) $query .= " AND ";
@@ -218,23 +226,28 @@ class ParseQuery {
                 $query .= $con->getSQLCondition();
                 $query .= " AND ";
             }
-            $query .= "1=1;"; // so this last condition is always false
+            $query .= SQL_TRUE . ";";
         }
        
 //	   	echo "$query\n";
         // now actually call the query
-        $result = Db::query($query);
+        $result = \Db::query($query);
         $movies = array();
-        for ($i = 0; $i < Db::getNumRows($result); $i++) {
-            $row = Db::getNextRow($result);
-            array_push($movies, Utils::createMovieFromDbRow($row));
+        for ($i = 0; $i < \Db::getNumRows($result); $i++) {
+            $row = \Db::getNextRow($result);
+            array_push($movies, \Utils::createMovieFromDbRow($row));
         }
         return $movies;
 	}
 
-	// this code looks at running sections in the code to attempt to 
-	// find people's names
+	
+	/* Returns constaints based on tokenization (attempt).
+
+	Infers additional constrains from the non-complete tokenization.
+	*/
 	public static function examineSections($base, $tokenLim, $numWords) {
+		return array(); // TODO working on this ... infinite loop below
+
 		$continous = array(); // will consist of start-end pairs
 		$inside = false;
 		$start = -1;
@@ -248,11 +261,54 @@ class ParseQuery {
 		}
 	}
 
+	/*
+	Look for "movie[s] like _stuff_"; try with longest _stuff_ possible,
+	getting shorter and shorter. ATM report only longest match.
+
+	Returns a list (array) of matching QResults.
+	*/
+	public static function trySimilarMovies(&$query) {
+		$movieListToReturn = array();
+		$pattern = '/(movies?)? like (.*)$/i'; // the pattern we look for
+		$queryCopy = substr($query, 0); // make a copy
+		while (strlen($queryCopy) > 0) {
+			if (preg_match($pattern, $queryCopy, $matches) == 1) {
+				// collect these movies, with relevances
+				$likeTitles = \Query::byTitle($matches[1]);
+				if (count($likeTitles) === 0) continue;
+
+				// not there may be multiple movies that matched... search through all
+				$likeResults = self::getRelevanceByTitle($likeTitles, $matches[1]);
+				foreach ($likeResults as $similarTo){
+					// similarTo is (movie, relevance) pair
+					$simMovies = Query::bySimilarity($similarTo->movie);
+					// we use the same relevance for all similar movies
+					self::updateData($movieListToReturn,
+						QResult::getResults($simMovies, $similarTo->relevance) ) ;
+				}
+				// also delete this section of the query
+				//         -- this is ok here, since we already "continue'd" if this code does not apply
+				$query = preg_replace($pattern, SEP, $query);
+				break;
+			}
+			$queryCopy = \Utils::removeLastWord($queryCopy);
+			// TODO test this.
+		}
+		return $movieListToReturn;
+	}
+
 	/* ---------------------------------------------------- */
 	/* Utilities...                                         */
 	/* ---------------------------------------------------- */
 
 	public static function updateData(&$arrayUpdate, $add) {
+		if ($DEBUG) {
+			if (!is_array($add)) {
+				debug_print_backtrace();
+				echo "Second arg: \n";
+				var_dump($add);
+			}
+		}
 		$arrayUpdate = array_merge($arrayUpdate, $add);
 	}
 
@@ -322,6 +378,7 @@ class QResult {
 		foreach ($movieList as $movie) {
 			array_push($ret, new QResult($movie, $relevance));
 		}
+		return $ret;
 	}
 }
 

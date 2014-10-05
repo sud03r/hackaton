@@ -204,7 +204,7 @@ class Constraint {
                 foreach ($oklist as $ok) {
                     $q .= "fRating=" . $ok . " OR ";
                 }
-                $q .= "1=0";
+                $q .= SQL_FALSE;
                 break;
             case "genre":
                 // TODO at the moment only one is set any time... later make safer
@@ -212,14 +212,14 @@ class Constraint {
                     foreach ($this->data["acceptable"] as $okg) {
                         $q .= "genre LIKE '%" . $okg . "%' OR ";
                     }
-                    $q .= "1=0";
+                    $q .= SQL_FALSE;
                 }
                 
                 if (isset($this->data["not_acceptable"])) {
                     foreach ($this->data["not_acceptable"] as $okg) {
                         $q .= "genre NOT LIKE '%" . $okg . "%' AND ";
                     }
-                    $q .= "1=1";
+                    $q .= SQL_TRUE;
                 }
                 break;
                         case "director":
