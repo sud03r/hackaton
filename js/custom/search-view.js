@@ -26,7 +26,12 @@ var SearchView = Backbone.View.extend({
 				var MAX_MOVIES = Math.min(100,movieInfo.length);
 				for (var i = 0; i < MAX_MOVIES; i++) 
 				{
-					parsed = _.pick(movieInfo[i], function (value) { 
+					// David: I modified this temporarily so the website would show things
+					// just added the .movie, as what I return in from the ajax call now
+					// changed structure that way. NOTE: I did not change the similar code
+					// that you have on the results page.
+					// TODO actually use relevances.
+					parsed = _.pick(movieInfo[i].movie, function (value) { 
 						if (!!!value) return false;
 						if (_.isArray(value) && (_.isEmpty(value) || value[0] == "")) return false;
 						return true;
