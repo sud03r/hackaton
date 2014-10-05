@@ -83,18 +83,25 @@ class ParseQuery {
 	*/
 
 	/* 
-		Takes a query and returns a list of appropriate movies.
+		Takes a query and returns a list of appropriate movies. 
+		If an empty query is sent, we return all movies.
+
+		TODO: implement the following feature:
+		We do not actually return every matching result, just the ones
+		that fit the decription of $pageSize and $pageNum. For an exact
+		description of these settings check -- FILL IN LATER --.
 	 */
-	public static function parseQuery($query) {
+	public static function parseQuery($query, $pageSize, $pageNum) {
 		global $DEBUG;
 	/* OVERKILL?
 		// We change this so that we keep a TREE of possible parses.
 		$root = new ParseNode($query, 1.0, array(), array());
 	*/
-	
+		
+		
 		// first thing we do is see if this is a movie title:
-		$movieListToUnion = \Query::byTitle($query);
-		$results = self::getRelevanceByTitle($movieListToUnion, $query); // TODO test this
+		$movieList = \Query::byTitle($query);
+		$resultsToUnion = self::getRelevanceByTitle($movieList, $query); // TODO test this
 
 		// rest of the stuff we compose / intersect movie lists
         $movieListToFilter = array(); // QResult 's
@@ -134,7 +141,7 @@ class ParseQuery {
 		self::updateData($constraints, self::examineSections($words, $tokenLim, $categories));
 
 		$filteredResults = self::findMovieByConstraint($movieListToFilter, $constraints); // TODO changing type of filter
-		return array_merge($movieListToUnion, $filteredResults);	
+		return array_merge($resultsToUnion, $filteredResults);	
 	}
 
 
@@ -200,8 +207,10 @@ class ParseQuery {
 
 	If $movieList is non-empty, we search in the movies specified in it,
 	otherwise we search in the set of all movies in our database / on netflix.
+	The constraints are contained in $constraints.
 
-	The constraints are contained in $constraints
+	Special case: if there are no movies to filter, or constraints given,
+					we return an empty array.
 	*/
 	public static function findMovieByConstraint($resultList, $constraints) {
         // if there is a movie list... for now we'll cheat and
@@ -218,24 +227,33 @@ class ParseQuery {
             }
             $query .= SQL_FALSE . " )";
         }
-        if (count($constraints) > 0) {
+		$numConstraints = count($constraints);
+        if ($numConstraints > 0) {
             if ($hadStuff) $query .= " AND ";
             foreach ($constraints as $con) {
                 $query .= $con->getSQLCondition();
                 $query .= " AND ";
             }
-            $query .= SQL_TRUE . ";";
-        }
-       
-//	   	echo "$query\n";
+            $query .= SQL_TRUE;
+        } else {
+			// if there's no movies to pick from
+			// and no contrainst to apply,
+			// ---> just return an empty list
+			if (!$hadStuff) return array(); // to make valid syntax.
+		}
+		$query .= ";";
+		if ($DEBUG) echo "$query\n";
+
         // now actually call the query
-        $result = \Db::query($query);
-        $movies = array();
-        for ($i = 0; $i < \Db::getNumRows($result); $i++) {
-            $row = \Db::getNextRow($result);
-            array_push($movies, \Utils::createMovieFromDbRow($row));
-        }
-        return $movies;
+        $moviesWithRelevances = array();
+		$dbResult = \Db::query($query);
+		for ($i = 0; $i < max(\Db::getNumRows($dbResult), 100); $i++) { // TODO temporary
+			$row = \Db::getNextRow($dbResult);
+			$movie = \Utils::createMovieFromDbRow($row);
+	 		array_push($moviesWithRelevances, 
+						new QResult($movie, min(0.0, 1.0/(1.0+numConstraints) )) );
+		}
+        return $moviesWithRelevances;
 	}
 
 	

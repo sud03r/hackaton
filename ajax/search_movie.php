@@ -27,7 +27,7 @@ if(isset($_GET['q']))
     $query = $_GET['q'];
 #	echo "$query\n";
 	try {
-		$movies = Pq::parseQuery($query);
+		$movies = Pq::parseQuery($query, -1, 0); // TODO ignored for now
 #		print_r($movies);
 		$response["success"] = true;
 		$response["data"] = $movies;

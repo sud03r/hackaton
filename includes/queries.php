@@ -8,7 +8,7 @@ class Query {
 	public static function byTitle($title) {
         $movies = array();
 		// TODO: can get fancy here matching similar things...
-		$result = Db::query("select * from movies where name LIKE '%$title%';");
+		$result = Db::query("select * from movies where name LIKE \"%$title%\";");
 		for ($i = 0; $i < Db::getNumRows($result); $i++) {
 			$row = Db::getNextRow($result);
 			array_push($movies, Utils::createMovieFromDbRow($row));

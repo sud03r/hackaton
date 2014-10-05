@@ -24,6 +24,9 @@ $queries = array(
 	"tarantino 2009"=>"ahh",
 	"movies since 2000 that are PG-13" => "jesus christ",
 	"family movie that is shorter than 90 minutes"=>"why not?",
+	"Bob & Carol & Ted & Alice" => "special characters...",
+	"Don't Look Back" => "more special characters...",
+	"8 1/2" => "We are building something insanely robust here"
 );
 
 $iter = 0;

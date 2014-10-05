@@ -202,7 +202,7 @@ class Constraint {
             case "famRating":
                 $oklist = Constraint::getFamilyFriendly($this->data["lastAcceptable"]);
                 foreach ($oklist as $ok) {
-                    $q .= "fRating=" . $ok . " OR ";
+                    $q .= "fRating=\"" . $ok . "\" OR ";
                 }
                 $q .= SQL_FALSE;
                 break;
