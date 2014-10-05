@@ -17,5 +17,7 @@
 
 	// TODO David: I know this replicates 'DEBUG_MODE' but
 	// I find it more convenient;
-	if ($DEBUG != true) $DEBUG = true; // turn it on
+	if (!isset($DEBUG))
+//		$DEBUG = true; // turn it on
+		$DEBUG = false; // turn it off
 ?>

@@ -16,7 +16,6 @@ require_once(__DIR__ . "/constraint.php");
 use \Utils, \Db, \Query;
 
 echo "Loaded everything\n";
-echo "debug = $DEBUG\n";
 
 class ParseQuery {
     
@@ -26,6 +25,7 @@ class ParseQuery {
 		- if it infers the basequery type ("base")
 	 */
 	public static function categorize($word, $prevData) {
+		global $DEBUG;
 		if ($DEBUG) {
 			if ($word === " ")
 				trigger_error("This is not optimal..", E_USER_WARNING);
@@ -87,7 +87,7 @@ class ParseQuery {
 		Takes a query and returns a list of appropriate movies.
 	 */
 	public static function parseQuery($query) {
-	
+		global $DEBUG;
 	/* OVERKILL?
 		// We change this so that we keep a TREE of possible parses.
 		$root = new ParseNode($query, 1.0, array(), array());
@@ -120,7 +120,6 @@ class ParseQuery {
 		list($words, $tokenLim, $categories) = self::tokenize($queryC);
 		$numWords = count($words);
 
-		var_dump($DEBUG);
 		if ($DEBUG) {
 			// we represent it as a string now
 			echo "$queryC\n";
@@ -302,6 +301,7 @@ class ParseQuery {
 	/* ---------------------------------------------------- */
 
 	public static function updateData(&$arrayUpdate, $add) {
+		global $DEBUG;	
 		if ($DEBUG) {
 			if (!is_array($add)) {
 				debug_print_backtrace();
