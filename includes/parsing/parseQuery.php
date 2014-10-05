@@ -5,9 +5,8 @@ namespace parsing;
 	the predefined set of base queries.
 */
 
-echo "opened up parseQueries.php\n";
-
 require_once(__DIR__ . "/../env.php");
+if ($DEBUG) echo "opened up parseQueries.php\n";
 require_once(__DIR__ . "/../queries.php");
 require_once(__DIR__ . "/../utils.php");
 require_once(__DIR__ . "/parseQueryConstants.php");
@@ -15,7 +14,7 @@ require_once(__DIR__ . "/constraint.php");
 
 use \Utils, \Db, \Query;
 
-echo "Loaded everything\n";
+if ($DEGUB) echo "Loaded everything\n";
 
 class ParseQuery {
     

@@ -83,6 +83,6 @@ class C {
 	);
 }
 
-echo "loaded all parsing constants\n";
+if ($DEBUG) echo "loaded all parsing constants\n";
 
 ?>

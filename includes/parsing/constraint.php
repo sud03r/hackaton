@@ -7,7 +7,7 @@ namespace parsing;
 	can be translated into SQL constraints, or plain text, etc.
 */
 
-echo "Going into constraint.php\n";
+if ($DEBUG) echo "Going into constraint.php\n";
 
 require_once(__DIR__ . "/parseQueryConstants.php" );
 require_once(__DIR__ . "/../utils.php");
@@ -231,7 +231,7 @@ class Constraint {
     }    
 }
 
-echo "Read through constraint.php\n";
+if ($DEBUG) echo "Read through constraint.php\n";
 
 
 ?>
