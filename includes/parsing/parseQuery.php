@@ -88,10 +88,11 @@ class ParseQuery {
 
 		TODO: implement the following feature:
 		We do not actually return every matching result, just the ones
-		that fit the decription of $pageSize and $pageNum. For an exact
-		description of these settings check -- FILL IN LATER --.
+		that fit the description of $pageSize and $pageNum. For an exact
+		description of these settings check -- FILL IN LATER --
+		PROPOSAL: $pageSize=-1 signals we don't do pages.
 	 */
-	public static function parseQuery($query, $pageSize, $pageNum) {
+	public static function parseQuery($query, $pageSize=-1, $pageNum=0) {
 		global $DEBUG;
 	/* OVERKILL?
 		// We change this so that we keep a TREE of possible parses.
