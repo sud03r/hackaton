@@ -77,6 +77,7 @@ class Utils {
 		$netflixId = $matchNetflix[1];
 
 		$imdbJSON = Utils::fixJSON($row['imdbJSON']);
+		$imdbJSON = utf8_encode($imdbJSON);
 		$movie = new Movie($row['name'], $row['rNetflix'], $netflixId, $row['year'], $row['imageURL']);
 		$movie->populateFromIMDB(json_decode($imdbJSON, true));
 		Utils::checkJSONError($movie->mName);
