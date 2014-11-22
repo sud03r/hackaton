@@ -2,6 +2,8 @@
 // Shows all the details of a movie
 // Uses a MovieModel. Shows suggestions, reviews, watch-link.
 
+// TODO: This page is UNUSED
+
 var DetailsView = Backbone.View.extend({
 	template  : "details.html",
 	className : "details-page",

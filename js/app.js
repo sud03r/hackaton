@@ -1,5 +1,5 @@
 /* This file is responsible for initially loading things.
- * It issialso responsible for setting up the URLs (routes),
+ * It is also responsible for setting up the URLs (routes),
  * and the mechanisms for switching between pages seemlessly.
  *
  * See backbonejs.org and backbonejs.org/examples/todos/todos.js 
@@ -24,15 +24,27 @@ $(function(){
 		// collection, when items are added or changed. Kick things off by
 		// loading any preexisting todos that might be saved in *localStorage*.
 		initialize: function() {
+		  Backbone.View.prototype.initialize.apply(this,arguments);
 		  $.ajaxSetup({timeout:10000}); //in milliseconds
 
-		  // TODO: Fill this in somehow
 		  movieCollection = new MovieCollection;
 		  this.pageViews = {
-			"search"  : new SearchView({app: this}),
+			"search"  : new SearchView({app: this}),	// HACK: The first page acts as the default page
 			"results" : new ResultsView({app: this}),
 			"details" : new DetailsView({app: this})
 		  }
+		  
+		  // Setup the backbone.js router (handles browers navigation, e.g.: the "back" button)
+		  me = this;	// use "me", since "this" will be overwritten in the callback scope
+		  _.each(this.pageViews, function(view,key) {
+			me.urlMapper.route(key + "(/)",key,function(){
+				me.loadPage(key);
+			});
+		  })
+		  var defaultKey = _.chain(this.pageViews).keys().first().value();
+		  me.urlMapper.route("(/)", defaultKey, function(){
+			me.loadPage(defaultKey);
+		  });
 		},
 
 		// Re-rendering the App just means refreshing the statistics -- the rest
@@ -69,7 +81,7 @@ $(function(){
 			$("body").addClass(pageName + "-page-body");
 
 			// Pass this to the URL mapper if needed
-			this.urlMapper.navigate("/" + pageName);
+			this.urlMapper.navigate(pageName, {trigger: true});
 		}
 	});
 
@@ -79,4 +91,5 @@ $(function(){
 	// Start the history
 	app.loadPage("search");	// TODO: CHANGE THIS BACK
 	app.render();
+	Backbone.history.start({root: PAGE_ROOT, silent: true});
 });
