@@ -25,9 +25,9 @@ var ResultsView = PageBase.extend({
 	},
 	
 	search : function() {
-		// TODO: Incorporate actual page-numbering
-		PAGE_NUMBER = 0;
+		PAGE_NUMBER = 0;	// TODO: Incorporate actual page-numbering
 		PAGE_SIZE = 100;
+		
 		var args = $('#search-text').val();
 		SearchBase.search(args, PAGE_NUMBER, PAGE_SIZE, this);
 	},

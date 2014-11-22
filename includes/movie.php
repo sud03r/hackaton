@@ -30,6 +30,7 @@ class Movie {
 		$this->rating['imdb'] = $imdbData['imdbRating'];
 		$this->imdbVotes = $imdbData['imdbVotes'];
 		$this->mType = $imdbData['Type'];
+		$this->imdbId = $imdbData['imdbID'];
 	}
 
 	# Populate the rotten tomatoes ratings -- just get it as in json, ie
@@ -37,10 +38,11 @@ class Movie {
 	#  "critics_score": 97,
 	#  "audience_rating": "Upright",
 	#  "audience_score": 88 }
-	public function populateFromRottenTomatoes($similar, $criticRating, $viewerRating) {
+	public function populateFromRottenTomatoes($similar, $criticRating, $viewerRating, $id) {
 		$this->similarLink = $similar;
 		$this->rating['critics_score'] = $criticRating;
 		$this->rating['audience_score'] = $viewerRating;
+		$this->rottenId = $id;
 	}
 
 	# If there is another movie with a similar title we'll keep track of that here

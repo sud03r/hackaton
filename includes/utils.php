@@ -74,13 +74,15 @@ class Utils {
 		$movie->populateFromIMDB(json_decode($imdbJSON, true));
 		//Utils::checkJSONError($movie->mName);
 		
+		$rottenJSON = json_decode($row['rottenJSON']);
+		
 		$matches = array();
 		$numMatches = preg_match('/"similar":"(.*?)"/', $row['rottenJSON'], $matches);
 		$similarLink = "";
 		if (count($matches) > 0)
 			$similarLink = $matches[1];
 
-		$movie->populateFromRottenTomatoes($similarLink, $row['rRotTomCritic'], $row['rRotTomViewer']);
+		$movie->populateFromRottenTomatoes($similarLink, $row['rRotTomCritic'], $row['rRotTomViewer'], $rottenJSON->id);
 		return $movie;
 	}
 

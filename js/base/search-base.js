@@ -20,6 +20,15 @@ var SearchBase = {
 						return true;
 					});
 					parsed.relevance = movieInfo[i].relevance;
+					
+					// We clean up the "writers" data.
+					// HACK: This probably shouldn't be here.
+					parsed.writers = _.map(parsed.writers, function (writer) {
+						var idx = writer.indexOf("(");
+						if (idx == -1) return writer;
+						else return writer.substr(0,idx).trim();
+					});
+					
 					movies.add(new MovieModel(parsed));
 				}
 				
