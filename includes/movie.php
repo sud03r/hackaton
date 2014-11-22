@@ -1,4 +1,5 @@
 <?php
+require_once('env.php');
 
 class Movie {
 
@@ -16,7 +17,7 @@ class Movie {
 	# From the key-value pairs, populate the unfilled fields.
 	public function populateFromIMDB($imdbData) {
 		$this->rFamily = $imdbData['Rated'];
-		$this->date = DateTime::createFromFormat('j M Y', $imdbData['Released'], new DateTimeZone(UTC));
+		$this->date = DateTime::createFromFormat('j M Y', $imdbData['Released']);
 		$this->runtime = $imdbData['Runtime'];
 		$this->genres = array_map('trim', explode(',', $imdbData['Genre']));
 		$this->directors = array_map('trim', explode(',', $imdbData['Director']));

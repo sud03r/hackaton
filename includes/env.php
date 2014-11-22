@@ -1,11 +1,11 @@
 <?php
-	$APP_NAME = 'Medley';
+    $APP_NAME = 'Medley';
     
-	// Debug
+    // Debug
     ob_start();
     error_reporting(E_ERROR);
-	error_reporting(E_ALL & ~E_NOTICE);
-    ini_set('display_errors', true);
+//    error_reporting(E_ALL & ~E_NOTICE);
+//    ini_set('display_errors', true);
     ini_set('html_errors', false);
     define('DEBUG_MODE', 'ON');
 
@@ -16,9 +16,11 @@
     define('DB_HOST', '192.168.0.17');
     define('DB_DATABASE', 'influx');
 
-	// TODO David: I know this replicates 'DEBUG_MODE' but
-	// I find it more convenient;
-	if (!isset($DEBUG))
-//		$DEBUG = true; // turn it on
-		$DEBUG = false; // turn it off
+    // TODO David: I know this replicates 'DEBUG_MODE' but
+    // I find it more convenient;
+    if (!isset($DEBUG))
+//      $DEBUG = true; // turn it on
+        $DEBUG = false; // turn it off
+
+    date_default_timezone_set("UTC");
 ?>
