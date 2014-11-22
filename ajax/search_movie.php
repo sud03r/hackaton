@@ -27,7 +27,15 @@ if(isset($_GET['q']))
     $query = $_GET['q'];
 #	echo "$query\n";
 	try {
-		$movies = Pq::parseQuery($query, -1, 0); // TODO ignored for now
+		# Check if the front-end needs a specific page. If so, return the appropriate chunk
+		$pageSize = -1;
+		$pageNum = 0;
+		if (isset($_GET['p']) && isset($_GET['s'])) {
+			$pageSize = $_GET['s'];
+			$pageNum = $_GET['p'];
+		}
+		
+		$movies = Pq::parseQuery($query, $pageSize, $pageNum);
 #		print_r($movies);
 		$response["success"] = true;
 		$response["data"] = $movies;

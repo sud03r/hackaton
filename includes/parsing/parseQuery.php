@@ -142,7 +142,23 @@ class ParseQuery {
 		self::updateData($constraints, self::examineSections($words, $tokenLim, $categories));
 
 		$filteredResults = self::findMovieByConstraint($movieListToFilter, $constraints); // TODO changing type of filter
-		return array_merge($resultsToUnion, $filteredResults);	
+		$results = array_merge($resultsToUnion, $filteredResults);
+
+		// No paging when we havent ask for it, ok?
+		if ($pageSize == -1)
+			return $results;
+
+		// Now we will check to see if $results satisfy paging requirements.
+		$numEntries = count($results);
+		if ($numEntries <= $pageSize) {
+			return $results;
+		}
+		else {
+			$startIdx = $pageNum * $pageSize;
+			// Takes care of the case when the slice is shorter than pagesize
+			return array_slice($results, $startIdx, $pageSize);
+		}
+
 	}
 
 
