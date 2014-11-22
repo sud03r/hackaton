@@ -30,10 +30,10 @@ class Query {
 	}
 }
 
-/*$movies = Query::byTitle("gump");
+$movies = Query::byTitle("gump");
 foreach ($movies as $movie) {
 	echo "$movie->mName $movie->netflixId\n";
 	//Query::bySimilarity($movie);
-}*/
+}
 
 ?>
