@@ -22,24 +22,27 @@ var MovieModel = Backbone.Model.extend({
 		runtime: "0 mins",
 		similarLink: {},
 		writers: ["(Not Available)"],
-		year: 1999
+		year: 1999,
+		relevance: 0
 	}
 });
 
 
 var MovieCollection = Backbone.Collection.extend({
 	model: MovieModel,
-	comp_field: "mName",
+	comp_field: "relevance",
 	comp_multiplier: -1,
 
 	comparator: function(model) {
 		if (_.isEmpty(this.comp_field)) return 0;
 		var val = 0;
-		var f = this.comp_field
+		var f = this.comp_field;
 		if (f == "rating.imdb")
 			val = model.get("rating").imdb;
 		else if (f == "rating.rotten")
 			val = model.get("rating").critics_score;
+		else
+			val = model.get(f);
 		
 		if (val == null) val = 0;
 		return val*this.comp_multiplier;

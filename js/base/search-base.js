@@ -14,15 +14,15 @@ var SearchBase = {
 				var MAX_MOVIES = Math.min(NUM_MOVIES, movieInfo.length);
 				for (var i = 0; i < MAX_MOVIES; i++) 
 				{
-					// TODO actually use relevances.
 					parsed = _.pick(movieInfo[i].movie, function (value) {
 						if (!value) return false;
 						if (_.isArray(value) && (_.isEmpty(value) || _.isEmpty(value[0]))) return false;
 						return true;
 					});
+					parsed.relevance = movieInfo[i].relevance;
 					movies.add(new MovieModel(parsed));
 				}
-
+				
 				// Apply the parent application's call-back function
 				if (_.isFunction(self.app.searchCallback)) {
 					self.app.searchCallback(movies);
