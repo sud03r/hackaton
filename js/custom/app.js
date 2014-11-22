@@ -64,6 +64,9 @@ $(function(){
 			$("#page-content").empty();
 			$("#page-content").append(pageView.$el);
 			pageView.render();
+			
+			$("body").removeClass();
+			$("body").addClass(pageName + "-page-body");
 
 			// Pass this to the URL mapper if needed
 			this.urlMapper.navigate("/" + pageName);
