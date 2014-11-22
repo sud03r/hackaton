@@ -4,9 +4,15 @@ require_once(dirname(__FILE__) . "/../../includes/utils.php");
 
 function findMovieInArray($movieArr, $name, $year) {
 	foreach ($movieArr as $movie) {
-		$description = $movie["description"];
-		$year = str_replace('"', "", $year);
-		if (strpos($description, $year) !== false) {
+		$description = explode(',', $movie["title_description"]);
+		$imdbYear = $description[0];;
+		$director = $description[1];
+
+		$netflixYear = str_replace('"', "", $year);
+		# the movies in netflix are off by an year or so, consider that
+		$yearAhead = $year + 1;
+		$yearBefore = $year - 1;
+		if (($netflixYear - 1 <= $imdbYear) && ($imdbYear <= $netflixYear + 1)) {
 			return $movie["id"];
 		}
 	}
@@ -42,6 +48,7 @@ while (($fLine = fgets($netflixData)) !== false) {
 		$url = $url."i=$title";
 	else
 		$url = $url."&t=$name";
+	echo "$url\n";
 	echo Utils::getWebData($url);
 	echo "\n";
 }

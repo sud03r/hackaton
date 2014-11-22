@@ -79,7 +79,7 @@ while($jNflix = <NETFLIX>) {
 	
 	print "INSERT INTO movies (name, year, runtime, actors, directors, genre, fRating, imageURL,". 
 							"rNetflix, rImdb, rRotTomCritic, rRotTomViewer, imdbJSON, netflixJSON, rottenJSON) VALUES (".
-							"\"$name\", '$year', $runtime, '$actors', '$directors', '$genre', '$fRating', \"$imageURL\",".
+							"\"$name\", '$year', '$runtime', '$actors', '$directors', '$genre', '$fRating', \"$imageURL\",".
 							"'$nRating', '$rImdb', '$rotCritic', '$rotAudience', '$jImdb', '$jNflix', '$jRotten');\n";
 }
 
