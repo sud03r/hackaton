@@ -56,8 +56,11 @@ class Utils {
 
 			foreach ($keyValPairs as $kvPair) {
 				$pair = explode(':', $kvPair);
-				$key = addslashes(trim($pair[0], '"'));
-				$val = addslashes(trim($pair[1], '"'));
+
+				$key = str_replace("'", "", $pair[0]);
+				$val = str_replace("'", "", $pair[1]);
+				$key = addslashes(trim($key, '"'));
+				$val = addslashes(trim($val, '"'));
 				$fixedJSON .= "\"$key\":\"$val\",";
 			}
 			$fixedJSON = rtrim($fixedJSON, ",");
@@ -76,7 +79,7 @@ class Utils {
 		$imdbJSON = Utils::fixJSON($row['imdbJSON']);
 		$movie = new Movie($row['name'], $row['rNetflix'], $netflixId, $row['year'], $row['imageURL']);
 		$movie->populateFromIMDB(json_decode($imdbJSON, true));
-		//Utils::checkJSONError($movie->mName);
+		Utils::checkJSONError($movie->mName);
 
 		$rottenJSON = Utils::fixJSON($row['rottenJSON']);
 		$rottenJSON = json_decode($rottenJSON, true);
