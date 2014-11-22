@@ -45,18 +45,13 @@ class Utils {
 		curl_close($curl_handle);*/
 	}
 
-	public static function createMovieFromDbRow($row) {
-		$matchNetflix = array();
-		preg_match('/^"(.*?)"/', $row['netflixJSON'], $matchNetflix);
-		$netflixId = $matchNetflix[1];
-
-		$imdbJSON = $row['imdbJSON'];
-		if (!Utils::isJson($imdbJSON)) {
+	public static function fixJSON($jsonStr) {
+		if (!Utils::isJson($jsonStr)) {
 			// If the imdb data from DB is malformed JSON, you'll need to fix it
 			// Get rid of leading and trailing '{' '}'
-			$imdbJSON = substr($imdbJSON, 1, -1);
+			$jsonStr = substr($jsonStr, 1, -1);
 			// explode into key-values
-			$keyValPairs = explode('",', $imdbJSON);
+			$keyValPairs = explode('",', $jsonStr);
 			$fixedJSON = "{";
 
 			foreach ($keyValPairs as $kvPair) {
@@ -67,22 +62,26 @@ class Utils {
 			}
 			$fixedJSON = rtrim($fixedJSON, ",");
 			$fixedJSON .= "}";
-			$imdbJSON = $fixedJSON;
+			$jsonStr = $fixedJSON;
 		}
+		return $jsonStr;
+	}
 
+
+	public static function createMovieFromDbRow($row) {
+		$matchNetflix = array();
+		preg_match('/^"(.*?)"/', $row['netflixJSON'], $matchNetflix);
+		$netflixId = $matchNetflix[1];
+
+		$imdbJSON = Utils::fixJSON($row['imdbJSON']);
 		$movie = new Movie($row['name'], $row['rNetflix'], $netflixId, $row['year'], $row['imageURL']);
 		$movie->populateFromIMDB(json_decode($imdbJSON, true));
 		//Utils::checkJSONError($movie->mName);
-		
-		$rottenJSON = json_decode($row['rottenJSON']);
-		
-		$matches = array();
-		$numMatches = preg_match('/"similar":"(.*?)"/', $row['rottenJSON'], $matches);
-		$similarLink = "";
-		if (count($matches) > 0)
-			$similarLink = $matches[1];
 
-		$movie->populateFromRottenTomatoes($similarLink, $row['rRotTomCritic'], $row['rRotTomViewer'], $rottenJSON->id);
+		$rottenJSON = Utils::fixJSON($row['rottenJSON']);
+		$rottenJSON = json_decode($rottenJSON, true);
+		$similarLink = $rottenJSON['links']['similar'];
+		$movie->populateFromRottenTomatoes($similarLink, $row['rRotTomCritic'], $row['rRotTomViewer'], $rottenJSON['id']);
 		return $movie;
 	}
 
