@@ -1,6 +1,9 @@
 <?php
 
-require_once(__DIR__ . "/../parseQuery.php");
+$DEBUG = true;
+
+require_once(__DIR__ . "/../parsing/parseQuery.php");
+use \parsing\ParseQuery;
 
 $queries = array(
 	"Scary movies rated higher than 7 on imdb"=>"mhm",
@@ -21,6 +24,9 @@ $queries = array(
 	"tarantino 2009"=>"ahh",
 	"movies since 2000 that are PG-13" => "jesus christ",
 	"family movie that is shorter than 90 minutes"=>"why not?",
+	"Bob & Carol & Ted & Alice" => "special characters...",
+	"Don't Look Back" => "more special characters...",
+	"8 1/2" => "We are building something insanely robust here"
 );
 
 $iter = 0;
@@ -29,7 +35,7 @@ foreach ($queries as $query => $descr) {
 	$iter += 1;
 	echo "-- query: $query\n";
 	echo "          $descr\n";
-	$movieMatching = Pq::parseQuery($query);
+	$movieMatching = ParseQuery::parseQuery($query);
 //	var_dump($movieMatching);
 	echo "\n";
 }

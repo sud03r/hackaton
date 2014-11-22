@@ -1,7 +1,7 @@
 /* At some point we should combine this with style.css */
 
 .results-page {
-	margin-top: 20px;
+	margin-top: 10px;
 	position: relative;
 }
 
@@ -32,7 +32,7 @@
 .sort-functions div {
 	margin-top: -30px;
 	margin-bottom: 10px;
-	z-index: 200;
+	z-index: 2000000;
 	display: none;
 	width: 135px;
 	float: right;
@@ -46,6 +46,7 @@
 	margin-top: 30px;
 	background-color: #f6f6f6;
 	list-style: none;
+	z-index: 2000000;
 }
 
 a#sort-by-btn:hover + div, a#sort-by-btn + div:hover {
@@ -146,6 +147,9 @@ a#sort-by-btn:hover + div, a#sort-by-btn + div:hover {
 
 .genre {
 	margin-left: 10px;
+	margin-top: 6px;
+	margin-bottom: 8px;
+	color: #008961;
 }
 
 .imdb-rating {
@@ -169,6 +173,7 @@ a#sort-by-btn:hover + div, a#sort-by-btn + div:hover {
 	background-repeat: no-repeat;
 	position: relative;
 	top: 3px;
+	z-index: -1;
 }
 
 .key-people {

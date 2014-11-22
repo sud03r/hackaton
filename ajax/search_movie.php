@@ -1,6 +1,19 @@
 <?php
+
+/**
+	Endpoint. Returns results that match the query passed to the file with $_GET.
+
+	The returned results are in json format, and have the following structure:
+		["success" = <true/false>, "data"=<array of results>],
+	where the array of results are generated from the QResult class found in /parsing/parseQuery.php,
+	and at the moment of writing this documentation will result in an array like
+		["movie"=<movie class>, "relevance"=<double between 0 and 1>]
+*/
+
 header('Content-Type: application/json');
-require_once(__DIR__ . "/../includes/parseQuery.php");
+require_once(__DIR__ . "/../includes/parsing/parseQuery.php");
+use \parsing\ParseQuery as Pq;
+
 
 /* if started from commandline, wrap parameters to $_POST and $_GET */
 if (!isset($_SERVER["HTTP_HOST"])) {
@@ -14,12 +27,12 @@ if(isset($_GET['q']))
     $query = $_GET['q'];
 #	echo "$query\n";
 	try {
-		$movies = Pq::parseQuery($query);
+		$movies = Pq::parseQuery($query, -1, 0); // TODO ignored for now
 #		print_r($movies);
 		$response["success"] = true;
 		$response["data"] = $movies;
 	} catch (Exception $e) {
-		// pass
+		// TODO this doesn't seem right..
 	}
 }
 

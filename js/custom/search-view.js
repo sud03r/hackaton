@@ -6,7 +6,14 @@ var SearchView = Backbone.View.extend({
 	template: "search.html",
 	
 	events: {
-		"click #search-submit" : "search"
+		"click #search-submit" : "search",
+		"keypress" : "searchOnEnter"
+	},
+
+	searchOnEnter: function(e) {
+		if(e.keyCode == 13){
+			this.search();
+		}
 	},
 
 	search: function() {
@@ -19,7 +26,17 @@ var SearchView = Backbone.View.extend({
 				var MAX_MOVIES = Math.min(100,movieInfo.length);
 				for (var i = 0; i < MAX_MOVIES; i++) 
 				{
-					movies.add(new MovieModel(movieInfo[i]));
+					// David: I modified this temporarily so the website would show things
+					// just added the .movie, as what I return in from the ajax call now
+					// changed structure that way. NOTE: I did not change the similar code
+					// that you have on the results page.
+					// TODO actually use relevances.
+					parsed = _.pick(movieInfo[i].movie, function (value) { 
+						if (!!!value) return false;
+						if (_.isArray(value) && (_.isEmpty(value) || value[0] == "")) return false;
+						return true;
+					});
+					movies.add(new MovieModel(parsed));
 				}
 
 				// Apply the parent application's call-back function

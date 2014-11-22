@@ -13,13 +13,13 @@
 		<a href="#" id="low-high-btn">high to low <i class="glyphicon glyphicon-sort" /></a>
 		<a href="#" id="sort-by-btn">sort by <i class="glyphicon glyphicon-chevron-down" /></a>
 		<div>
-			<ul style="padding-left: 21px; padding-right: 21px;">
-				<li> <a id="relevance" href="#"> Relevance </a> </li>
-				<li> <a id="imdb-rating" href="#"> IMDb Rating </a> </li>
-				<li> <a id="rt-rating" href="#"> RT Rating </a> </li>
-				<li> <a id="netflix-rating" href="#"> Netflix Rating </a> </li>
-				<li> <a id="netflix-release" href="#"> Netflix Release </a> </li>
-				<li> <a id="date" href="#"> Date </a> </li>
+			<ul id="sort-by-list" style="padding-left: 21px; padding-right: 21px;">
+				<li id="relevance" data-field=""> <a href="#"> Relevance </a> </li>
+				<li id="imdb-rating" data-field="rating.imdb"> <a href="#"> IMDb Rating </a> </li>
+				<li id="rt-rating" data-field="rating.rotten"> <a href="#"> RT Rating </a> </li>
+				<!--<li> <a id="netflix-rating" data-field="" href="#"> Netflix Rating </a> </li>-->
+				<!--<li> <a id="netflix-release" href="#"> Netflix Release </a> </li>-->
+				<li id="date" data-field="date"> <a href="#"> Date </a> </li>
 			</ul>
 		</div>
 	</div>
@@ -29,9 +29,8 @@
 	<!-- See underscore.js and backbone.js -->
 	<!-- One of these for each individual movie item -->
 	<% _.each(movies, function(movie,index) { %>
-		<% console.log(movie) %>
 		<div class="movie-result parity-<%= (index%2) %>">
-		<a id="view-movie-<%= (index) %>" data-movie-id="<%= (index) %>" href="#">
+		<a data-movie-id="<%= (index) %>" target="_blank" href="http://www.netflix.com/WiPlayer?movieid=<%= movie.netflixId %>">
 			<!-- Basic info -->
 			<img src="<%= encodeURI(movie.image) %>" class="thumbnail">
 			<div class="movie-info">

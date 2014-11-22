@@ -1,6 +1,14 @@
 <?php
+namespace parsing;
 
-require_once(__DIR__ . "/../parseQuery.php");
+echo "Going into constraint test\n";
+
+require_once(__DIR__ . "/../parsing/constraint.php");
+
+echo "Returned to constraint test\n";
+
+error_reporting(E_ALL);
+echo "Error reporting turned on\n";
 
 echo "\n\n====== DATE CONSTRAINTS ======\n\n";
 $queriesDate = array(
@@ -12,7 +20,7 @@ $queriesDate = array(
 
 foreach($queriesDate as $q) {
     echo "$q:\n";
-    $cons = Pq::findDateRangeConstraints($q);
+    $cons = Constraint::findDateRangeConstraints($q);
     foreach ($cons as $con)
         echo $con->getSQLCondition() . "\n";
     echo "$q:\n";
@@ -28,7 +36,7 @@ $queriesLength = array(
 
 foreach($queriesLength as $q) {
     echo "$q:\n";
-    $cons = Pq::findLengthConstraints($q);
+    $cons = Constraint::findLengthConstraints($q);
     foreach ($cons as $con)
         echo $con->getSQLCondition() . "\n";
     echo "$q:\n";
@@ -44,11 +52,28 @@ $queriesGenre = array(
 
 foreach($queriesGenre as $q) {
     echo "$q:\n";
-    $cons = Pq::findGenreConstraints($q);
+    $cons = Constraint::findGenreConstraints($q);
     foreach ($cons as $con)
         echo $con->getSQLCondition() . "\n";
     echo "$q:\n";
 }
+
+
+echo "\n\n====== FAMILY CONSTRAINTS ======\n\n";
+$queriesFamily = array(
+    "something rated PG-13 something",
+    "something X something",
+    "something rated R something",
+);
+
+foreach($queriesFamily as $q) {
+    echo "$q:\n";
+    $cons = Constraint::findFamilyConstraints($q);
+    foreach ($cons as $con)
+        echo $con->getSQLCondition() . "\n";
+    echo "$q:\n";
+}
+
 
 
 ?>

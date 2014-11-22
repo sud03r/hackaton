@@ -31,7 +31,13 @@ class Db {
 	}
 
 	public static function getNumRows($result) {
-		return mysql_num_rows($result);
+		
+//		if (!is_null($result) && $result !== FALSE) {
+			return mysql_num_rows($result);
+//		} else {
+//			debug_print_backtrace();
+//			return 0;
+//		}
 	}
 
 	public static function getNumRowsAffected() {
@@ -57,11 +63,11 @@ class Db {
 	}
 
 	private static function logError($error, $query, $details) {
-		//echo ($query);
-		//die($details);
+		trigger_error("Failure when running query '$query'. Response was '$details'", E_USER_ERROR);
+		// die($details);
 		// todo set up proper logging
 	}	
-	
+
 }
 Db::init();
 ?>
