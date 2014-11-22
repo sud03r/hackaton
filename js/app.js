@@ -27,7 +27,6 @@ $(function(){
 		  Backbone.View.prototype.initialize.apply(this,arguments);
 		  $.ajaxSetup({timeout:10000}); //in milliseconds
 
-		  // TODO: Fill this in somehow
 		  movieCollection = new MovieCollection;
 		  this.pageViews = {
 			"search"  : new SearchView({app: this}),	// HACK: The first page acts as the default page
@@ -77,7 +76,6 @@ $(function(){
 			$("#page-content").empty();
 			$("#page-content").append(pageView.$el);
 			pageView.render();
-			pageView.delegateEvents();
 			
 			// Pass this to the URL mapper if needed
 			this.urlMapper.navigate(pageName, {trigger: true});

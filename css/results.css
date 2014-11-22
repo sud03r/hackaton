@@ -49,10 +49,9 @@
 	z-index: 2000000;
 }
 
-a#sort-by-btn:hover + div, a#sort-by-btn + div:hover {
+#sort-by-btn:hover + div, #sort-by-btn + div:hover {
 	display: block;
 }
-
 
 #low-high-btn {
 	margin-right: 20px;

@@ -16,7 +16,7 @@
 
     define('DB_USERNAME', 'influx');
     define('DB_PASSWORD', 'influx');
-    define('DB_HOST', '192.168.0.17');
+    define('DB_HOST', 'localhost');
     define('DB_DATABASE', 'influx');
 
     // TODO David: I know this replicates 'DEBUG_MODE' but

@@ -54,19 +54,22 @@
 	
     <!-- Library javascript files -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-	<script src="js/underscore-min.js"></script>
-	<script src="js/backbone-min.js"></script>
+	<script src="js/lib/bootstrap.min.js"></script>
+	<script src="js/lib/underscore-min.js"></script>
+	<script src="js/lib/backbone-min.js"></script>
 
-	<!-- Custom javascript files -->
-	<script src="js/custom/app.js"></script>
-	<script src="js/custom/movie-model.js"></script>
+	<!-- Base classes and components -->
+	<script src="js/base/page-base.js"></script>
+	<script src="js/base/search-base.js"></script>
+	<script src="js/base/movie-model.js"></script>
 
-	<!-- Views -->
-	<script src="js/custom/search-view.js"></script>
-	<script src="js/custom/results-view.js"></script>
-	<script src="js/custom/details-view.js"></script>
+	<!-- Pages -->
+	<script src="js/search-view.js"></script>
+	<script src="js/results-view.js"></script>
+	<script src="js/details-view.js"></script>
 
+	<!-- The app (should be included last) -->
+	<script src="js/app.js"></script>
   </body>
 </html>
 
