@@ -8,23 +8,17 @@ class Db {
 	public static function init() {
 		if( self::$conn != FALSE )
 			return;
-		self::$conn = mysql_connect(DB_HOST, DB_USERNAME, DB_PASSWORD);
+		self::$conn = mysqli_connect(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 		if( self::$conn === FALSE ) {
 			header('location: oops');
 			exit;
 		}
-		$db = mysql_select_db(DB_DATABASE, self::$conn);
-		if( $db===FALSE ) {
-			header('location: oops');
-			exit;
-		}
-		
 	}
 
 	public static function query($q) {
-		$result = mysql_query($q, self::$conn);
+		$result = mysqli_query(self::$conn, $q);
 		if( $result===FALSE ) {
-			self::logError(QUERY_FAILURE, $q, mysql_error(self::$conn));
+			self::logError(QUERY_FAILURE, $q, mysqli_error(self::$conn));
 			return FALSE;
 		}
 		return $result;
@@ -33,7 +27,7 @@ class Db {
 	public static function getNumRows($result) {
 		
 //		if (!is_null($result) && $result !== FALSE) {
-			return mysql_num_rows($result);
+			return mysqli_num_rows($result);
 //		} else {
 //			debug_print_backtrace();
 //			return 0;
@@ -41,15 +35,15 @@ class Db {
 	}
 
 	public static function getNumRowsAffected() {
-		return mysql_affected_rows(self::$conn);
+		return mysqli_affected_rows(self::$conn);
 	}
 
 	public static function getNextRow($result) {
-		return mysql_fetch_array($result);
+		return mysqli_fetch_array($result);
 	}
 
 	public static function escape($str) {
-		return mysql_real_escape_string($str, self::$conn);
+		return mysqli_real_escape_string($str, self::$conn);
 	}
 	public static function escapeArray($arr) {
 		$escaped = array();
@@ -59,7 +53,7 @@ class Db {
 		return $escaped;
 	}
 	public static function getInsertId() {
-		return mysql_insert_id(self::$conn);
+		return mysqli_insert_id(self::$conn);
 	}
 
 	private static function logError($error, $query, $details) {
