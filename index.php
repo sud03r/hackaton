@@ -58,6 +58,7 @@
 	<script src="js/lib/bootstrap.min.js"></script>
 	<script src="js/lib/underscore-min.js"></script>
 	<script src="js/lib/backbone-min.js"></script>
+	<script src="js/lib/masonry.pkgd.min.js"></script>
 
 	<!-- Base classes and components -->
 	<script src="js/base/page-base.js"></script>

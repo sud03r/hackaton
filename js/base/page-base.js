@@ -29,9 +29,11 @@ var PageBase = Backbone.View.extend({
 		});
 	},
 	
-	render: function() {	// render page with dataObject as the model
+	render: function(rendered) {	// render page with dataObject as the model
 		this.loadTemplate(function () {
 			this.$el.html(this.template(this.getData()));
+			if (!!rendered && !_.isNull(rendered) && _.isFunction(rendered))
+				rendered();
 		});
 		this.delegateEvents();
 	}
