@@ -21,7 +21,7 @@ class Constraint {
         "length"=>array("min"=>null, "max"=>null), // done
         "genre"=>array("acceptable"=>array(), "not_acceptable"=>array()), // done
         "famRating"=>array("lastAcceptable"=>array()), //done
-        "director"=>array(),
+        "director"=>array("name" => array()),
         "actor"=>array(),   // a list of names
     );
     
@@ -172,7 +172,7 @@ class Constraint {
     }
     
     public static function findActorConstraints(&$orig_query) {
-        $keywords = array("with","starring","staring","star","that","and","or");
+        $keywords = array("with","starring","staring","star","that","and","or",SEP);
         
         // Clean it up a bit
         $query = $orig_query;
@@ -194,7 +194,7 @@ class Constraint {
             // Relying on short-circuit here when $i == $n
             if ($i == $n || in_array($words[$i], $keywords)) { 
                 $word_clause = implode(array_slice($words, $start_index, $i - $start_index), " ");
-                if (!empty($word_clause) && $word_clause != SEP)
+                if (!empty($word_clause) && (strpos($word_clause,SEP) === FALSE))
                     array_push($actor_names, $word_clause);
                 $start_index = $i+1;
             }
@@ -203,6 +203,39 @@ class Constraint {
         if (empty($actor_names)) return array();
         $constraint = new Constraint("actor", $actor_names);
         return array($constraint);
+    }
+    
+    public static function findDirectorConstraints(&$orig_query) {
+        // Clean it up a bit
+        $query = $orig_query;
+        $query = str_replace(", ", " and ", $query);    // replace commas, punctuation with "and"
+        $query = preg_replace('/\s+/', ' ', $query);
+        
+        $constraints = array();
+        
+        $key_phrases = array("directed by", "director", "director:", "by");
+        foreach ($key_phrases as $phrase) {
+            $pos = strpos($query, $phrase);
+            if ($pos === FALSE) continue;
+            
+            // AFTER
+            $rest = substr($query,$pos+strlen($phrase));
+            $rest = str_word_count($rest,1);
+            //$name = substr($query,$pos+1,2);
+            
+            $word_clause = implode(array_slice($rest, 0, 2), " ");
+            array_push($constraints, new Constraint("director",array("name" => $word_clause)));
+            
+            // Now replace what we just found
+            $orig_query = str_replace($phrase, SEP, $orig_query);
+            for ($i = 0; $i < 2 && $i < count($rest); ++$i) {
+                $orig_query = str_replace($rest[$i], SEP, $orig_query);
+            }
+            
+            break;
+        }
+        
+        return $constraints;
     }
  
 
@@ -262,6 +295,8 @@ class Constraint {
             case "actor":
                 foreach ($this->data as $actor) {
                     $q .= "(actors LIKE '%" . $actor . "%')";
+                    $q .= " OR ";
+                    $q .= "(directors LIKE '%" . $actor . "%')";    // hack, also check for directors
                     $q .= " OR ";
                 }
                 $q .= SQL_FALSE;
