@@ -53,9 +53,10 @@ $(function(){
 		  // TODO: Render function
 		},
 
-		searchCallback: function(movieCollection) {
+		searchCallback: function(movieCollection, searchQuery) {
 			resultsPage = this.pageViews["results"];
 			resultsPage.collection = movieCollection;
+			resultsPage.lastQuery = searchQuery;
 			this.loadPage("results");
 		},
 

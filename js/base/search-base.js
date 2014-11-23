@@ -34,7 +34,7 @@ var SearchBase = {
 				
 				// Apply the parent application's call-back function
 				if (_.isFunction(self.app.searchCallback)) {
-					self.app.searchCallback(movies);
+					self.app.searchCallback(movies, text);
 				}
 			}
 		}, 'json').fail( function(reason) {

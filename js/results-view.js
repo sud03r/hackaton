@@ -7,6 +7,7 @@ var ResultsView = PageBase.extend({
 	className : "results-page",
 	
 	collection : new MovieCollection,
+	lastQuery : "",
 	
 	getData : function() {
 		return { movies: this.collection.toJSON() };
@@ -51,6 +52,8 @@ var ResultsView = PageBase.extend({
 			  gutter: 10,
 			  itemSelector: '.movie-result'
 			});
+			
+			$("#search-text").val(this.lastQuery);
 			
 			// Just in case another callback was specified
 			if (_.isFunction(callback)) callback();	
