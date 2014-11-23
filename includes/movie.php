@@ -16,6 +16,9 @@ class Movie {
 
 	# From the key-value pairs, populate the unfilled fields.
 	public function populateFromIMDB($imdbData) {
+		// Fix year if netflix gave a wrong one
+		if ($this->year < 1900)
+			$this->year = $imdbData['Year'];
 		$this->rFamily = $imdbData['Rated'];
 		$this->date = DateTime::createFromFormat('j M Y', $imdbData['Released']);
 		$this->runtime = $imdbData['Runtime'];
