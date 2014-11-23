@@ -43,7 +43,7 @@ var ResultsView = PageBase.extend({
     },
     
     render: function(callback) {
-        PageBase.prototype.render.call(this, function(){
+		PageBase.prototype.render.call(this, function(){
             // Once the page is loaded, apply masonry to layout everything
             var $container = $('.results-collection');
         
@@ -54,6 +54,13 @@ var ResultsView = PageBase.extend({
             });
             
             $("#search-text").val(this.lastQuery);
+			
+			// Truncate long plot descriptions
+			$plotEl = $(".movie-info .plot");
+			lineHeight = parseInt($plotEl.css("line-height"));
+			$(".movie-info .plot").dotdotdot({
+				height: lineHeight*3 + 2
+			});
             
             // Just in case another callback was specified
             if (_.isFunction(callback)) callback(); 

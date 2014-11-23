@@ -24,6 +24,14 @@
 	
 	<link href='http://fonts.googleapis.com/css?family=Lato:400,300,100,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
+	
+	<!-- Library javascript files -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="js/lib/bootstrap.min.js"></script>
+	<script src="js/lib/underscore-min.js"></script>
+	<script src="js/lib/backbone-min.js"></script>
+	<script src="js/lib/masonry.pkgd.min.js"></script>
+	<script src="js/lib/jquery.dotdotdot.min.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -53,12 +61,6 @@
 		</div>
 	</div>
 	
-    <!-- Library javascript files -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script src="js/lib/bootstrap.min.js"></script>
-	<script src="js/lib/underscore-min.js"></script>
-	<script src="js/lib/backbone-min.js"></script>
-	<script src="js/lib/masonry.pkgd.min.js"></script>
 
 	<!-- Base classes and components -->
 	<script src="js/base/page-base.js"></script>

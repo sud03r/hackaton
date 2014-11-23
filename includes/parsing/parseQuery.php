@@ -98,6 +98,8 @@ class ParseQuery {
         // We change this so that we keep a TREE of possible parses.
         $root = new ParseNode($query, 1.0, array(), array());
     */
+
+        $query = trim($query);	
         
         // first thing we do is see if this is a movie title:
         $movieList = \Query::byTitle($query);
