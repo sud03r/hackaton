@@ -1,33 +1,48 @@
 /* At some point we should combine this with style.css */
 
 .results-page-body {
-	background-color: white;
 }
 
 .results-page {
 	position: relative;
 }
 
+.container {
+	width: 95%;
+	padding: 0px;
+}
+
 .search-title-container {
 	position: fixed;
 	width: 100%;
 	display: block;
-	background-color: #f0efee;
+	/*background-color: #272d2d; more of a grey*/
+	background-color: #1d2f35;
 	padding-top: 8px;
 	padding-bottom: 8px;
-	height: 51px;
+	height: 42px;
 	z-index: 100;
+	box-shadow: 0px 1px 0px #161e21;
+}
+
+.topbar-left {
+	display: inline-block;
+	width: 70%;
+}
+
+.search-title {
+	height: 25px;
 }
 
 .block-icon {
 	display : inline-block;
-	position: relative;
+	position: absolute;
 	font-size: 130%;
-	top: 3px;
+	top: 12px;
 } 
 
 .small-logo {
-	height : 30px;
+	height : 25px;
 	margin-left: 10px;
 	margin-right : 10px;
 }
@@ -35,12 +50,14 @@
 .sort-functions {
 	line-height: 30px;
 	vertical-align: bottom;
-	height: 30px;
-	margin-top: 5px;
-	width: 190px;
+	height: 25px;
+	width: 115px;
 	padding-left: 0px;
 	padding-right: 0px;
 	float: right;
+	font-weight: bold;
+	font-size: 12px;
+	position: relative;
 }
 
 .sort-functions div {
@@ -58,33 +75,72 @@
 
 .sort-functions div ul {
 	margin-top: 30px;
-	background-color: #f6f6f6;
+	background-color: white;
 	list-style: none;
 	z-index: 2000000;
 	padding-bottom: 8px;
+	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.075) inset;
 }
 
+/* old button design
 #sort-by-btn:hover + div, #sort-by-btn + div:hover {
+	display: block;
+}*/
+
+#dropdown:hover + div, #dropdown + div:hover {
 	display: block;
 }
 
 #low-high-btn {
 	margin-right: 20px;
+	font-size: 11px;
 }
+
+#dropdown img {
+	height: 24%;
+	position: absolute;
+	margin-top: 12px;
+}
+
+#dropdown-hover {
+	display: none;
+}
+
+a:hover #dropdown-hover {
+	display: inline-block;
+}
+
+hr {
+	margin: 0px;
+	border-color: #e2e2e2;
+	width: 110%;
+}
+
+/* old sort by button design
+#sort-by-btn {
+	font-size: 11px;
+	vertical-align: bottom;
+	font-weight: bold;
+}*/
 
 .results-collection {
 	width: 100%;
 	display: block;
 	margin-top: 63px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .movie-result {
 	display: inline-block;
-	height: 250px;
+	height: 270px;
 	margin-bottom: 10px;
 	width: 550px;
 	overflow-y: hidden;
 	position: relative;
+	background-color: white;
+	padding: 10px;
+	box-shadow: 0px 1px 2px #d6d6d6;
 }
 
 .movie-result a {
@@ -100,10 +156,10 @@
 }
 
 .parity-0 {
-	margin-right: 36px;
+	margin-right: 10px;
 }
 
-.thumbnail {
+.movie-thumbnail {
 	display: inline-block;
 	height: 100%;
 	border: none;
@@ -112,8 +168,8 @@
 }
 
 .play-button img {
-	margin-top: 40%;
-	margin-left: 24%;
+	margin-left: 37px;
+	margin-top: 75px;
 	opacity: 1;
 }
 
@@ -122,12 +178,11 @@
 	background-color: black;
 	opacity: 0.9;
 	z-index: 1;
-	width: 33%;
-	height: 100%;
-	left: 0px;
-	top: 0px;
+	width: 175px;
+	height: 250px;
+	left: 10px;
+	top: 10px;
 	display: none;
-	clip: rect(4px,177px,246px,4px);
 }
 
 a:hover .play-button {
@@ -140,8 +195,7 @@ a:hover .play-button {
 	z-index: 10000;
 	clear: none;
 	vertical-align: top;
-	max-width: 66%;
-	width: 400px;
+	width: 66%;
 }
 
 .movie-title {

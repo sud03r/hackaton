@@ -74,9 +74,18 @@ a:hover, a:active , .clickable:hover, .clickable:active {
 	margin-right: 5px;
 }
 
+.form-control {
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
 #search-submit {
 	display: inline-block;
 	width: 70px;
+	height: 32px;
+	margin-bottom: 2px;
 	color: #f0efee;
 }
 

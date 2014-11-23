@@ -39,5 +39,21 @@ var ResultsView = PageBase.extend({
 
 		this.collection.setComparator(type);
 		this.render();
+	},
+	
+	render: function(callback) {
+		PageBase.prototype.render.call(this, function(){
+			// Once the page is loaded, apply masonry to layout everything
+			var $container = $('.results-collection');
+		
+			$container.masonry({
+			  isFitWidth: true,
+			  gutter: 10,
+			  itemSelector: '.movie-result'
+			});
+			
+			// Just in case another callback was specified
+			if (_.isFunction(callback)) callback();	
+		});
 	}
 });

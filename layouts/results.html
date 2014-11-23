@@ -1,20 +1,20 @@
 <div class="search-title-container">
-	<div class="col-md-6">
+	<div class="topbar-left" >
 		<a href="index.php"> <img class="small-logo" src="images/assets/logo_diamond.svg"> </a>
-		<input type="text" class="form-control search-title" style="width:80%;" id="search-text">
+		<input type="text" class="form-control search-title" style="width:50%;" id="search-text">
 		<a class="glyphicon glyphicon-search block-icon"></a>
 	</div>
 
-	<!-- bootstrap expects 12 columns -->
-	<div class="col-md-4">
-	</div>
-
-	<div class="col-md-2 sort-functions">
+	<div class="sort-functions">
 		<!--<a href="#" class="glyphicon glyphicon-eye-open"></a>-->
 		<a id="low-high-btn">high to low <i class="glyphicon glyphicon-sort" /></a>
-		<a id="sort-by-btn">sort by <i class="glyphicon glyphicon-chevron-down" /></a>
+		<!-- trying a new design for sorting
+		<a id="sort-by-btn">sort by <i class="glyphicon glyphicon-chevron-down" /></a>-->
+		<a id="dropdown"> <img src="images/assets/dropdown.svg"> <img id="dropdown-hover" src="images/assets/dropdown-hover.svg"> </a>
 		<div>
 			<ul id="sort-by-list" style="padding-left: 21px; padding-right: 21px;">
+				<li id="sort-by"> sort by </li>
+				<hr>
 				<li id="relevance" data-field="relevance"> <a> Relevance </a> </li>
 				<li id="imdb-rating" data-field="rating.imdb"> <a> IMDb Rating </a> </li>
 				<li id="rt-rating" data-field="rating.rotten"> <a> RT Rating </a> </li>
@@ -31,10 +31,10 @@
 	<!-- See underscore.js and backbone.js -->
 	<!-- One of these for each individual movie item -->
 	<% _.each(movies, function(movie,index) { %>
-		<div class="movie-result parity-<%= (index%2) %>">
+		<div class="movie-result">
 		<a data-movie-id="<%= (index) %>" target="_blank" href="http://www.netflix.com/WiPlayer?movieid=<%= movie.netflixId %>">
 			<!-- Basic info -->
-			<img src="<%= encodeURI(movie.image) %>" class="thumbnail">
+			<img src="<%= encodeURI(movie.image) %>" class="movie-thumbnail">
 			<div class="play-button"><img src="images/assets/play.svg"></div>
 			<div class="movie-info">
 				<div class="movie-title">
@@ -68,15 +68,13 @@
 				<!-- Key People -->
 				<div class="key-people">
 					Director:
-						<% _.map(movie.directors, function (director, idx) { %><%= (idx>0?", ":"") %>
-							<span class="clickable people director-something-or-the-other"><%= director %></span><% }); %>
+						<% _.map(movie.directors, function (director, idx, directors) { %><span class="clickable people director-something-or-the-other"><%= director %><%= (idx<directors.length-1?", ":"") %></span><% }); %>
 					<br />
 					<!--<strong>Writers: </strong>
 						<span class="clickable"><%= (movie.writers || ["(Not Available)"]).join(", ") %></span>
 					<br />-->
 					Starring:
-						<% _.map(movie.actors, function (actor, idx) { %><%= (idx>0?", ":"") %>
-							<span class="clickable people actor-something-or-the-other"><%= actor %></span><% }); %>
+						<% _.map(movie.actors, function (actor, idx, actors) { %><span class="clickable people actor-something-or-the-other"><%= actor %><%= (idx<actors.length-1?", ":"") %></span><% }); %>
 					<br />
 				</div>
 				
