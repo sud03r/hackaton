@@ -19,7 +19,6 @@
 	font-size: 20px;
 }
 
-.movie-info p {
+.movie-info .movie-title .plot {
 	margin-left: 10px;
-	font-weight: bold;
 }
