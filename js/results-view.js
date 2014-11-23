@@ -47,13 +47,18 @@ var ResultsView = PageBase.extend({
             // Once the page is loaded, apply masonry to layout everything
             var $container = $('.results-collection');
         
-            $container.masonry({
-              isFitWidth: true,
-              gutter: 10,
-              itemSelector: '.movie-result'
-            });
-            
-            $("#search-text").val(this.lastQuery);
+			if (self.collection.isEmpty()) {	// first check if container is empty
+				$(".no-result-msg").show();
+			} else {
+				$(".no-result-msg").hide();
+				$container.masonry({
+				  isFitWidth: true,
+				  gutter: 10,
+				  itemSelector: '.movie-result'
+				});
+			}
+			
+			$("#search-text").val(this.lastQuery);
 			
 			// Truncate long plot descriptions
 			$plotEl = $(".movie-info .plot");
