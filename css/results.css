@@ -1,13 +1,22 @@
 /* At some point we should combine this with style.css */
 
+.results-page-body {
+	background-color: white;
+}
+
 .results-page {
-	margin-top: 10px;
 	position: relative;
 }
 
 .search-title-container {
-	position: relative;
+	position: fixed;
+	width: 100%;
 	display: block;
+	background-color: #f0efee;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	height: 51px;
+	z-index: 100;
 }
 
 .block-icon {
@@ -18,19 +27,24 @@
 } 
 
 .small-logo {
-	height : 60px;
+	height : 30px;
+	margin-left: 10px;
 	margin-right : 10px;
 }
 
 .sort-functions {
-	line-height: 40px;
+	line-height: 30px;
 	vertical-align: bottom;
-	height: 40px;
-	margin-top: 10px;
+	height: 30px;
+	margin-top: 5px;
+	width: 190px;
+	padding-left: 0px;
+	padding-right: 0px;
+	float: right;
 }
 
 .sort-functions div {
-	margin-top: -30px;
+	margin-top: -23px;
 	margin-bottom: 10px;
 	z-index: 2000000;
 	display: none;
@@ -47,6 +61,7 @@
 	background-color: #f6f6f6;
 	list-style: none;
 	z-index: 2000000;
+	padding-bottom: 8px;
 }
 
 #sort-by-btn:hover + div, #sort-by-btn + div:hover {
@@ -60,15 +75,16 @@
 .results-collection {
 	width: 100%;
 	display: block;
-	margin-top: 20px;
+	margin-top: 63px;
 }
 
 .movie-result {
 	display: inline-block;
 	height: 250px;
-	margin-bottom: 30px;
+	margin-bottom: 10px;
 	width: 550px;
 	overflow-y: hidden;
+	position: relative;
 }
 
 .movie-result a {
@@ -83,7 +99,6 @@
 	color: #7ac094;
 }
 
-
 .parity-0 {
 	margin-right: 36px;
 }
@@ -96,9 +111,33 @@
 	max-width: 33%;
 }
 
+.play-button img {
+	margin-top: 40%;
+	margin-left: 24%;
+	opacity: 1;
+}
+
+.play-button {
+	position: absolute;
+	background-color: black;
+	opacity: 0.9;
+	z-index: 1;
+	width: 33%;
+	height: 100%;
+	left: 0px;
+	top: 0px;
+	display: none;
+	clip: rect(4px,177px,246px,4px);
+}
+
+a:hover .play-button {
+	display: inline-block;
+}
+
 .movie-info {
 	display: inline-block;
 	height: 100%;
+	z-index: 10000;
 	clear: none;
 	vertical-align: top;
 	max-width: 66%;
@@ -108,24 +147,26 @@
 .movie-title {
 	display: inline-block;
 	margin-top: 0px;
+	margin-bottom: 5px;
+	vertical-align: bottom;
+	margin-left: 10px;
 }
 
 .movie-name {
-	display: inline-block;
-	vertical-align: top;
+	display: inline;
 	margin-top: 0px;
-	margin-left: 10px;
 	color: #008961;
 	margin-bottom: 0px;
+	font-size: 20px;
 }
 
 .movie-year {
-	display: inline-block;
-	vertical-align: top;
+	display: inline;
 	margin-top: 4px;
 	margin-left: 10px;
 	color: #008961;
 	margin-bottom: 0px;
+	font-size: 16px;
 }
 
 .rating-icon {
@@ -141,24 +182,28 @@
 
 .rating {
 	display: inline-block;
-	font-weight: bold;
+	font-weight: 400;
 }
 
 .genre {
+	display: inline-block;
 	margin-left: 10px;
 	margin-top: 6px;
 	margin-bottom: 8px;
-	color: #008961;
+	color: #0F6B66;
 }
 
 .imdb-rating {
 	background-image: url('../images/assets/imdb_star.png');
-	background-size: 50px 47px;
-	width: 50px;
-	height: 47px;
+	/*background-size: 50px 47px; - original size*/
+	background-size: 44px 42px;
+	width: 44px;
+	height: 42px;
 	text-align: center;
-	line-height: 47px;
+	font-size: 12px;
+	line-height: 44px;
 	margin-left: 10px;
+	margin-right: 5px;
 }
 
 .run-time {
@@ -175,9 +220,15 @@
 	z-index: -1;
 }
 
+.people {
+	color: #0F6B66;
+	font-weight: 300;
+}
+
 .key-people {
 	margin-left: 10px;
 	display: block;
+	font-weight: 400;
 }
 
 .plot {

@@ -22,6 +22,7 @@
 	<link href="css/results.css" rel="stylesheet">
 	<link href="css/details.css" rel="stylesheet">
 	
+	<link href='http://fonts.googleapis.com/css?family=Lato:400,300,100,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -37,7 +38,7 @@
   </head>
   <body>
     <div class="wrapper">
-		<div class="container" id="app-container">
+		<div id="app-container">
 			<!-- The main page is loaded here-->
 			<div id="page-content"></div>
 		</div>
