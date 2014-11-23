@@ -12,6 +12,10 @@
 	padding: 0px;
 }
 
+.no-result-msg {
+	display: none;
+}
+
 .search-title-container {
 	position: fixed;
 	width: 100%;

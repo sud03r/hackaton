@@ -42,15 +42,21 @@ var ResultsView = PageBase.extend({
 	},
 	
 	render: function(callback) {
+		var self = this;
 		PageBase.prototype.render.call(this, function(){
 			// Once the page is loaded, apply masonry to layout everything
 			var $container = $('.results-collection');
-		
-			$container.masonry({
-			  isFitWidth: true,
-			  gutter: 10,
-			  itemSelector: '.movie-result'
-			});
+			
+			if (self.collection.isEmpty()) {	// first check if container is empty
+				$(".no-result-msg").show();
+			} else {
+				$(".no-result-msg").hide();
+				$container.masonry({
+				  isFitWidth: true,
+				  gutter: 10,
+				  itemSelector: '.movie-result'
+				});
+			}
 			
 			// Just in case another callback was specified
 			if (_.isFunction(callback)) callback();	
