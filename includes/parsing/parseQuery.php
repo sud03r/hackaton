@@ -108,7 +108,8 @@ class ParseQuery {
         $constraints = array(); // Constraint 's
 
 
-        self::updateData($movieListToFilter, self::trySimilarMovies($query));
+        # TODO commented out 'cuz I can't connect to rotten tomatoes
+#        self::updateData($movieListToFilter, self::trySimilarMovies($query));
 
     
         // -- we don't have a title;  analyze for tokens
@@ -116,6 +117,7 @@ class ParseQuery {
 //      $queryC = str_replace(" with ", " and ", $queryC);
         $queryC = str_replace(" but ", " and ", $queryC);
         $queryC = self::cleanQuery($queryC);
+        $queryC = addslashes($queryC);
         
         self::updateData($constraints, Constraint::findDateRangeConstraints($queryC));
         self::updateData($constraints, Constraint::findLengthConstraints($queryC));
