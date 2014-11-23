@@ -121,8 +121,8 @@ class ParseQuery {
         self::updateData($constraints, Constraint::findLengthConstraints($queryC));
         self::updateData($constraints, Constraint::findFamilyConstraints($queryC));
         self::updateData($constraints, Constraint::findGenreConstraints($queryC));
+        self::updateData($constraints, Constraint::findDirectorConstraints($queryC));
         self::updateData($constraints, Constraint::findActorConstraints($queryC));
-        //self::updateData($constraints, Constraint::findDirectorConstraints($queryC));
         
         // clean some more again ?
         
