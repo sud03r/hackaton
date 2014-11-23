@@ -6,6 +6,7 @@ require_once(__DIR__ . "/../parsing/parseQuery.php");
 use \parsing\ParseQuery;
 
 $queries = array(
+	"thriller movies"=>"mhm",
 	"Scary movies rated higher than 7 on imdb"=>"mhm",
 	"movies directed by Tom Hanks with rating higher than 61% on rotten tomato"=>"this should check both critic and audiance and if matches either, report",
 	"romantic comedy from before 1970"=>"genre info",
@@ -36,7 +37,13 @@ foreach ($queries as $query => $descr) {
 	echo "-- query: $query\n";
 	echo "          $descr\n";
 	$movieMatching = ParseQuery::parseQuery($query);
-//	var_dump($movieMatching);
+	$tmp = array();
+	foreach ($movieMatching as $movie) {
+		$tmp[] = ($movie->movie->mName . $movie->relevance);
+	}
+	print_r(count($tmp));
+	//
+	//var_dump($tmp);
 	echo "\n";
 }
 

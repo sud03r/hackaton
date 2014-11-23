@@ -1,4 +1,7 @@
 <?php
+
+// SQL Queries for searches
+
 require_once(dirname(__FILE__) . "/Db.php");
 require_once(dirname(__FILE__) . "/utils.php");
 
@@ -23,9 +26,10 @@ class Query {
 			$url="$movie->similarLink?limit=5&apikey=y9ycwv778uspxkj6g4txme2h";
 			$similar = json_decode(Utils::getWebData($url), true);
 			foreach ($similar["movies"] as $sMovie) {
-				$movies += Query::byTitle($sMovie["title"]);
+				$movies[] = Query::byTitle($sMovie["title"]);
 			}
 		}
+		
 		//var_dump($movies);
 		return $movies;
 	}

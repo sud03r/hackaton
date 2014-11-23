@@ -1,10 +1,10 @@
 <?php
 namespace parsing;
 /**
-	This file contains the constraint class and methods related to it.
+    This file contains the constraint class and methods related to it.
 
-	The constraints are extracted from the queries we get, stored, and later
-	can be translated into SQL constraints, or plain text, etc.
+    The constraints are extracted from the queries we get, stored, and later
+    can be translated into SQL constraints, or plain text, etc.
 */
 
 require_once(__DIR__ . "/../env.php");
@@ -21,10 +21,10 @@ class Constraint {
         "length"=>array("min"=>null, "max"=>null), // done
         "genre"=>array("acceptable"=>array(), "not_acceptable"=>array()), // done
         "famRating"=>array("lastAcceptable"=>array()), //done
-                "director"=>array("name"=>null)
+        "director"=>array(),
+        "actor"=>array(),   // a list of names
     );
     
-   
     // $type should be one of the listed ones, and
     // $data should be an array like what the $type is associated to
     public function __construct($type, $data) {
@@ -36,9 +36,8 @@ class Constraint {
         $this->data = $data;
     }
 
-
-	// returns an array of constraint (related to date)
-	public static function findDateRangeConstraints(&$query) {
+    // returns an array of constraint (related to date)
+    public static function findDateRangeConstraints(&$query) {
         $patterns = array(
             "/before ('\d{2}|\d{4})/i"=>0,
             "/since ('\d{2}|\d{4})/i"=>1,
@@ -72,7 +71,7 @@ class Constraint {
             }
         }
         return $toRet;
- 	}
+    }
 
 
     // returns an array of constraints 
@@ -109,7 +108,7 @@ class Constraint {
         foreach ($selected as $famRating) {
             // make constraint and delete
             array_push($toRet, new Constraint("famRating", array("lastAcceptable"=>$famRating)));
-                        $pattern = "/(rated )?\b$famRating\b/i";
+            $pattern = "/(rated )?\b$famRating\b/i";
             $query = preg_replace($pattern, SEP, $query);
         }
         return $toRet;
@@ -164,12 +163,46 @@ class Constraint {
 
     // returns a list of all ratings that are ok
     public static function getFamilyFriendly($lastAcceptable) {
-                $okay = array($lastAcceptable);
+        $okay = array($lastAcceptable);
         foreach (C::$familyRating as $rating) {
             if ($rating === $lastAcceptable) break;
             array_push($okay, $rating);
         }
-                return $okay;
+        return $okay;
+    }
+    
+    public static function findActorConstraints(&$orig_query) {
+        $keywords = array("with","starring","staring","star","that","and","or");
+        
+        // Clean it up a bit
+        $query = $orig_query;
+        $query = str_replace(", ", " and ", $query);    // replace commas, punctuation with "and"
+        $query = preg_replace('/\s+/', ' ', $query);
+        
+        // A list of constraints to return
+        $actor_names = array();
+        
+        // Split the query on words for parsing
+        $words = explode(" ", $query);
+        $n = count($words);
+        
+        // Go through all words. Try to find clauses immediately following a key-word
+        // Hopefully these will correspond to actor names
+        $start_index = 0;
+        for($i = 0; $i < $n+1; ++$i) {
+            // HACK: $i goes till $n+1, not $n, to handle entire string
+            // Relying on short-circuit here when $i == $n
+            if ($i == $n || in_array($words[$i], $keywords)) { 
+                $word_clause = implode(array_slice($words, $start_index, $i - $start_index), " ");
+                if (!empty($word_clause) && $word_clause != SEP)
+                    array_push($actor_names, $word_clause);
+                $start_index = $i+1;
+            }
+        }
+        
+        if (empty($actor_names)) return array();
+        $constraint = new Constraint("actor", $actor_names);
+        return array($constraint);
     }
  
 
@@ -223,13 +256,22 @@ class Constraint {
                     $q .= SQL_TRUE;
                 }
                 break;
-                        case "director":
-                                $q .= "directors LIKE '%" . $this->data["name"] . "%'";
-                                break;
+            case "director":
+                $q .= "directors LIKE '%" . $this->data["name"] . "%'";
+                break;
+            case "actor":
+                foreach ($this->data as $actor) {
+                    $q .= "(actors LIKE '%" . $actor . "%')";
+                    $q .= " OR ";
+                }
+                $q .= SQL_FALSE;
+                break;
+            default:
+                throw new Exception("Invalid constraint type " . $this->type . " given for SQL condition");
         }
         $q .= ")";
         return $q;
-    }    
+    }
 }
 
 if ($DEBUG) echo "Read through constraint.php\n";
