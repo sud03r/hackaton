@@ -80,7 +80,8 @@ class Utils {
 		$imdbJSON = Utils::fixJSON($imdbJSON);
 		$movie = new Movie($row['name'], $row['rNetflix'], $netflixId, $row['year'], $row['imageURL']);
 		$movie->populateFromIMDB(json_decode($imdbJSON, true));
-		Utils::checkJSONError($movie->mName);
+		
+		if ($DEGUB) Utils::checkJSONError($movie->mName);
 
 		$rottenJSON = Utils::fixJSON($row['rottenJSON']);
 		$rottenJSON = json_decode($rottenJSON, true);
