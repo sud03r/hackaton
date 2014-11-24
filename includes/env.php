@@ -23,8 +23,8 @@ if (isset($DEBUG) && $DEBUG) {
 
 define('IFX_ROOT', dirname(__FILE__));
 
-$REMOTE_HOST = "www.medleymovies.me";
-if ($_SERVER['HTTP_HOST'] == $REMOTE_HOST) {
+$REMOTE_HOST = "medleymovies.me";
+if (strpos($_SERVER['HTTP_HOST'], $REMOTE_HOST) !== FALSE) {
 	define('DB_USERNAME', '1741910_medley');
 	define('DB_PASSWORD', 'influxinfluxmedleyinflux9');
 	define('DB_HOST', 'fdb6.atspace.me');
