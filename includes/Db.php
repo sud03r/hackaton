@@ -8,6 +8,7 @@ class Db {
 	public static function init() {
 		if( self::$conn != FALSE )
 			return;
+
 		self::$conn = mysqli_connect(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 		if( self::$conn === FALSE ) {
 			header('location: oops');

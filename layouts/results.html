@@ -7,20 +7,21 @@
 
 	<div class="sort-functions">
 		<!--<a href="#" class="glyphicon glyphicon-eye-open"></a>-->
-		<a id="low-high-btn">high to low <i class="glyphicon glyphicon-sort" /></a>
+		
 		<!-- trying a new design for sorting
 		<a id="sort-by-btn">sort by <i class="glyphicon glyphicon-chevron-down" /></a>-->
-		<a id="dropdown"> <img src="images/assets/dropdown.svg"> <img id="dropdown-hover" src="images/assets/dropdown-hover.svg"> </a>
+		<a id="dropdown"> sort by <img src="images/assets/dropdown.svg"> <img id="dropdown-hover" src="images/assets/dropdown-hover.svg"> </a>
 		<div>
 			<ul id="sort-by-list" style="padding-left: 21px; padding-right: 21px;">
-				<li id="sort-by"> sort by </li>
-				<hr>
 				<li id="relevance" data-field="relevance"> <a> Relevance </a> </li>
 				<li id="imdb-rating" data-field="rating.imdb"> <a> IMDb Rating </a> </li>
-				<li id="rt-rating" data-field="rating.rotten"> <a> RT Rating </a> </li>
+				<li id="rt-rating" data-field="rating.rotten"> <a> RT Critic Rating </a> </li>
+				<li id="rt-aRating" data-field="rating.aRotten"> <a> RT Audience Rating </a> </li>
 				<!--<li> <a id="netflix-rating" data-field="" href="#"> Netflix Rating </a> </li>-->
 				<!--<li> <a id="netflix-release" href="#"> Netflix Release </a> </li>-->
 				<li id="date" data-field="date"> <a> Date </a> </li>
+				<hr>
+				<a id="low-high-btn"> <i class="glyphicon glyphicon-sort" /> high to low </a>
 			</ul>
 		</div>
 	</div>
