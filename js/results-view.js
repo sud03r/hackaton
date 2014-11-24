@@ -38,16 +38,15 @@ var ResultsView = PageBase.extend({
             type = $(type.currentTarget).data("field");
         }
 
-		this.collection.setComparator(type);
-		this.render();
-	},
-	
-	render: function(callback) {
-		var self = this;
+        this.collection.setComparator(type);
+        this.render();
+    },
+    
+    render: function(callback) {
 		PageBase.prototype.render.call(this, function(){
-			// Once the page is loaded, apply masonry to layout everything
-			var $container = $('.results-collection');
-			
+            // Once the page is loaded, apply masonry to layout everything
+            var $container = $('.results-collection');
+        
 			if (self.collection.isEmpty()) {	// first check if container is empty
 				$(".no-result-msg").show();
 			} else {
@@ -61,8 +60,15 @@ var ResultsView = PageBase.extend({
 			
 			$("#search-text").val(this.lastQuery);
 			
-			// Just in case another callback was specified
-			if (_.isFunction(callback)) callback();	
-		});
-	}
+			// Truncate long plot descriptions
+			$plotEl = $(".movie-info .plot");
+			lineHeight = parseInt($plotEl.css("line-height"));
+			$(".movie-info .plot").dotdotdot({
+				height: lineHeight*3 + 2
+			});
+            
+            // Just in case another callback was specified
+            if (_.isFunction(callback)) callback(); 
+        });
+    }
 });

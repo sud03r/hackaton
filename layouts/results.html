@@ -38,16 +38,20 @@
 	<!-- One of these for each individual movie item -->
 	<% _.each(movies, function(movie,index) { %>
 		<div class="movie-result">
-		<a data-movie-id="<%= (index) %>" target="_blank" href="http://www.netflix.com/WiPlayer?movieid=<%= movie.netflixId %>">
-			<!-- Basic info -->
-			<img src="<%= encodeURI(movie.image) %>" class="movie-thumbnail">
-			<div class="play-button"><img src="images/assets/play.svg"></div>
+			<a data-movie-id="<%= (index) %>" target="_blank" href="http://www.netflix.com/WiPlayer?movieid=<%= movie.netflixId %>">
+				<!-- Basic info -->
+				<img src="<%= encodeURI(movie.image) %>" class="movie-thumbnail">
+				<div class="play-button"><img src="images/assets/play.svg"></div>
+			</a>		
+
 			<div class="movie-info">
-				<div class="movie-title">
-					<p class="movie-name"><%= movie.mName %></p>
-					<p class="movie-year">(<%= movie.year %>)</p>
-				</div>
-		</a>
+				<!-- Note: We duplicate this from above (the movie-thumbnail is also an <a>) -->
+				<a data-movie-id="<%= (index) %>" target="_blank" href="http://www.netflix.com/WiPlayer?movieid=<%= movie.netflixId %>">
+					<div class="movie-title">
+						<p class="movie-name"><%= movie.mName %></p>
+						<p class="movie-year">(<%= movie.year %>)</p>
+					</div>
+				</a>
 
 				<!-- Ratings -->
 				<div class="rating-group">
@@ -73,20 +77,19 @@
 				
 				<!-- Key People -->
 				<div class="key-people">
-					Director:
-						<% _.map(movie.directors, function (director, idx, directors) { %><span class="clickable people director-something-or-the-other"><%= director %><%= (idx<directors.length-1?", ":"") %></span><% }); %>
+					Director<%= (movie.directors.length > 1?"s":"") %>:
+						<% _.map(_.first(movie.directors,2), function (director, idx, directors) { %><span class="clickable people director-something-or-the-other"><%= director %><%= (idx<directors.length-1?", ":"") %></span><% }); %>
 					<br />
 					<!--<strong>Writers: </strong>
 						<span class="clickable"><%= (movie.writers || ["(Not Available)"]).join(", ") %></span>
 					<br />-->
 					Starring:
-						<% _.map(movie.actors, function (actor, idx, actors) { %><span class="clickable people actor-something-or-the-other"><%= actor %><%= (idx<actors.length-1?", ":"") %></span><% }); %>
+						<% _.map(_.first(movie.actors,2), function (actor, idx, actors) { %><span class="clickable people actor-something-or-the-other"><%= actor %><%= (idx<actors.length-1?", ":"") %></span><% }); %>
 					<br />
 				</div>
 				
 				<% _.map(movie.genres, function (genre, idx) { %>
 					<span class="genre clickable"><%= genre %></span><% }); %>
-
 			</div>
 		</div>
 	<% }); %>
