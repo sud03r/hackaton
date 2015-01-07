@@ -53,10 +53,11 @@
 
 		<div class="footer">
 			<div class="footer-centered">
-				<div class="footer-style"> <a href="/help">Help</a> </div>
-				<div class="footer-style"> <a href="/contact">Contact</a> </div>
-				<div class="footer-style"> <a href="/about">About</a> </div>
-				<div class="footer-style"><a href="/copyright">Copyright</a></div>
+				<div class="footer-style"> <a href="index.php">Home</a> </div>
+				<div class="footer-style"> <a href="info.php#about">About</a> </div>
+				<div class="footer-style"> <a href="info.php#help">Help</a> </div>
+				<div class="footer-style"> <a href="info.php#contact">Contact</a> </div>
+				<div class="footer-style"><a href="info.php#copyright">Copyright</a></div>
 			</div>
 		</div>
 	</div>
