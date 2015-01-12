@@ -5,6 +5,9 @@ namespace parsing;
     the predefined set of base queries.
 */
 
+// TODO all the "self::" should probably be "static::", just in case this class
+// is subclassed
+
 require_once(__DIR__ . "/../env.php");
 if ($DEBUG) echo "opened up parseQueries.php\n";
 require_once(__DIR__ . "/../queries.php");
@@ -86,11 +89,8 @@ class ParseQuery {
         Takes a query and returns a list of appropriate movies. 
         If an empty query is sent, we return all movies.
 
-        TODO: implement the following feature:
-        We do not actually return every matching result, just the ones
-        that fit the description of $pageSize and $pageNum. For an exact
-        description of these settings check -- FILL IN LATER --
-        PROPOSAL: $pageSize=-1 signals we don't do pages.
+        Paging is supported, $pageSize and $pageNum are fairly descriptive,
+        except that $pageSize=-1 to return all results.
      */
     public static function parseQuery($query, $pageSize=-1, $pageNum=0) {
         global $DEBUG;
@@ -118,6 +118,11 @@ class ParseQuery {
         $queryC = strtolower($query); // TODO could find names by capital letter maybe
 //      $queryC = str_replace(" with ", " and ", $queryC);
         $queryC = str_replace(" but ", " and ", $queryC);
+        
+        // first turn emotions to genres (this should be done before cleaning)
+        self::updateData($constraints, self::emotionsToGenres($queryC));
+        self::applyGenreAliases($queryC);
+
         $queryC = self::cleanQuery($queryC);
         $queryC = addslashes($queryC);
         
@@ -125,8 +130,9 @@ class ParseQuery {
         self::updateData($constraints, Constraint::findLengthConstraints($queryC));
         self::updateData($constraints, Constraint::findFamilyConstraints($queryC));
         self::updateData($constraints, Constraint::findGenreConstraints($queryC));
-        self::updateData($constraints, Constraint::findDirectorConstraints($queryC));
-        self::updateData($constraints, Constraint::findActorConstraints($queryC));
+        // TODO these two should be moved down for the more intense type of analysis.
+//        self::updateData($constraints, Constraint::findDirectorConstraints($queryC));
+//        self::updateData($constraints, Constraint::findActorConstraints($queryC));
         
         // clean some more again ?
         
@@ -137,11 +143,10 @@ class ParseQuery {
             // we represent it as a string now
             echo "$queryC\n";
             echo self::getStringRepOfCats($categories, $tokenLim, $numWords);
-            echo "\nconstraints:";
+            echo "\nconstraints:\n";
             foreach ($constraints as $const) {
-                echo " $const->type";
+                echo "- $const->type: " . $const->getSQLCondition() . "\n";
             }
-            echo "\n\n";
         }
 
         // now find continuous sections
@@ -150,7 +155,11 @@ class ParseQuery {
         $filteredResults = self::findMovieByConstraint($movieListToFilter, $constraints); // TODO changing type of filter
         $results = array_merge($resultsToUnion, $filteredResults);
 
-        // No paging when we havent ask for it, ok?
+        return self::getPage($results, $pageSize, $pageNum);
+    }
+
+   public static function getPage($results, $pageSize, $pageNum) { 
+        // No paging when we havent asked for it, ok?
         if ($pageSize == -1)
             return $results;
 
@@ -164,9 +173,7 @@ class ParseQuery {
             // Takes care of the case when the slice is shorter than pagesize
             return array_slice($results, $startIdx, $pageSize);
         }
-
     }
-
 
     /** Try to tokenize the query, finding delimiters and categories.
 
@@ -337,6 +344,45 @@ class ParseQuery {
         
         return $movieListToReturn;
     }
+    
+    /* Applies the replacement rules as defined in the parseQueryConstraint
+       file, under C::$emotions. Each rule matches some text (emotion) and
+       maps to an array of genres (all OR'ed together).
+
+       In fact, $emotionRegexPattern can and should be used to find emotions
+       in queries.
+
+       Returns a list of constraints.
+     */
+    public static function emotionsToGenres(&$query) {
+        global $DEBUG;
+        $constraints = array();
+//        if ($DEBUG) echo "== query start: $query \n";
+        
+        while (preg_match(C::$emotionRegexPattern, $query, $matches)) {
+            $selEmotion = $matches[1];
+//            if ($DEBUG) echo "   found emotion: $selEmotion\n";
+            $query = str_replace($selEmotion, "", $query); 
+            $genreData = array(
+                    "acceptable"=> C::$emotions[$selEmotion]
+                    );
+
+            array_push($constraints, new Constraint("genre", $genreData));
+        }
+//        if ($DEBUG) echo "== query end: $query \n"; 
+        return $constraints;
+    }
+
+    /* There are certain variations in genres that we need to account for.
+
+       These are recorded in C::$genreAliases.
+     */
+    public static function applyGenreAliases(&$query) {
+        foreach (C::$genreAliases as $alias=>$genre) {
+            $query = str_replace($alias, $genre, $query);
+        }
+    }
+
 
     /* ---------------------------------------------------- */
     /* Utilities...                                         */

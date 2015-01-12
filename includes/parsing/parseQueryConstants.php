@@ -61,6 +61,29 @@ class C {
 	public static $genres = array(
 			"action", "adventure", "animation", "biography", "comedy", "crime", "documentary", "drama", "family", "fantasy", "film-noir", "history", "horror", "music", "musical", "mystery", "romance", "sci-fi", "sport", "thriller", "war", "western"
 	);
+    
+    public static $genreAliases = array(
+            "scifi"=>"sci-fi",
+            "science fiction"=>"sci-fi",
+            "biographies"=>"biography",
+            "comedies"=>"comedy",
+            "documentaries"=>"documentary",
+            "historical"=>"history",
+            "mysteries"=>"mystery",
+            "fantasies"=>"fantasy"
+    );
+
+    // any element of the array we map to may be a valid genre
+    public static $emotions = array(
+            "sad"=>array("drama", "war"),
+            "funny"=>array("comedy"),
+            "serious"=>array("documentary", "drama", "film-noir", "history", "war", "biography"),
+            "scary"=>array("thriller", "horror"),
+            "intense"=>array("thriller"),
+            "kid"=>array("animation", "family"),
+            "romantic"=>array("romance"),
+    );
+    public static $emotionRegexPattern;
 
 	// this is just the ones people may search for
 	public static $familyRating = array(
@@ -81,8 +104,17 @@ class C {
 					"movie"=>array("base"=>"sep", "oLim" => BOTH)
 					)
 	);
+
+    /* Does all one time initialization -- will only be called upon including
+       this file. */
+    static function init() {
+        // 1: create a regex from the $emotions array
+        static::$emotionRegexPattern = "/(" . implode("|", array_keys(static::$emotions)); 
+        static::$emotionRegexPattern .= ").*movie/";
+    }
 }
 
+C::init();
 if ($DEBUG) echo "loaded all parsing constants\n";
 
 ?>

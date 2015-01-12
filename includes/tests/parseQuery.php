@@ -6,8 +6,11 @@ require_once(__DIR__ . "/../parsing/parseQuery.php");
 use \parsing\ParseQuery;
 
 $queries = array(
-	"thriller movies"=>"mhm",
-	"Scary movies rated higher than 7 on imdb"=>"mhm",
+    "comedies from before 1970"=>"genre(alias) + daterange",
+    "funny family movie"=>"emotion->genre + genre",
+	"thriller movies"=>"genre",
+    "sad movies"=>"emotion->2 OK genres",
+	"Scary movies rated higher than 7 on imdb"=>"emotion(case)->genre + rating/imdb",
 	"movies directed by Tom Hanks with rating higher than 61% on rotten tomato"=>"this should check both critic and audiance and if matches either, report",
 	"romantic comedy from before 1970"=>"genre info",
 	"romance or drama with ryan Gosling"=>"logical and genre",
@@ -41,10 +44,11 @@ foreach ($queries as $query => $descr) {
 	foreach ($movieMatching as $movie) {
 		$tmp[] = ($movie->movie->mName . $movie->relevance);
 	}
+    echo "Number of matching results: ";
 	print_r(count($tmp));
 	//
 	//var_dump($tmp);
-	echo "\n";
+	echo "\n\n";
 }
 
 
