@@ -70,7 +70,8 @@ class C {
             "documentaries"=>"documentary",
             "historical"=>"history",
             "mysteries"=>"mystery",
-            "fantasies"=>"fantasy"
+            "fantasies"=>"fantasy",
+            "romantic"=>"romance"
     );
 
     // any element of the array we map to may be a valid genre
@@ -81,7 +82,6 @@ class C {
             "scary"=>array("thriller", "horror"),
             "intense"=>array("thriller"),
             "kid"=>array("animation", "family"),
-            "romantic"=>array("romance"),
     );
     public static $emotionRegexPattern;
 
@@ -111,6 +111,7 @@ class C {
         // 1: create a regex from the $emotions array
         static::$emotionRegexPattern = "/(" . implode("|", array_keys(static::$emotions)); 
         static::$emotionRegexPattern .= ").*movie/";
+//        echo "emotion regex = " . static::$emotionRegexPattern . "\n"; 
     }
 }
 

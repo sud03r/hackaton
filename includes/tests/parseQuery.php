@@ -6,6 +6,7 @@ require_once(__DIR__ . "/../parsing/parseQuery.php");
 use \parsing\ParseQuery;
 
 $queries = array(
+    "romantic comedies"=>"feeling=>genre + genre(alias)",
     "comedies from before 1970"=>"genre(alias) + daterange",
     "funny family movie"=>"emotion->genre + genre",
 	"thriller movies"=>"genre",
